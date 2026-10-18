@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: pez_linterna
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: pez_linterna
+  displayName: Pez linterna
+  scientificName: "Myctophidae (mict\xF3fidos)"
+  habitatBand: 5
+  referenceDepth: ">1.000 m \xB7 batial y abisal"
+  playableDepth: {x: 79, y: 85}
+  form: 13
+  pattern: 6
+  length: 0.65
+  width: 0.16
+  height: 0.22
+  backColor: {r: 0.1882353, g: 0.27450982, b: 0.35686275, a: 0}
+  bellyColor: {r: 0.5686275, g: 0.6666667, b: 0.7411765, a: 0}
+  accentColor: {r: 0.3882353, g: 0.8980392, b: 0.79607844, a: 0}
+  dorsalHeight: 0.085
+  dorsalCount: 2
+  eyeSize: 0.058
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: e60e05ed1f77da54b99169e55606d317, type: 2}
+  prefab: {fileID: 5999550062849118375, guid: 62e3072b914d4a046b8ce4ed63331228, type: 3}

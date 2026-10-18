@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: jerguilla
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: jerguilla
+  displayName: Jerguilla
+  scientificName: Aplodactylus punctatus
+  habitatBand: 1
+  referenceDepth: "5\u201330 m \xB7 costa somera"
+  playableDepth: {x: 5, y: 19}
+  form: 0
+  pattern: 2
+  length: 1.05
+  width: 0.33
+  height: 0.39
+  backColor: {r: 0.3529412, g: 0.38431373, b: 0.29411766, a: 0}
+  bellyColor: {r: 0.67058825, g: 0.654902, b: 0.48235294, a: 0}
+  accentColor: {r: 0.14509805, g: 0.18431373, b: 0.16470589, a: 0}
+  dorsalHeight: 0.13
+  dorsalCount: 1
+  eyeSize: 0.04
+  swimSpeed: 0.27
+  population: 3
+  item: {fileID: 11400000, guid: 7dd938be7cb658a42b9cb03e267ce4a2, type: 2}
+  prefab: {fileID: 45764402001767915, guid: a27e99e05e447de488fa275421ee5419, type: 3}

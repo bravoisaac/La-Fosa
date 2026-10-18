@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: cabinza
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: cabinza
+  displayName: Cabinza
+  scientificName: Isacia conceptionis
+  habitatBand: 1
+  referenceDepth: "5\u201330 m \xB7 costa somera"
+  playableDepth: {x: 5, y: 19}
+  form: 0
+  pattern: 3
+  length: 0.74
+  width: 0.2
+  height: 0.3
+  backColor: {r: 0.53333336, g: 0.60784316, b: 0.5921569, a: 0}
+  bellyColor: {r: 0.827451, g: 0.8627451, b: 0.8039216, a: 0}
+  accentColor: {r: 0.8156863, g: 0.6862745, b: 0.34117648, a: 0}
+  dorsalHeight: 0.1
+  dorsalCount: 1
+  eyeSize: 0.034
+  swimSpeed: 0.27
+  population: 3
+  item: {fileID: 11400000, guid: 359db5bca79e39549a715ded7e62df69, type: 2}
+  prefab: {fileID: 5272345836808398960, guid: 31ba1ccd3c877dd42869a021214b060c, type: 3}

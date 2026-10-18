@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: pez_espada
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: pez_espada
+  displayName: Pez espada
+  scientificName: Xiphias gladius
+  habitatBand: 2
+  referenceDepth: "0\u2013200 m \xB7 pel\xE1gicos"
+  playableDepth: {x: 6, y: 44}
+  form: 10
+  pattern: 0
+  length: 2.4
+  width: 0.44
+  height: 0.58
+  backColor: {r: 0.1882353, g: 0.3019608, b: 0.40784314, a: 0}
+  bellyColor: {r: 0.6862745, g: 0.7490196, b: 0.74509805, a: 0}
+  accentColor: {r: 0.14509805, g: 0.23529412, b: 0.3372549, a: 0}
+  dorsalHeight: 0.55
+  dorsalCount: 2
+  eyeSize: 0.06
+  swimSpeed: 0.27
+  population: 3
+  item: {fileID: 11400000, guid: 5bf18dbdac616c04499ea4b3fdd264c7, type: 2}
+  prefab: {fileID: 8700711784861127397, guid: c3ef340a2d3904443ba6aac2796b9a71, type: 3}

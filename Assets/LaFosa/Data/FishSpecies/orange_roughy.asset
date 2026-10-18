@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: orange_roughy
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: orange_roughy
+  displayName: Orange roughy
+  scientificName: Hoplostethus atlanticus
+  habitatBand: 4
+  referenceDepth: "300\u20131.500 m \xB7 talud"
+  playableDepth: {x: 53, y: 74}
+  form: 0
+  pattern: 5
+  length: 1.12
+  width: 0.39
+  height: 0.65
+  backColor: {r: 0.84705883, g: 0.44705883, b: 0.25490198, a: 0}
+  bellyColor: {r: 0.9019608, g: 0.69803923, b: 0.4862745, a: 0}
+  accentColor: {r: 0.59607846, g: 0.28235295, b: 0.20392157, a: 0}
+  dorsalHeight: 0.24
+  dorsalCount: 1
+  eyeSize: 0.08
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: 20209330521f6bd40867b5b3e8111712, type: 2}
+  prefab: {fileID: 516688277358138934, guid: 7e1be01b1cea1b1479e8823b7e9031ea, type: 3}

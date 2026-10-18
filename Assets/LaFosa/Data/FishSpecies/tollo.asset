@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: tollo
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: tollo
+  displayName: Tollo
+  scientificName: Mustelus spp.
+  habitatBand: 3
+  referenceDepth: "50\u2013400 m \xB7 plataforma"
+  playableDepth: {x: 26, y: 49}
+  form: 8
+  pattern: 0
+  length: 2
+  width: 0.42
+  height: 0.45
+  backColor: {r: 0.39215687, g: 0.49411765, b: 0.52156866, a: 0}
+  bellyColor: {r: 0.84313726, g: 0.85882354, b: 0.8039216, a: 0}
+  accentColor: {r: 0.25882354, g: 0.35686275, b: 0.4, a: 0}
+  dorsalHeight: 0.38
+  dorsalCount: 2
+  eyeSize: 0.046
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: ddedf2c1269689c4a8be8001186c584d, type: 2}
+  prefab: {fileID: 311472085521834354, guid: 817a260546001ff42a27a03aacb1904a, type: 3}

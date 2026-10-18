@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: congrio_colorado
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: congrio_colorado
+  displayName: Congrio colorado
+  scientificName: Genypterus chilensis
+  habitatBand: 3
+  referenceDepth: "50\u2013400 m \xB7 plataforma"
+  playableDepth: {x: 26, y: 49}
+  form: 6
+  pattern: 5
+  length: 1.8
+  width: 0.29
+  height: 0.35
+  backColor: {r: 0.6039216, g: 0.2784314, b: 0.23921569, a: 0}
+  bellyColor: {r: 0.84705883, g: 0.5882353, b: 0.41568628, a: 0}
+  accentColor: {r: 0.3137255, g: 0.20392157, b: 0.1764706, a: 0}
+  dorsalHeight: 0.12
+  dorsalCount: 1
+  eyeSize: 0.044
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: ce5417a4d65d301489b843a2094af991, type: 2}
+  prefab: {fileID: 3109130153118504696, guid: 16d6cbc5ebdb98e43977c861447effbc, type: 3}

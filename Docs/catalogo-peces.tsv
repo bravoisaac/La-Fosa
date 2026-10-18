@@ -1,0 +1,50 @@
+id	nombre	taxon	franja	profundidad_documento	profundidad_juego	valor	triangulos
+baunco	Baunco	Girella laevifrons	0	0–5 m · intermareal	1,2–4,5 m	30	586
+borrachilla	Borrachilla	Scartichthys viridis	0	0–5 m · intermareal	1,2–4,5 m	30	610
+pejesapo	Pejesapo	Sicyases sanguineus	0	0–5 m · intermareal	1,2–4,5 m	30	714
+trambollo	Trambollo	Labrisomus philippii	0	0–5 m · intermareal	1,2–4,5 m	30	610
+chalaco	Chalaco	Auchenionchus spp.	0	0–5 m · intermareal	1,2–4,5 m	30	610
+tomoyo	Tomoyo	Helcogrammoides spp.	0	0–5 m · intermareal	1,2–4,5 m	30	626
+vieja_negra	Vieja negra	Graus nigra	1	5–30 m · costa somera	5–19 m	65	586
+pejeperro	Pejeperro	Semicossyphus darwini	1	5–30 m · costa somera	5–19 m	70	674
+rollizo	Rollizo	Pinguipes chilensis	1	5–30 m · costa somera	5–19 m	45	586
+bilagay	Bilagay	Cheilodactylus variegatus	1	5–30 m · costa somera	5–19 m	45	586
+jerguilla	Jerguilla	Aplodactylus punctatus	1	5–30 m · costa somera	5–19 m	40	586
+cabrilla	Cabrilla	Paralabrax humeralis	1	5–30 m · costa somera	5–19 m	50	604
+sargo	Sargo	Anisotremus scapularis	1	5–30 m · costa somera	5–19 m	45	586
+castaneta	Castañeta	Chromis crusma	1	5–30 m · costa somera	5–19 m	35	586
+lenguado	Lenguado	Paralichthys adspersus	1	5–30 m · costa somera	5–19 m	60	566
+corvina	Corvina	Cilus gilberti	1	5–30 m · costa somera	5–19 m	60	604
+pejerrey	Pejerrey de mar	Odontesthes regia	1	5–30 m · costa somera	5–19 m	30	584
+cabinza	Cabinza	Isacia conceptionis	1	5–30 m · costa somera	5–19 m	35	586
+robalo	Róbalo	Eleginops maclovinus	1	5–30 m · costa somera	5–19 m	55	604
+anchoveta	Anchoveta	Engraulis ringens	2	0–200 m · pelágicos	6–44 m	20	566
+sardina_comun	Sardina común	Strangomera bentincki	2	0–200 m · pelágicos	6–44 m	25	566
+sardina_espanola	Sardina española	Sardinops sagax	2	0–200 m · pelágicos	6–44 m	30	566
+jurel	Jurel	Trachurus murphyi	2	0–200 m · pelágicos	6–44 m	30	604
+caballa	Caballa	Scomber japonicus	2	0–200 m · pelágicos	6–44 m	40	604
+sierra	Sierra	Thyrsites atun	2	0–200 m · pelágicos	6–44 m	65	604
+cojinoba	Cojinoba del norte	Seriolella violacea	2	0–200 m · pelágicos	6–44 m	60	604
+palometa	Palometa o vidriola	Seriola lalandi	2	0–200 m · pelágicos	6–44 m	80	604
+pez_espada	Pez espada	Xiphias gladius	2	0–200 m · pelágicos	6–44 m	120	616
+merluza_comun	Merluza común	Merluccius gayi	3	50–400 m · plataforma	26–49 m	65	604
+congrio_colorado	Congrio colorado	Genypterus chilensis	3	50–400 m · plataforma	26–49 m	75	584
+congrio_negro	Congrio negro	Genypterus maculatus	3	50–400 m · plataforma	26–49 m	75	584
+pejegallo	Pejegallo	Callorhinchus callorynchus	3	50–400 m · plataforma	26–49 m	85	680
+raya_volantin	Raya volantín	Zearaja chilensis	3	50–400 m · plataforma	26–49 m	90	564
+lenguado_ojos_grandes	Lenguado de ojos grandes	Hippoglossina macrops	3	50–400 m · plataforma	26–49 m	75	566
+tollo	Tollo	Mustelus spp.	3	50–400 m · plataforma	26–49 m	95	664
+congrio_dorado	Congrio dorado	Genypterus blacodes	4	300–1.500 m · talud	53–74 m	100	584
+merluza_austral	Merluza austral	Merluccius australis	4	300–1.500 m · talud	53–74 m	105	604
+merluza_cola	Merluza de cola	Macruronus magellanicus	4	300–1.500 m · talud	53–74 m	100	584
+merluza_tres_aletas	Merluza de tres aletas	Micromesistius australis	4	300–1.500 m · talud	53–74 m	100	622
+besugo	Besugo	Epigonus crassicaudus	4	300–1.500 m · talud	53–74 m	110	604
+alfonsino	Alfonsino	Beryx splendens	4	300–1.500 m · talud	53–74 m	125	586
+orange_roughy	Orange roughy	Hoplostethus atlanticus	4	300–1.500 m · talud	53–74 m	130	586
+granadero_coelorinchus	Granadero o cola de rata	Coelorinchus spp.	4	300–1.500 m · talud	53–74 m	115	602
+bacalao_profundidad	Bacalao de profundidad	Dissostichus eleginoides	5	>1.000 m · batial y abisal	79–85 m	170	604
+granadero_coryphaenoides	Granadero abisal	Coryphaenoides spp.	5	>1.000 m · batial y abisal	79–85 m	145	602
+pez_linterna	Pez linterna	Myctophidae (mictófidos)	5	>1.000 m · batial y abisal	79–85 m	140	1628
+pez_vibora	Pez víbora	Chauliodus spp.	5	>1.000 m · batial y abisal	79–85 m	165	1738
+pez_hacha	Pez hacha	Argyropelecus spp.	5	>1.000 m · batial y abisal	79–85 m	155	1608
+pez_caracol	Pez caracol	Liparidae	5	>1.000 m · batial y abisal	79–85 m	180	584

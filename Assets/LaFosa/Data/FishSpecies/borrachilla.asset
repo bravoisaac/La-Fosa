@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: borrachilla
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: borrachilla
+  displayName: Borrachilla
+  scientificName: Scartichthys viridis
+  habitatBand: 0
+  referenceDepth: "0\u20135 m \xB7 intermareal"
+  playableDepth: {x: 1.2, y: 4.5}
+  form: 1
+  pattern: 5
+  length: 0.65
+  width: 0.18
+  height: 0.22
+  backColor: {r: 0.26666668, g: 0.43529412, b: 0.2901961, a: 0}
+  bellyColor: {r: 0.62352943, g: 0.6862745, b: 0.39607844, a: 0}
+  accentColor: {r: 0.16078432, g: 0.24705882, b: 0.16078432, a: 0}
+  dorsalHeight: 0.11
+  dorsalCount: 1
+  eyeSize: 0.038
+  swimSpeed: 0.2
+  population: 4
+  item: {fileID: 11400000, guid: 6370584ce319f8a418975ad8b92911b4, type: 2}
+  prefab: {fileID: 3585116708640634924, guid: 1bb39226532c22c4a98d65a795289697, type: 3}

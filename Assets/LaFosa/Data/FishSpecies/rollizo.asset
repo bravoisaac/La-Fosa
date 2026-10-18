@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: rollizo
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: rollizo
+  displayName: Rollizo
+  scientificName: Pinguipes chilensis
+  habitatBand: 1
+  referenceDepth: "5\u201330 m \xB7 costa somera"
+  playableDepth: {x: 5, y: 19}
+  form: 11
+  pattern: 3
+  length: 1.05
+  width: 0.28
+  height: 0.32
+  backColor: {r: 0.5411765, g: 0.44313726, b: 0.30588236, a: 0}
+  bellyColor: {r: 0.8, g: 0.74509805, b: 0.61960787, a: 0}
+  accentColor: {r: 0.23529412, g: 0.34117648, b: 0.28627452, a: 0}
+  dorsalHeight: 0.15
+  dorsalCount: 1
+  eyeSize: 0.047
+  swimSpeed: 0.27
+  population: 3
+  item: {fileID: 11400000, guid: 41433e4d9aa84a54e8c7c2b7e14e0417, type: 2}
+  prefab: {fileID: 9041216296882936390, guid: 8535094b7020aed4e9ab18f34dcb7515, type: 3}

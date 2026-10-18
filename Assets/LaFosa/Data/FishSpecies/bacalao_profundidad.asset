@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: bacalao_profundidad
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: bacalao_profundidad
+  displayName: Bacalao de profundidad
+  scientificName: Dissostichus eleginoides
+  habitatBand: 5
+  referenceDepth: ">1.000 m \xB7 batial y abisal"
+  playableDepth: {x: 79, y: 85}
+  form: 11
+  pattern: 5
+  length: 2.35
+  width: 0.66
+  height: 0.68
+  backColor: {r: 0.3254902, g: 0.3647059, b: 0.4, a: 0}
+  bellyColor: {r: 0.6784314, g: 0.7058824, b: 0.6784314, a: 0}
+  accentColor: {r: 0.1882353, g: 0.21960784, b: 0.25490198, a: 0}
+  dorsalHeight: 0.25
+  dorsalCount: 2
+  eyeSize: 0.083
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: 43f72ded04a0ad24ea24a1fec7b4950a, type: 2}
+  prefab: {fileID: 112440138537873607, guid: 06f5b410a71bee54ca076bdbca877390, type: 3}

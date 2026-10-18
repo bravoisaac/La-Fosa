@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: congrio_dorado
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: congrio_dorado
+  displayName: Congrio dorado
+  scientificName: Genypterus blacodes
+  habitatBand: 4
+  referenceDepth: "300\u20131.500 m \xB7 talud"
+  playableDepth: {x: 53, y: 74}
+  form: 6
+  pattern: 5
+  length: 2.05
+  width: 0.33
+  height: 0.37
+  backColor: {r: 0.7176471, g: 0.5568628, b: 0.34509805, a: 0}
+  bellyColor: {r: 0.8980392, g: 0.79607844, b: 0.5803922, a: 0}
+  accentColor: {r: 0.45490196, g: 0.34901962, b: 0.21568628, a: 0}
+  dorsalHeight: 0.13
+  dorsalCount: 1
+  eyeSize: 0.052
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: 98cad42897bca8a4c943c48598a943bf, type: 2}
+  prefab: {fileID: 8338400390928845108, guid: 07803d8fa911396499de24bcd675b208, type: 3}

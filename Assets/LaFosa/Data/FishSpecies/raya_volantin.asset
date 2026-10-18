@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: raya_volantin
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: raya_volantin
+  displayName: "Raya volant\xEDn"
+  scientificName: Zearaja chilensis
+  habitatBand: 3
+  referenceDepth: "50\u2013400 m \xB7 plataforma"
+  playableDepth: {x: 26, y: 49}
+  form: 7
+  pattern: 2
+  length: 1.7
+  width: 1.5
+  height: 0.22
+  backColor: {r: 0.5647059, g: 0.45490196, b: 0.3764706, a: 0}
+  bellyColor: {r: 0.78039217, g: 0.72156864, b: 0.6313726, a: 0}
+  accentColor: {r: 0.2784314, g: 0.24313726, b: 0.20784314, a: 0}
+  dorsalHeight: 0
+  dorsalCount: 0
+  eyeSize: 0.044
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: 7ca2ec61b314c9e4287053c5e9091e23, type: 2}
+  prefab: {fileID: 5203767555130543053, guid: 54d68a4498afccf438d264f33abf14bf, type: 3}

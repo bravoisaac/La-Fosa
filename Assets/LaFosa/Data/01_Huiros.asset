@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5103810b1c07e43bdddcaa2e85d2da, type: 3}
+  m_Name: 01_Huiros
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.DiveZoneDefinition
+  displayName: "01 \xB7 Bosque de huiros"
+  subtitle: "La luz a\xFAn alcanza las ruinas."
+  stationPosition: {x: 0, y: -23.5, z: 50}
+  startsAtDepth: 12
+  unlockedDepth: 64
+  unlockedOxygen: 155
+  accent: {r: 0.38, g: 0.91, b: 0.74, a: 1}
+  sequence: 000000000100000002000000
+  stonePuzzle: {fileID: 11400000, guid: 45ac265537514444abb827c8b10de4c8, type: 2}
+  treasure: {fileID: 11400000, guid: 0d5b768af575f5d47ae1e7111d1692b4, type: 2}

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: sierra
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: sierra
+  displayName: Sierra
+  scientificName: Thyrsites atun
+  habitatBand: 2
+  referenceDepth: "0\u2013200 m \xB7 pel\xE1gicos"
+  playableDepth: {x: 6, y: 44}
+  form: 5
+  pattern: 3
+  length: 1.65
+  width: 0.22
+  height: 0.25
+  backColor: {r: 0.26666668, g: 0.43529412, b: 0.5019608, a: 0}
+  bellyColor: {r: 0.76862746, g: 0.84705883, b: 0.83137256, a: 0}
+  accentColor: {r: 0.16862746, g: 0.29803923, b: 0.35686275, a: 0}
+  dorsalHeight: 0.18
+  dorsalCount: 2
+  eyeSize: 0.047
+  swimSpeed: 0.45
+  population: 3
+  item: {fileID: 11400000, guid: 3d115dbfcd120c348a4315c421504e8f, type: 2}
+  prefab: {fileID: 438319222309440020, guid: 13e015b0b3c75904aad055658c264a6f, type: 3}

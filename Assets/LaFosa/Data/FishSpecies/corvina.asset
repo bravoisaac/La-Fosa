@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: corvina
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: corvina
+  displayName: Corvina
+  scientificName: Cilus gilberti
+  habitatBand: 1
+  referenceDepth: "5\u201330 m \xB7 costa somera"
+  playableDepth: {x: 5, y: 19}
+  form: 11
+  pattern: 3
+  length: 1.5
+  width: 0.4
+  height: 0.45
+  backColor: {r: 0.41568628, g: 0.4862745, b: 0.5176471, a: 0}
+  bellyColor: {r: 0.83137256, g: 0.8509804, b: 0.80784315, a: 0}
+  accentColor: {r: 0.2509804, g: 0.32156864, b: 0.39607844, a: 0}
+  dorsalHeight: 0.15
+  dorsalCount: 2
+  eyeSize: 0.05
+  swimSpeed: 0.27
+  population: 3
+  item: {fileID: 11400000, guid: 4f897b7ec076e204888d564c93bdf223, type: 2}
+  prefab: {fileID: 189827786728735790, guid: a03537f2fe27c8942bc2812f9116b177, type: 3}

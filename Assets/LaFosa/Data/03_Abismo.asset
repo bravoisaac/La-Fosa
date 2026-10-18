@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5103810b1c07e43bdddcaa2e85d2da, type: 3}
+  m_Name: 03_Abismo
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.DiveZoneDefinition
+  displayName: "03 \xB7 Coraz\xF3n del abismo"
+  subtitle: Un resplandor en la oscuridad.
+  stationPosition: {x: 0, y: -87.5, z: 70}
+  startsAtDepth: 67
+  unlockedDepth: 110
+  unlockedOxygen: 240
+  accent: {r: 0.74, g: 0.49, b: 1, a: 1}
+  sequence: 0200000001000000000000000200000000000000
+  stonePuzzle: {fileID: 11400000, guid: dde554ecd93e81e499aa7b167f0e6b28, type: 2}
+  treasure: {fileID: 11400000, guid: 068def852d9f050449d7e2527c1c3b2b, type: 2}

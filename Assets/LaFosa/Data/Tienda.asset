@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aecee21af3745a4e9e914e24f9ceb8b, type: 3}
+  m_Name: Tienda
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.ShopCatalog
+  fishValue: 30
+  oxygenBonus: 60
+  finSpeedMultiplier: 1.35
+  offers:
+  - gear: 4
+    title: Tridente
+    description: "Primera herramienta. Tecla 2: alcance de 4 m y recarga rápida."
+    price: 60
+  - gear: 0
+    title: "Arpón"
+    description: "Después del tridente. Tecla 3: alcance de 40 m y recarga de 0,65 s."
+    price: 150
+  - gear: 1
+    title: "Bombona de O\u2082 ampliada"
+    description: +60 s de reserva; se suma a las mejoras de los tesoros.
+    price: 90
+  - gear: 2
+    title: Aletas de buceo
+    description: "Nadas un 35% m\xE1s r\xE1pido. Se equipan autom\xE1ticamente."
+    price: 75
+  - gear: 3
+    title: Red de pesca
+    description: "Después del tridente. Tecla 4: hasta 5 peces cercanos."
+    price: 120
+  - gear: 5
+    title: Bote de caleta
+    description: Conducible a 12 m/s. Entrega al lado izquierdo del muelle.
+    price: 240
+  - gear: 6
+    title: Moto de agua
+    description: Conducible a 22 m/s. Entrega al lado derecho del muelle.
+    price: 360

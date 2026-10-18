@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: anchoveta
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: anchoveta
+  displayName: Anchoveta
+  scientificName: Engraulis ringens
+  habitatBand: 2
+  referenceDepth: "0\u2013200 m \xB7 pel\xE1gicos"
+  playableDepth: {x: 6, y: 44}
+  form: 5
+  pattern: 3
+  length: 0.48
+  width: 0.105
+  height: 0.13
+  backColor: {r: 0.23529412, g: 0.4745098, b: 0.4862745, a: 0}
+  bellyColor: {r: 0.83137256, g: 0.9098039, b: 0.8627451, a: 0}
+  accentColor: {r: 0.654902, g: 0.7882353, b: 0.76862746, a: 0}
+  dorsalHeight: 0.055
+  dorsalCount: 1
+  eyeSize: 0.025
+  swimSpeed: 0.45
+  population: 3
+  item: {fileID: 11400000, guid: 3aa27aeab5b69f84bb7c0036704d4f75, type: 2}
+  prefab: {fileID: 7792370920066364406, guid: 77f1494600e353c45b0e1004b526e08f, type: 3}

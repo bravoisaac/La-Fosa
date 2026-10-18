@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: robalo
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: robalo
+  displayName: "R\xF3balo"
+  scientificName: Eleginops maclovinus
+  habitatBand: 1
+  referenceDepth: "5\u201330 m \xB7 costa somera"
+  playableDepth: {x: 5, y: 19}
+  form: 11
+  pattern: 0
+  length: 1.3
+  width: 0.34
+  height: 0.43
+  backColor: {r: 0.3254902, g: 0.41960785, b: 0.4, a: 0}
+  bellyColor: {r: 0.70980394, g: 0.7764706, b: 0.69411767, a: 0}
+  accentColor: {r: 0.20784314, g: 0.28627452, b: 0.26666668, a: 0}
+  dorsalHeight: 0.15
+  dorsalCount: 2
+  eyeSize: 0.046
+  swimSpeed: 0.27
+  population: 3
+  item: {fileID: 11400000, guid: 7a0272bb70aa90b4badc21ec97196fdb, type: 2}
+  prefab: {fileID: 775532916041393683, guid: 7afba33445394ee4a999f647cf218486, type: 3}

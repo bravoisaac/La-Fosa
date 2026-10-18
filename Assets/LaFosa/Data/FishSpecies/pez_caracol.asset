@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: pez_caracol
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: pez_caracol
+  displayName: Pez caracol
+  scientificName: Liparidae
+  habitatBand: 5
+  referenceDepth: ">1.000 m \xB7 batial y abisal"
+  playableDepth: {x: 79, y: 85}
+  form: 16
+  pattern: 0
+  length: 1.08
+  width: 0.4
+  height: 0.41
+  backColor: {r: 0.8509804, g: 0.7176471, b: 0.7372549, a: 0}
+  bellyColor: {r: 0.9411765, g: 0.87058824, b: 0.8352941, a: 0}
+  accentColor: {r: 0.6784314, g: 0.5372549, b: 0.62352943, a: 0}
+  dorsalHeight: 0.06
+  dorsalCount: 1
+  eyeSize: 0.034
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: 8821fc000f8d8de468351859e6e17f50, type: 2}
+  prefab: {fileID: 8496175999121399839, guid: 1e2fb84e2a90bc24ebd593d0a66c0032, type: 3}

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: lenguado
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: lenguado
+  displayName: Lenguado
+  scientificName: Paralichthys adspersus
+  habitatBand: 1
+  referenceDepth: "5\u201330 m \xB7 costa somera"
+  playableDepth: {x: 5, y: 19}
+  form: 4
+  pattern: 5
+  length: 1.15
+  width: 0.7
+  height: 0.105
+  backColor: {r: 0.5058824, g: 0.44705883, b: 0.33333334, a: 0}
+  bellyColor: {r: 0.7372549, g: 0.70980394, b: 0.6039216, a: 0}
+  accentColor: {r: 0.26666668, g: 0.24313726, b: 0.19607843, a: 0}
+  dorsalHeight: 0.05
+  dorsalCount: 1
+  eyeSize: 0.045
+  swimSpeed: 0.27
+  population: 3
+  item: {fileID: 11400000, guid: bfa56bf39dfd14a44956eb9ed4fa087f, type: 2}
+  prefab: {fileID: 8041182180757253658, guid: 9183fcc10e491884095de52b79722546, type: 3}

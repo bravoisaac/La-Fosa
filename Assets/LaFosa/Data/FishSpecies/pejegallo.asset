@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: pejegallo
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: pejegallo
+  displayName: Pejegallo
+  scientificName: Callorhinchus callorynchus
+  habitatBand: 3
+  referenceDepth: "50\u2013400 m \xB7 plataforma"
+  playableDepth: {x: 26, y: 49}
+  form: 9
+  pattern: 2
+  length: 1.6
+  width: 0.39
+  height: 0.43
+  backColor: {r: 0.5686275, g: 0.6117647, b: 0.63529414, a: 0}
+  bellyColor: {r: 0.85490197, g: 0.85882354, b: 0.79607844, a: 0}
+  accentColor: {r: 0.25490198, g: 0.3019608, b: 0.34509805, a: 0}
+  dorsalHeight: 0.39
+  dorsalCount: 2
+  eyeSize: 0.064
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: 2aebafbc18d51d04789e3c49ce177906, type: 2}
+  prefab: {fileID: 2710000366338176883, guid: 3e22c2d88830725419e7ab731a8cbdf5, type: 3}

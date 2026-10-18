@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: besugo
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: besugo
+  displayName: Besugo
+  scientificName: Epigonus crassicaudus
+  habitatBand: 4
+  referenceDepth: "300\u20131.500 m \xB7 talud"
+  playableDepth: {x: 53, y: 74}
+  form: 0
+  pattern: 0
+  length: 0.85
+  width: 0.28
+  height: 0.43
+  backColor: {r: 0.5411765, g: 0.41960785, b: 0.4509804, a: 0}
+  bellyColor: {r: 0.78039217, g: 0.7176471, b: 0.68235296, a: 0}
+  accentColor: {r: 0.3019608, g: 0.27450982, b: 0.34117648, a: 0}
+  dorsalHeight: 0.16
+  dorsalCount: 2
+  eyeSize: 0.074
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: b8a09432d45159244aff224e51400e22, type: 2}
+  prefab: {fileID: 2177132802139700573, guid: bb53dcbed505d874abddeeae24812cf2, type: 3}

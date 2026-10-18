@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: alfonsino
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: alfonsino
+  displayName: Alfonsino
+  scientificName: Beryx splendens
+  habitatBand: 4
+  referenceDepth: "300\u20131.500 m \xB7 talud"
+  playableDepth: {x: 53, y: 74}
+  form: 0
+  pattern: 0
+  length: 1.03
+  width: 0.32
+  height: 0.6
+  backColor: {r: 0.78431374, g: 0.3019608, b: 0.26666668, a: 0}
+  bellyColor: {r: 0.9019608, g: 0.6392157, b: 0.5372549, a: 0}
+  accentColor: {r: 0.5176471, g: 0.18039216, b: 0.21960784, a: 0}
+  dorsalHeight: 0.23
+  dorsalCount: 1
+  eyeSize: 0.095
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: 4cc5cb521a9a0cb4f9649a7c5cd66a54, type: 2}
+  prefab: {fileID: 3338968868027439456, guid: de213b219c30a5f4285f54bcb7cd0e38, type: 3}

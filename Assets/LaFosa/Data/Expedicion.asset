@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52ae51730b79b146a98a7f282b190fd, type: 3}
+  m_Name: Expedicion
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.GameConfig
+  seed: 2718
+  spawn: {x: 0, y: 4, z: -22}
+  waterLevel: 0
+  initialOxygen: 115
+  initialSafeDepth: 34
+  inventorySlots: 12
+  fish: {fileID: 11400000, guid: ed4e03ae66648d4409b34965c8116d28, type: 2}
+  fishSpecies:
+  - {fileID: 11400000, guid: 5af5c7941ec585f44b7915272ec905d7, type: 2}
+  - {fileID: 11400000, guid: 7666e7792eee50b4faf476c94cae8642, type: 2}
+  - {fileID: 11400000, guid: 22764d80d4490654eae602bd4fb806d3, type: 2}
+  - {fileID: 11400000, guid: 251e00c8b2f83404990028c0ba9ba5a5, type: 2}
+  - {fileID: 11400000, guid: 309ea4466841f2e40a2f23826fae6f9b, type: 2}
+  - {fileID: 11400000, guid: c8aca1c681c78bb4d81dd030652ab2eb, type: 2}
+  - {fileID: 11400000, guid: e7e5236fae34a1f4d9fcaf6c467639a6, type: 2}
+  - {fileID: 11400000, guid: 0504d0a37d3624046b1d01dc0e46e179, type: 2}
+  - {fileID: 11400000, guid: 5b0610fc256d609419ff7b10abb9ac3f, type: 2}
+  - {fileID: 11400000, guid: 18ffd29390d8d82419b10f64fa23aa7b, type: 2}
+  - {fileID: 11400000, guid: 806e8296a8d50b4478e5193175c644cb, type: 2}
+  - {fileID: 11400000, guid: aadba9b2a9748d64ba7e3f80df1d5904, type: 2}
+  - {fileID: 11400000, guid: 5795a6fc7a40b394a8390f65fc087b79, type: 2}
+  - {fileID: 11400000, guid: 22dc4b707be959a469718a9a397c1738, type: 2}
+  - {fileID: 11400000, guid: a4712cf57249bbc41974396af0a12989, type: 2}
+  - {fileID: 11400000, guid: d808b0841383b4c40ad3c7a30b559fbc, type: 2}
+  - {fileID: 11400000, guid: 827e975a151aaf248ba487f52b553801, type: 2}
+  - {fileID: 11400000, guid: fa2a5eb837c48f442b9f1509641b5958, type: 2}
+  - {fileID: 11400000, guid: 7a2173ce82e0e314a8d435e1339907a0, type: 2}
+  - {fileID: 11400000, guid: 703326e1138d85d41bb077e27ddf796a, type: 2}
+  - {fileID: 11400000, guid: ed12cfc06852f5742badef403662b91e, type: 2}
+  - {fileID: 11400000, guid: 9ceaf311b5e2b8643a62091be1f9087e, type: 2}
+  - {fileID: 11400000, guid: 4e698275b6f8b8f46a7332597528d4a7, type: 2}
+  - {fileID: 11400000, guid: 9774c06149160614e95aa3432c9c4ee7, type: 2}
+  - {fileID: 11400000, guid: ab246ecadeaa77945aeb316c5a99c9de, type: 2}
+  - {fileID: 11400000, guid: 51817ec7021319d49993bfa6943a1374, type: 2}
+  - {fileID: 11400000, guid: 5cfa784502a505645b551a196f51d47d, type: 2}
+  - {fileID: 11400000, guid: f954fe57b4276fa4eaee93967b0e995b, type: 2}
+  - {fileID: 11400000, guid: 9866a4ddd3e4ca44b9cdb007c9f95577, type: 2}
+  - {fileID: 11400000, guid: 51873bed5fd71444f99059005fa9cef1, type: 2}
+  - {fileID: 11400000, guid: fe1dc13c4bf7cea4fafe0ae4936fe5c4, type: 2}
+  - {fileID: 11400000, guid: 003a491847957ae4b8c77bd414003ccb, type: 2}
+  - {fileID: 11400000, guid: 283d7ae7772782342a1df683cfda1164, type: 2}
+  - {fileID: 11400000, guid: 9ab7cd39c1f6b4448aee12702a56c919, type: 2}
+  - {fileID: 11400000, guid: 04a827282bed30c4287646c45c9e00b5, type: 2}
+  - {fileID: 11400000, guid: f501a0bc7626244479cef551161f01ed, type: 2}
+  - {fileID: 11400000, guid: 632bf0874b44d7e418f5159f6195d962, type: 2}
+  - {fileID: 11400000, guid: 817424083eb0d0e49a7ebe7533c54a4b, type: 2}
+  - {fileID: 11400000, guid: 4e19d137a61ffa24399e2840112cfa16, type: 2}
+  - {fileID: 11400000, guid: 11d931311bf819d42abdbb9d70c6399b, type: 2}
+  - {fileID: 11400000, guid: f8c28b10c74ee3d4b86d332c8de7b22c, type: 2}
+  - {fileID: 11400000, guid: 2007e878d09a0684987e79d7c792d04c, type: 2}
+  - {fileID: 11400000, guid: b7cce3db8cee78f4b93e03dbc05bc500, type: 2}
+  - {fileID: 11400000, guid: 91c3c01f849f30749b314071bfebfb80, type: 2}
+  - {fileID: 11400000, guid: 3738e63e110d70f41821a2c42b1f3d6f, type: 2}
+  - {fileID: 11400000, guid: 7ef84594e077eb949a97cb419a51824a, type: 2}
+  - {fileID: 11400000, guid: b0dfc6cd304f53f4f947d5df7e481a90, type: 2}
+  - {fileID: 11400000, guid: e82f59edde7e7b9418bcf4db4d80ea03, type: 2}
+  - {fileID: 11400000, guid: aef355c7c16a92e4197a5b06e956525d, type: 2}
+  coastalFishBehavior: {fileID: 11400000, guid: a84a8b278aa48e94e8300665b9e075b6, type: 2}
+  offshoreFishBehavior: {fileID: 11400000, guid: 9bdf66223a7fa9740b64b9d1fb9cccba, type: 2}
+  shell: {fileID: 11400000, guid: cde434697fb2dd040a417e76bb478528, type: 2}
+  shop: {fileID: 11400000, guid: d8dec4f584ad9de409949366cbea73a1, type: 2}
+  zones:
+  - {fileID: 11400000, guid: a05fc36d05d684e47883d73176a801e2, type: 2}
+  - {fileID: 11400000, guid: d4a602b78c8fddc47bed0ae411a5eb76, type: 2}
+  - {fileID: 11400000, guid: cff961d127000254a90b6cbf1b5755b2, type: 2}
+  includedShaders:
+  - {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 4800000, guid: f36e320d9046f68409f58268e6784a6a, type: 3}
+  - {fileID: 4800000, guid: 6a013f8359be2db4bab075bbb55b88a1, type: 3}
+  - {fileID: 4800000, guid: b0e72f3c9aaec284091fec2f0bf3d2e7, type: 3}
+  - {fileID: 4800000, guid: 3266a6af5a8532c44b8a9762b961fe16, type: 3}

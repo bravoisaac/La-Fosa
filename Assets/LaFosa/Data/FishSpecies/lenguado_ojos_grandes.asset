@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf06fd5ab7da324590371f748ba1e52, type: 3}
+  m_Name: lenguado_ojos_grandes
+  m_EditorClassIdentifier: Assembly-CSharp::LaFosa.FishSpeciesDefinition
+  id: lenguado_ojos_grandes
+  displayName: Lenguado de ojos grandes
+  scientificName: Hippoglossina macrops
+  habitatBand: 3
+  referenceDepth: "50\u2013400 m \xB7 plataforma"
+  playableDepth: {x: 26, y: 49}
+  form: 4
+  pattern: 2
+  length: 0.95
+  width: 0.53
+  height: 0.09
+  backColor: {r: 0.63529414, g: 0.54509807, b: 0.3764706, a: 0}
+  bellyColor: {r: 0.8352941, g: 0.7921569, b: 0.67058825, a: 0}
+  accentColor: {r: 0.31764707, g: 0.2784314, b: 0.21568628, a: 0}
+  dorsalHeight: 0.04
+  dorsalCount: 1
+  eyeSize: 0.061
+  swimSpeed: 0.27
+  population: 2
+  item: {fileID: 11400000, guid: b606c166eaeff4b4a96e223dd93c6d72, type: 2}
+  prefab: {fileID: 2953341480510055729, guid: 34ac569605c14544caaaee7c558a8562, type: 3}
