@@ -96,21 +96,38 @@ namespace LaFosa
                 ObservedFish = hit.collider.GetComponentInParent<FishAgent>();
             }
         }
+        void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            hit.collider.GetComponentInParent<DiveGate>()?.NotifyBlocked(this);
+        }
         void UpdateAtmosphere()
         {
             float t = Mathf.Clamp01(Depth / 95);
-            if (RenderSettings.sun != null) RenderSettings.sun.intensity = Underwater ? Mathf.Lerp(.65f, .12f, t) : 1.1f;
+            float trench = WorldBuilder.TrenchBlend(View.transform.position);
+            if (RenderSettings.sun != null) RenderSettings.sun.intensity = Underwater ? Mathf.Lerp(.65f, Mathf.Lerp(.48f, .07f, t), trench) : 1.1f;
             lamp.intensity = Underwater ? 1.4f : 0;
-            Color water = Color.Lerp(new Color(.05f, .37f, .42f), new Color(.012f, .035f, .085f), t);
+            Color water = Color.Lerp(new Color(.045f, .3f, .29f), Color.Lerp(new Color(.035f, .23f, .24f), new Color(.009f, .025f, .045f), t), trench);
             RenderSettings.fogColor = Underwater ? water : new Color(.64f, .79f, .81f);
-            RenderSettings.fogDensity = Underwater ? Mathf.Lerp(.025f, .055f, t) : .0035f;
+            float shallowFog = Mathf.Clamp(Session.Config.shallowFogDensity, .01f, .2f);
+            float deepFog = Mathf.Clamp(Session.Config.deepFogDensity, shallowFog, .2f);
+            float coastalFog = Mathf.Clamp(Session.Config.coastalFogDensity, .01f, shallowFog);
+            RenderSettings.fogDensity = Underwater ? Mathf.Lerp(coastalFog, Mathf.Lerp(shallowFog, deepFog, t), trench) : .0035f;
             View.backgroundColor = Underwater ? water : new Color(.52f, .75f, .83f);
-            RenderSettings.ambientLight = Underwater ? Color.Lerp(new Color(.38f, .62f, .66f), new Color(.14f, .22f, .34f), t) : new Color(.7f, .77f, .78f);
+            RenderSettings.ambientLight = Underwater ? Color.Lerp(new Color(.32f, .52f, .49f), Color.Lerp(new Color(.26f, .44f, .43f), new Color(.08f, .14f, .19f), t), trench) : new Color(.7f, .77f, .78f);
         }
         public void Upgrade(float depth, float oxygen)
         {
             SafeDepth = Mathf.Max(SafeDepth, depth); baseOxygen = Mathf.Max(baseOxygen, oxygen); MaxOxygen = baseOxygen + oxygenBonus;
             Oxygen = MaxOxygen; Health = 100;
+        }
+        internal void RestoreEquipment()
+        {
+            baseOxygen = Session.Config.initialOxygen; oxygenBonus = 0;
+            SafeDepth = Session.Config.initialSafeDepth; MaxOxygen = baseOxygen;
+            foreach (var zone in Session.Config.zones)
+                if (Session.IsTreasureClaimed(zone)) Upgrade(zone.unlockedDepth, zone.unlockedOxygen);
+            if (Session.Economy.Has(GearKind.OxygenTank)) ApplyOxygenTank(Session.Config.shop.oxygenBonus);
+            Rescue("Expedición recuperada en la playa.");
         }
         public void ApplyOxygenTank(float extraSeconds)
         {
@@ -145,6 +162,7 @@ namespace LaFosa
             transform.rotation = Quaternion.identity; pitch = 0; View.transform.localRotation = Quaternion.identity;
             controller.enabled = true; verticalSpeed = 0; Oxygen = MaxOxygen; Health = 100;
             Target = null; Session.Notify(message);
+            Session.MarkSaveDirty();
         }
     }
 }

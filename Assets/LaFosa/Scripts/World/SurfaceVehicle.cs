@@ -60,10 +60,16 @@ namespace LaFosa
                 point.y = session.Config.waterLevel - .65f;
                 if (WorldBuilder.FloorHeight(point.x, point.z) > point.y - .3f) continue;
                 if (Physics.CheckCapsule(point + Vector3.up * .35f, point + Vector3.up * 1.45f, .34f, ~0, QueryTriggerInteraction.Ignore)) continue;
-                Passenger.LeaveVehicle(point); session.Notify("En el agua. El vehículo queda aquí para volver a subir."); return true;
+                Passenger.LeaveVehicle(point); session.MarkSaveDirty(); session.Notify("En el agua. El vehículo queda aquí para volver a subir."); return true;
             }
             session.Notify("No hay espacio al costado. Aléjate del muelle o pulsa R."); return false;
         }
         public void ClearPassenger() { Passenger = null; }
+        internal void Restore(bool owned, Vector3 position, float yaw)
+        {
+            Passenger = null;
+            transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
+            gameObject.SetActive(owned);
+        }
     }
 }

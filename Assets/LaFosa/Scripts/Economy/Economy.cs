@@ -12,6 +12,12 @@ namespace LaFosa
         GameSession session;
         public void Initialize(GameSession game) { session = game; }
         public bool Has(GearKind gear) => owned.Contains(gear);
+        internal void Restore(int money, string[] gear)
+        {
+            Money = money; owned.Clear();
+            foreach (string id in gear) owned.Add((GearKind)Enum.Parse(typeof(GearKind), id));
+            Feedback = "Trae tu pesca: cada especie tiene su propio valor.";
+        }
         public bool MeetsRequirement(GearKind gear) => (gear != GearKind.ReinforcedHarpoon && gear != GearKind.Net) || Has(GearKind.Trident);
         public int FishCount => session.Diver.Inventory.FishCount;
         public long SaleValue => session.Diver.Inventory.FishValue;
@@ -26,6 +32,7 @@ namespace LaFosa
             if (!session.Diver.Inventory.TryRemoveAllFish(count, value)) return Reject("La pesca disponible cambió; inténtalo de nuevo.");
             Money += (int)value;
             Feedback = "Vendiste " + count + " peces por $" + value + ". ¡Buena pesca!";
+            session.SaveNow();
             return true;
         }
         public bool Buy(ShopOffer offer)
@@ -44,7 +51,9 @@ namespace LaFosa
             if (offer.gear == GearKind.OxygenTank) session.Diver.ApplyOxygenTank(session.Config.shop.oxygenBonus);
             if (offer.gear == GearKind.Boat) session.Boat.Deliver();
             if (offer.gear == GearKind.JetSki) session.JetSki.Deliver();
+            session.RefreshRoutes();
             Feedback = "Compraste " + offer.title + ". " + (offer.gear == GearKind.Boat || offer.gear == GearKind.JetSki ? "Te espera junto al muelle." : "Disponible en tu equipo.");
+            session.SaveNow();
             return true;
         }
         bool Reject(string message) { Feedback = message; return false; }

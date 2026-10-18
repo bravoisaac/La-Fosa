@@ -8,7 +8,7 @@ Los santuarios usan circuitos de canales tallados, en lugar de repetir una secue
 4. Lleva la corriente hasta el cristal **SELLO**, atravesando **todas** las piedras, sin conexiones que terminen contra una pared o salgan del borde por otro lugar.
 5. Cuando el mural indique «CORRIENTE COMPLETA», acciona la palanca **ABRIR SELLO**. El cerrojo gira y las piedras se vuelven doradas. Recoge el tesoro con E.
 
-El cofre cerrado ofrece una pista. La piedra **REINICIAR** devuelve únicamente ese tablero a su mezcla inicial. Un error no borra los demás giros. R devuelve al jugador a la playa y conserva el estado del mecanismo durante la sesión. Si la mochila está llena, el sello permanece abierto y puedes regresar por el tesoro. Los santuarios posteriores no se pueden manipular hasta recuperar el tesoro anterior.
+El cofre cerrado ofrece una pista. La piedra **REINICIAR** devuelve únicamente ese tablero a su mezcla inicial. Un error no borra los demás giros. R devuelve al jugador a la playa y conserva el estado del mecanismo. Los giros y sellos se guardan también al cerrar y continuar la partida. Si la mochila está llena, el sello permanece abierto y puedes regresar por el tesoro. Los santuarios posteriores no se pueden manipular hasta recuperar el tesoro anterior.
 
 | Santuario | Mecanismo | Tablero | Desafío |
 |---|---|---|---|

@@ -84,7 +84,11 @@ namespace LaFosa.Editor
         }
         static DiveZoneDefinition Zone(string id, string title, string subtitle, Vector3 pos, float start, float maxDepth, float oxygen, int[] sequence, Color color, ItemDefinition treasure)
         {
-            var zone = ScriptableObject.CreateInstance<DiveZoneDefinition>(); zone.displayName = title; zone.subtitle = subtitle; zone.stationPosition = pos; zone.startsAtDepth = start; zone.unlockedDepth = maxDepth; zone.unlockedOxygen = oxygen; zone.sequence = sequence; zone.accent = color; zone.treasure = treasure;
+            var zone = ScriptableObject.CreateInstance<DiveZoneDefinition>(); zone.id = id.Substring(3).ToLowerInvariant(); zone.displayName = title; zone.subtitle = subtitle; zone.stationPosition = pos; zone.startsAtDepth = start; zone.unlockedDepth = maxDepth; zone.unlockedOxygen = oxygen; zone.sequence = sequence; zone.accent = color; zone.treasure = treasure;
+            zone.entryPosition = zone.id == "huiros" ? new Vector3(0, -2, 46) : new Vector3(0, zone.id == "naufragio" ? -32 : -64, 75);
+            zone.requiredSafeDepth = zone.id == "huiros" ? 24 : zone.id == "naufragio" ? 52 : 88;
+            zone.requiredOxygen = zone.id == "huiros" ? 115 : zone.id == "naufragio" ? 155 : 200;
+            zone.barrierWidth = zone.id == "abismo" ? 40 : 60;
             AssetDatabase.CreateAsset(zone, DataPath + "/" + id + ".asset"); return zone;
         }
         static void EnsureMouseAxes()
@@ -132,6 +136,18 @@ namespace LaFosa.Editor
                 }
                 Check(-config.zones[0].stationPosition.y < config.initialSafeDepth, "Primera zona alcanzable");
                 for (int i = 1; i < config.zones.Length; i++) Check(-config.zones[i].stationPosition.y < config.zones[i - 1].unlockedDepth, "Progresión alcanzable");
+                for (int i = 1; i < config.zones.Length; i++)
+                {
+                    var zone = config.zones[i]; var previous = config.zones[i - 1];
+                    Check(zone.requiredSafeDepth <= previous.unlockedDepth && zone.requiredOxygen <= previous.unlockedOxygen, "Tesoro anterior permite preparar el descenso");
+                    Check(zone.entryPosition.y < previous.stationPosition.y - 4 && zone.entryPosition.y > zone.stationPosition.y + 4, "Compuerta entre los dos santuarios");
+                    Check(zone.barrierWidth >= 12 && zone.requiredSafeDepth >= -zone.stationPosition.y, "Dimensiones y equipo de descenso válidos");
+                    float half = zone.barrierWidth / 2;
+                    for (float edge = -half; edge <= half; edge += 1)
+                        foreach (float side in new[] { -half, half })
+                            Check(WorldBuilder.FloorHeight(zone.entryPosition.x + edge, zone.entryPosition.z + side) > zone.entryPosition.y + 1 &&
+                                WorldBuilder.FloorHeight(zone.entryPosition.x + side, zone.entryPosition.z + edge) > zone.entryPosition.y + 1, "Perímetro de compuerta enterrado sin atajos laterales");
+                }
                 Debug.Log("LA_FOSA_TESTS_OK · Inventario, capacidad atómica, puzles y progresión.");
             }
             finally { UnityEngine.Object.DestroyImmediate(obj); }

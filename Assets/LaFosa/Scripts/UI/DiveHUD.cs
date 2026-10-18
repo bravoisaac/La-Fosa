@@ -12,6 +12,7 @@ namespace LaFosa
         static readonly Color Gold = new Color(1, .73f, .39f);
         GUIStyle style;
         bool showControls = true;
+        bool confirmNewGame;
         void OnGUI()
         {
             if (session == null || session.Diver == null) return;
@@ -30,7 +31,7 @@ namespace LaFosa
             Text(Mathf.RoundToInt(diver.transform.eulerAngles.y).ToString("000") + "°", 740, 65, 120, 30, 21, Color.white, TextAnchor.MiddleCenter);
 
             Panel(30, 137, 315, 126);
-            Text("CUADERNO DE EXPEDICIÓN", 50, 153, 280, 22, 12, Gold);
+            Text("CUADERNO · ZONAS " + session.DiscoveredZoneCount + "/" + session.Config.zones.Length, 50, 153, 280, 22, 12, Gold);
             Text(session.Complete ? "Los secretos del abismo" : "El siguiente descenso", 50, 184, 280, 28, 20, Color.white);
             Text(session.Complete ? "Expedición completada. Sigue explorando y pescando." : "Gira las piedras, une los canales y abre los sellos. Tesoros: " + session.Treasures + " / " + session.Config.zones.Length, 50, 220, 270, 40, 13, Muted);
             Panel(30, 280, 315, 90);
@@ -52,14 +53,14 @@ namespace LaFosa
             {
                 if (!session.Complete)
                 {
-                    Vector3 destination = session.Config.zones[session.Treasures].stationPosition + Vector3.up * 3;
+                    Vector3 destination = session.NextWaypoint(out string waypointLabel);
                     Vector3 point = diver.View.WorldToViewportPoint(destination);
                     if (point.z > 0)
                     {
                         float markerX = Mathf.Clamp(point.x * 1600, 400, 1200);
                         float markerY = Mathf.Clamp((1 - point.y) * 900, 200, 610);
                         Text("◇", markerX - 20, markerY - 20, 40, 36, 27, Gold, TextAnchor.MiddleCenter);
-                        Text("SANTUARIO  ·  " + Mathf.RoundToInt(Vector3.Distance(diver.transform.position, destination)) + " m", markerX - 140, markerY + 20, 280, 28, 12, Gold, TextAnchor.MiddleCenter);
+                        Text(waypointLabel + " · " + Mathf.RoundToInt(Vector3.Distance(diver.transform.position, destination)) + " m", markerX - 140, markerY + 20, 280, 28, 12, Gold, TextAnchor.MiddleCenter);
                     }
                 }
                 RectColor(798, 440, 4, 4, Color.white);
@@ -89,6 +90,8 @@ namespace LaFosa
                 Panel(410, 112, 780, 60);
                 Text(session.Message, 435, 123, 730, 42, 17, Mint, TextAnchor.MiddleCenter);
             }
+            if (session.SaveFailed && !session.Intro)
+                Text(session.SaveStatus, 410, 180, 780, 55, 16, Gold, TextAnchor.MiddleCenter);
             if (session.Intro) Intro();
             else if (session.ShopOpen) Shop();
             else if (session.InventoryOpen) Inventory();
@@ -97,13 +100,26 @@ namespace LaFosa
         void Intro()
         {
             RectColor(0, 0, 1600, 900, new Color(.015f, .04f, .065f, .65f));
-            Panel(390, 165, 820, 570);
+            Panel(390, 165, 820, 650);
             Text("UNA EXPEDICIÓN AL PACÍFICO", 450, 208, 700, 25, 14, Mint);
             Text("Bajo la calma,\nun mundo por descubrir.", 450, 257, 700, 120, 42, Color.white);
             Text("Explora una caleta chilena y desciende por una fosa ficticia. Tres santuarios, tres tesoros y la oscuridad del océano te esperan.", 450, 398, 685, 65, 20, Muted);
             Text("01  Atrapa los peces lentos de la orilla con las manos.\n02  Vende tu pesca y compra el tridente por $60.\n03  Compra el arpón para los peces rápidos del mar.", 450, 482, 690, 100, 18, Color.white);
-            if (Button("COMENZAR INMERSIÓN   →", 450, 621, 390, 55)) session.Begin();
-            Text("WASD + ratón  ·  TAB mochila\nESC pausa  ·  R rescate", 880, 625, 270, 50, 14, Muted);
+            if (confirmNewGame)
+            {
+                Text("Se reemplazará la partida guardada y su respaldo. ¿Empezar desde cero?", 450, 597, 690, 48, 18, Gold);
+                if (Button("SÍ, NUEVA PARTIDA", 450, 660, 330, 50)) { if (session.NewGame(true)) confirmNewGame = false; }
+                if (Button("CANCELAR", 810, 660, 330, 50)) confirmNewGame = false;
+            }
+            else
+            {
+                GUI.enabled = session.CanContinue;
+                if (Button("CONTINUAR", 450, 621, 330, 55)) session.ContinueGame();
+                GUI.enabled = true;
+                if (Button("NUEVA PARTIDA", 810, 621, 330, 55))
+                { if (session.HasSaveFiles) confirmNewGame = true; else session.NewGame(); }
+            }
+            Text(session.SaveStatus, 450, 736, 690, 60, 15, session.SaveFailed ? Gold : Muted);
         }
         void Inventory()
         {
@@ -139,7 +155,8 @@ namespace LaFosa
             if (Button("CONTINUAR", 580, 370, 440, 52)) session.Resume();
             if (Button("VOLVER A LA PLAYA", 580, 438, 440, 52)) { session.Diver.Rescue("De regreso en Caleta Bruma."); session.Resume(); }
             if (Button(showControls ? "OCULTAR CONTROLES" : "MOSTRAR CONTROLES", 580, 506, 440, 52)) showControls = !showControls;
-            Text("Prototipo · el progreso dura esta sesión.\nCierra la ventana para salir.", 580, 590, 440, 50, 15, Muted);
+            if (Button("GUARDAR Y VOLVER AL MENÚ", 580, 574, 440, 42)) session.ReturnToMenu();
+            Text(session.SaveStatus, 580, 626, 440, 44, 13, session.SaveFailed ? Gold : Muted);
         }
         void Panel(float x, float y, float w, float h) { RectColor(x, y, w, h, Ink); RectColor(x, y, 3, h, new Color(.35f, .76f, .68f, .6f)); }
         void RectColor(float x, float y, float w, float h, Color color) { GUI.color = color; GUI.DrawTexture(new Rect(x, y, w, h), Texture2D.whiteTexture); GUI.color = Color.white; }

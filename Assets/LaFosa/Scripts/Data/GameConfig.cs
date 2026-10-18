@@ -8,6 +8,10 @@ namespace LaFosa
         public int seed = 2718;
         public Vector3 spawn = new Vector3(0, 4, -22);
         public float waterLevel;
+        [Header("Bruma submarina")]
+        [Range(.01f, .2f)] public float coastalFogDensity = .035f;
+        [Range(.01f, .2f)] public float shallowFogDensity = .065f;
+        [Range(.01f, .2f)] public float deepFogDensity = .115f;
         public float initialOxygen = 115;
         public float initialSafeDepth = 34;
         public int inventorySlots = 12;

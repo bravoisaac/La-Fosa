@@ -11,11 +11,16 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a5103810b1c07e43bdddcaa2e85d2da, type: 3}
   m_Name: 03_Abismo
+  id: abismo
   m_EditorClassIdentifier: Assembly-CSharp::LaFosa.DiveZoneDefinition
   displayName: "03 \xB7 Coraz\xF3n del abismo"
   subtitle: Un resplandor en la oscuridad.
   stationPosition: {x: 0, y: -87.5, z: 70}
   startsAtDepth: 67
+  entryPosition: {x: 0, y: -64, z: 75}
+  requiredSafeDepth: 88
+  requiredOxygen: 200
+  barrierWidth: 40
   unlockedDepth: 110
   unlockedOxygen: 240
   accent: {r: 0.74, g: 0.49, b: 1, a: 1}

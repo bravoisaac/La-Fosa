@@ -25,6 +25,10 @@ namespace LaFosa
             if (Ready) throw new InvalidOperationException("La mezcla comienza resuelta: " + Definition.name);
         }
         public int Turns(int index) => turns[index];
+        internal void Restore(int[] savedTurns, int moves, bool solved)
+        {
+            Array.Copy(savedTurns, turns, turns.Length); Moves = moves; Solved = solved; Evaluate();
+        }
         public int BaseMask(int index) => masks[index];
         public bool IsPowered(int index) => powered[index];
         public int Mask(int index) => ((masks[index] << turns[index]) | (masks[index] >> (4 - turns[index]))) & 15;

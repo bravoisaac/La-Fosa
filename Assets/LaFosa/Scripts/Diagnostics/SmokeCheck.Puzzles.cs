@@ -49,6 +49,11 @@ namespace LaFosa
             yield return null;
             Check(diver.Target == lever, "Palanca accesible por interacción " + level + " (" + (diver.Target != null ? diver.Target.name : "sin objetivo") + ")");
             lever.Interact(diver); Check(puzzle.Solved, "Palanca abre sello " + level);
+            if (level < session.Config.zones.Length - 1)
+            {
+                var gate = session.GetComponentsInChildren<DiveGate>().First(g => g.Puzzle == puzzle);
+                Check(!gate.IsOpen && gate.MissingRequirement.Contains(puzzle.zone.treasure.displayName), "Sello resuelto pide recoger la mejora antes del descenso " + level);
+            }
             int moves = puzzle.Moves;
             stones[0].Interact(diver); reset.Interact(diver); lever.Interact(diver);
             Check(puzzle.Solved && puzzle.Moves == moves, "Sello abierto no se reinicia ni duplica " + level);

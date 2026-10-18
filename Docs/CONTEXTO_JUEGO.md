@@ -112,7 +112,11 @@ Una criatura peligrosa debe mostrar señales que el jugador pueda aprender: post
 
 **Ya existe en el prototipo:** movimiento y buceo en primera persona; oxígeno y presión; inventario; cabaña y tienda; venta de peces; manos, tridente, arpón y red; mejoras de aire y aletas; bote y moto de agua conducibles; 49 modelos de fauna y 132 individuos; tres mosaicos de 6, 9 y 12 piedras; cofres y mejoras de equipo.
 
-**Todavía no está implementado:** guardado persistente; base flotante; exploradores; ballesta; fauna fantástica agresiva; capas con fenómenos ambientales propios; puertas físicas que vinculen los puzles al avance; viajes rápidos desbloqueables; historia desarrollada y sonido. El rescate actual conserva los objetos y el progreso solo dura la sesión.
+**Añadido en la etapa 1:** guardado persistente local con respaldo, Nueva partida/Continuar y recuperación desde la playa. Conserva inventario, dinero, compras, tesoros, puzles, descubrimientos, conchas y embarcaciones. El rescate conserva los objetos.
+
+**Añadido en la etapa 2:** compuertas físicas entre las tres capas, requisitos de equipo y tesoro, indicadores de acceso/retorno y persistencia de las rutas abiertas. Falta probar manualmente su orientación y equilibrio junto con la primera expedición.
+
+**Todavía no está implementado:** base flotante; exploradores; ballesta; fauna fantástica agresiva; capas con fenómenos ambientales propios; viajes rápidos desbloqueables; historia desarrollada y sonido.
 
 ## Criterios para trabajar con Codex
 

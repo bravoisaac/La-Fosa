@@ -51,6 +51,7 @@ namespace LaFosa
             if ((tool == 1 && !diver.Session.Economy.Has(GearKind.Trident)) || (tool == 2 && !diver.Session.Economy.Has(GearKind.ReinforcedHarpoon)) || (tool == 3 && !diver.Session.Economy.Has(GearKind.Net)))
             { diver.Session.Notify("Compra esta herramienta en la cabaña de Don Lucho."); return false; }
             SelectedTool = tool;
+            diver.Session.MarkSaveDirty();
             if (toolModels != null) for (int i = 0; i < toolModels.Length; i++) toolModels[i].SetActive(i == tool);
             return true;
         }

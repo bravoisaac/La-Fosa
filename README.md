@@ -8,7 +8,7 @@ Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md
 
 1. En Unity Hub, selecciona **Add / Add project from disk** y esta carpeta.
 2. Abre `Assets/LaFosa/Scenes/LaFosa.unity`.
-3. Pulsa **Play** y **Comenzar inmersión**.
+3. Pulsa **Play** y **Nueva partida** o **Continuar**. Reemplazar una partida existente requiere confirmación.
 
 Si aún no existe la escena, usa **La Fosa → Preparar escena inicial**. El mundo se construye al pulsar Play; es normal que la escena en edición contenga solamente el objeto de inicio.
 
@@ -43,13 +43,17 @@ Los peces huyen al ver al buzo. **Los de la orilla escapan despacio (1,8 m/s)**:
 
 Hay tres santuarios: Bosque de huiros (~24 m), Ecos del naufragio (~52 m) y Corazón del abismo (~88 m). Cada uno tiene un mosaico de piedras giratorias: **6, 9 y 12 piezas**, respectivamente. Apunta a una piedra y pulsa **E** para girarla 90°. Une los canales desde **ENTRADA** hasta **SELLO** pasando por todas las piedras y sin extremos abiertos. La corriente ilumina el recorrido conectado. Cuando esté completo, acciona la palanca **ABRIR SELLO** y abre el cofre con E.
 
-Los giros equivocados no borran tus avances. La piedra **REINICIAR** restaura solo ese tablero si quieres empezar de nuevo. Puedes leer la pista mirando el cofre cerrado y pulsando E. Regresar a la playa conserva los giros durante la sesión, y un mecanismo abierto no vuelve a bloquearse. Consulta [los puzles de piedras](Docs/PUZLES.md).
+Los giros equivocados no borran tus avances. La piedra **REINICIAR** restaura solo ese tablero si quieres empezar de nuevo. Puedes leer la pista mirando el cofre cerrado y pulsando E. Los giros y los sellos abiertos se guardan también al cerrar el juego. Consulta [los puzles de piedras](Docs/PUZLES.md).
 
 Los tesoros mejoran automáticamente la reserva de aire y la profundidad segura. Abrir un cofre repone oxígeno y salud. El exceso de profundidad y la falta de oxígeno causan daño. La superficie repone aire y salud; si agotas la salud, regresas a la playa conservando tus objetos. R permite regresar en cualquier momento.
 
+**El descenso tiene dos compuertas físicas**, a 32 y 64 m. Las losas cubren la fosa y dejan una escotilla central: abre el sello anterior y recoge su tesoro para preparar el equipo y liberar el paso. Comprar la bombona no resuelve el mecanismo. E sobre la compuerta, o chocar con ella, muestra lo que falta. El marcador guía primero a la escotilla y después al santuario; vuelve por la misma abertura iluminada. Las rutas permanecen abiertas al cargar y aunque descartes el objeto del tesoro. Consulta [rutas y requisitos de descenso](Docs/DESCENSOS.md).
+
 La mochila tiene 12 espacios y pilas limitadas. Un inventario lleno no consume tesoros ni capturas. Puedes descartar pilas desde Tab. Las mejoras adquiridas permanecen aunque descartes su tesoro. Inventario y pausa detienen la simulación.
 
-**El progreso dura la sesión actual**, incluido dinero, compras y vehículos. No incluye guardado persistente, multijugador, sonido ni animación de brazos. Es una base jugable para ampliar; los objetos y paisajes se generan con geometría simple, sin recursos externos.
+**El progreso se guarda en el equipo**, con versión de formato y copia de respaldo. Se conservan dinero, inventario, compras, tesoros, piedras, zonas descubiertas, conchas recogidas y propiedad/posición de vehículos. **Continuar** devuelve al buzo a la playa con aire y salud recuperados. En pausa, **Guardar y volver al menú** permite comprobar el guardado antes de salir. Un error de escritura se muestra en pantalla; un archivo principal inválido permite recuperar el respaldo. Consulta [guardado y recuperación](Docs/GUARDADO.md).
+
+No incluye multijugador, sonido ni animación de brazos. Es una base jugable para ampliar; los objetos y paisajes se generan con geometría simple, sin recursos externos.
 
 ## Cabaña y tienda de Don Lucho
 
@@ -67,17 +71,20 @@ Empiezas **sin dinero, sin arpón y pescando con las manos**. Los peces de la or
 | Bote de caleta | $240 | Embarcación de superficie a 12 m/s |
 | Moto de agua | $360 | Embarcación de superficie a 22 m/s |
 
-Las mejoras se compran una sola vez y no consumen espacios de mochila. Puedes volver a las manos con la tecla 1. La bombona amplía permanentemente la capacidad durante la sesión; no es un consumible. La red es reutilizable, funciona buceando o desde una embarcación y respeta los obstáculos. Las manos, el arpón y el tridente requieren estar bajo el agua. Cambiar de herramienta no elimina la recarga pendiente.
+Las mejoras se compran una sola vez y no consumen espacios de mochila. Puedes volver a las manos con la tecla 1. La bombona amplía permanentemente la capacidad de la partida; no es un consumible. La red es reutilizable, funciona buceando o desde una embarcación y respeta los obstáculos. Las manos, el arpón y el tridente requieren estar bajo el agua. Cambiar de herramienta no elimina la recarga pendiente.
 
 El bote comprado aparece a la izquierda del muelle y la moto a la derecha. Acércate, mira la embarcación y pulsa **E**. Usa **W/S** para avanzar/retroceder, **A/D** para girar y el ratón para mirar. **E** te deja nadando a un costado; el vehículo queda donde lo abandonaste. **R** rescata al buzo y conserva la propiedad. La conducción usa colisiones y límites de costa; no incluye una simulación de oleaje o combustible.
 
 ## Ampliar
 
 - `Assets/LaFosa/Data/Expedicion.asset`: semilla, punto de aparición, oxígeno inicial, profundidad segura, capacidad y lista ordenada de zonas.
+- Desde fuera del agua, el mar tiene un tono y una turbidez uniformes; solo los primeros 20 m junto a la orilla son progresivamente más transparentes, sin una mancha oscura sobre la fosa. Bajo el agua, `coastalFogDensity` (0,035), `shallowFogDensity` (0,065) y `deepFogDensity` (0,115) en `Expedicion.asset` ajustan exterior, fosa somera y fosa profunda, conservando la transición gradual entre zonas. La bruma del aire sigue en 0,0035 y Graphics Settings conserva explícitamente el modo Exp2.
 - `Assets/LaFosa/Data/Tienda.asset`: precios del equipo, bono de oxígeno y multiplicador de aletas. Los precios de venta están en cada `ItemDefinition.salePrice` (el campo antiguo `fishValue` se conserva como referencia del jurel inicial). `ShopCatalog`, `Economy` y `GearKind` permiten ampliar el equipo; añade también su efecto en el componente correspondiente.
 - `WorldBuilder.Shop.cs`: cabaña, vendedor, modelos de herramientas y embarcaciones. `SurfaceVehicle` concentra navegación, embarque, colisiones y desembarque. `DiveHUD.Shop.cs` contiene la tienda con lista desplazable.
 - **Create → La Fosa → Objeto**: crea recursos, peces y tesoros con identificador estable, nombre, descripción, color y tamaño de pila.
-- **Create → La Fosa → Zona de buceo**: crea una zona con posición, profundidad, tesoro y mejoras. Asígnale un **Puzle de piedras** y añádela a `Expedicion.zones` en orden de profundidad. Se genera su santuario automáticamente. El campo antiguo `sequence` ya no controla los nuevos mecanismos.
+- **Create → La Fosa → Zona de buceo**: crea una zona con ID estable único, posición, profundidad, tesoro y mejoras. Asígnale un **Puzle de piedras** y añádela a `Expedicion.zones` en orden de profundidad. Se genera su santuario automáticamente. El campo antiguo `sequence` ya no controla los nuevos mecanismos. Cambiar IDs o estructura del contenido exige planificar una migración del guardado.
+- `GameSession.Persistence`, `GameSession.SaveValidation` y `SaveStore`: captura/restauración de la partida, validación previa y escritura con respaldo. Los cambios de inventario/puzles se guardan al final del frame; compras, ventas y tesoros se guardan tras completar la transacción.
+- `DiveGate` y `WorldBuilder.Gates`: compuertas, losas y señalización de retorno. Cada zona define entrada, requisitos de profundidad/aire, ancho de barrera y pista de regreso; validar de nuevo el perímetro si cambia el terreno.
 - `WorldBuilder.FloorHeight`: amplía el fondo si añades niveles por debajo de los 88 m. Ajusta también los límites de rescate de `DiverController` para profundidades mayores a 120 m. Las posiciones y alturas del paisaje base asumen agua a 0 m.
 - `Interactable`: hereda esta clase para añadir puertas, herramientas, misiones o nuevos puzles. El buzo detecta automáticamente los objetos a menos de 4,5 m.
 - `StonePuzzleDefinition` define dimensiones, recorrido y mezcla; `StoneCircuitPuzzle` evalúa conexiones y corriente; `RuneStone` gira las piedras; `StonePuzzleLever` activa o reinicia; `StonePuzzleView` anima el cierre; `TreasureChest` entrega la recompensa. `SequencePuzzle` conserva el código anterior por compatibilidad, pero ya no se usa en los santuarios.

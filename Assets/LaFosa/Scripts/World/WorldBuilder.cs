@@ -10,11 +10,19 @@ namespace LaFosa
         readonly GameConfig config;
         readonly Dictionary<string, Material> materials = new Dictionary<string, Material>();
         public WorldBuilder(Transform parent, GameConfig settings) { root = parent; config = settings; }
+        public static readonly Vector2 TrenchCenter = new Vector2(0, 75);
+        public const float TrenchOuterRadius = 31;
+        public const float TrenchInnerRadius = 23;
+        public static float TrenchBlend(Vector3 position)
+        {
+            float distance = Vector2.Distance(new Vector2(position.x, position.z), TrenchCenter);
+            return Mathf.SmoothStep(0, 1, Mathf.InverseLerp(TrenchOuterRadius, TrenchInnerRadius, distance));
+        }
         public static float FloorHeight(float x, float z)
         {
             float shelf = Mathf.Lerp(3, -9, Mathf.InverseLerp(-12, 24, z));
-            float r = Vector2.Distance(new Vector2(x, z), new Vector2(0, 75));
-            if (r > 31) return shelf;
+            float r = Vector2.Distance(new Vector2(x, z), TrenchCenter);
+            if (r > TrenchOuterRadius) return shelf;
             if (r > 27) return Mathf.Lerp(-24, -9, (r - 27) / 4);
             if (r > 23) return -24;
             if (r > 19) return Mathf.Lerp(-52, -24, (r - 19) / 4);
@@ -72,7 +80,12 @@ namespace LaFosa
             terrain.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("LaFosa/Faceted"));
             terrain.AddComponent<MeshCollider>().sharedMesh = mesh;
             var sea = Shape("Océano Pacífico", PrimitiveType.Plane, new Vector3(0, config.waterLevel, 104), new Vector3(30, 1, 22), Mat("temporary water", Color.cyan), false);
-            sea.GetComponent<Renderer>().sharedMaterial = new Material(Shader.Find("LaFosa/Water"));
+            var water = new Material(Shader.Find("LaFosa/Water"));
+            water.SetVector("_Trench", new Vector4(TrenchCenter.x, TrenchCenter.y, TrenchInnerRadius, TrenchOuterRadius));
+            water.SetFloat("_WaterLevel", config.waterLevel);
+            float shoreZ = Mathf.Lerp(-12, 24, Mathf.InverseLerp(3, -9, config.waterLevel));
+            water.SetVector("_ShoreFade", new Vector4(shoreZ, shoreZ + 20, 0, 0));
+            sea.GetComponent<Renderer>().sharedMaterial = water;
         }
         void Triangle(Vector3 a, Vector3 b, Vector3 c, List<Vector3> vertices, List<Color> colors, List<int> indices)
         {
@@ -141,7 +154,7 @@ namespace LaFosa
             for (int i = 0; i < 9; i++)
             {
                 var shell = Rock("Concha recolectable", new Vector3(Random.Range(-5, 5), 3.3f, Random.Range(-20, -12)), new Vector3(.32f, .18f, .4f), Mat("Concha", new Color(.95f, .71f, .48f)));
-                shell.AddComponent<Pickup>().item = config.shell;
+                var pickup = shell.AddComponent<Pickup>(); pickup.item = config.shell; pickup.id = "coast-shell-" + i;
             }
         }
         void BuildSeaLife()

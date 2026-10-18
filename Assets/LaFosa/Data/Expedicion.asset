@@ -15,6 +15,9 @@ MonoBehaviour:
   seed: 2718
   spawn: {x: 0, y: 4, z: -22}
   waterLevel: 0
+  coastalFogDensity: 0.035
+  shallowFogDensity: 0.065
+  deepFogDensity: 0.115
   initialOxygen: 115
   initialSafeDepth: 34
   inventorySlots: 12

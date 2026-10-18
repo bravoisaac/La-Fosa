@@ -22,7 +22,7 @@ namespace LaFosa
         }
         public override void Interact(DiverController diver)
         {
-            if (!diver.Session.IsZoneUnlocked(puzzle.zone)) { diver.Session.Notify("Recupera primero el tesoro del nivel anterior."); return; }
+            if (!diver.Session.IsZoneUnlocked(puzzle.zone)) { diver.Session.Notify(diver.Session.ZoneRequirement(puzzle.zone)); return; }
             if (!puzzle.Rotate(index)) return;
             diver.Session.Notify(puzzle.Ready ? "¡La corriente llega a todas las piedras! Acciona ABRIR SELLO." : "Corriente: " + puzzle.PoweredCount + "/" + puzzle.Definition.Count + " piedras. Une los canales sin dejar extremos abiertos.");
         }

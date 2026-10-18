@@ -1,6 +1,6 @@
 # La Fosa plan de mejora por etapas
 
-El objetivo es transformar el prototipo actual en un juego de expediciones por una fosa misteriosa. Este plan desarrolla la visión de `Docs/CONTEXTO_JUEGO.md`. **Es un plan de trabajo: las funciones futuras que describe todavía no están implementadas.**
+El objetivo es transformar el prototipo actual en un juego de expediciones por una fosa misteriosa. Este plan desarrolla la visión de `Docs/CONTEXTO_JUEGO.md`. **Es un plan de trabajo: consultar el estado de cada etapa; las funciones de las etapas pendientes todavía no están implementadas.**
 
 El orden de construcción no es idéntico al orden en que el jugador comprará el equipo. Primero hay que conseguir una expedición completa que se guarde, se entienda y permita avanzar; después se amplía el mundo.
 
@@ -13,6 +13,12 @@ Usar el contexto como referencia para conservar Unity, primera persona, low poly
 **Resultado:** una visión común y este orden de desarrollo. La preparación de este plan no cambia el funcionamiento del juego.
 
 ## Etapa 1 Guardar y recuperar el progreso
+
+**Estado al 18 de octubre de 2026: implementada y verificada automáticamente. Pendiente la comprobación humana del menú y del recorrido.**
+
+Guardado local versionado con escritura temporal, validación previa y respaldo; Nueva partida con confirmación, Continuar y Guardar y volver al menú. Incluye saldo, inventario, compras, herramienta, tesoros, giros/sellos, descubrimientos, conchas y propiedad/posición de vehículos. Continuar vuelve a la playa con aire y salud completos. Detalles y límites en `Docs/GUARDADO.md`.
+
+Verificación: compilación Windows correcta; **389 comprobaciones de integración aprobadas** y **12 comprobaciones adicionales repartidas entre dos procesos** de escritura/carga tras cerrar. Sin duplicar tesoros ni acumular mejoras. Probados archivo ausente, corrupción, recuperación del respaldo, versión incompatible, datos incoherentes, fallo de escritura y protección contra nueva partida accidental.
 
 **Objetivo:** que una expedición no se pierda al cerrar el juego.
 
@@ -27,6 +33,12 @@ Usar el contexto como referencia para conservar Unity, primera persona, low poly
 
 ## Etapa 2 Organizar los requisitos de cada descenso
 
+**Estado al 18 de octubre de 2026: implementada y verificada automáticamente. Pendiente el recorrido humano, junto con la comprobación manual de la etapa 1.**
+
+Dos compuertas físicas a 32 y 64 m cierran el descenso al naufragio y al abismo. Cada paso exige abrir el sello anterior y recoger su mejora permanente. Requisitos editables, mensajes al interactuar/chocar, señalización de retorno y marcador que guía hasta la escotilla. El estado de acceso se deriva del progreso existente, sin cambiar el formato v1. Detalles por capa: `Docs/DESCENSOS.md`.
+
+Verificación: **422 comprobaciones de integración aprobadas**, incluidas 33 nuevas sobre accesos; cobertura de 5.957 y 1.693 puntos de las losas, cruce real con CharacterController y regreso a superficie, persistencia y descarte de tesoros sin bloqueo. La partida de prueba de la etapa 1 cargó con el ejecutable de la etapa 2 (**5 comprobaciones de compatibilidad aprobadas**). Revisión visual de compuertas abiertas/cerradas; orientación y equilibrio pendientes de juego humano.
+
 **Objetivo:** que el jugador sepa qué necesita para avanzar.
 
 1. Definir por capa su entrada, equipo necesario, prueba principal, recompensa y salida segura.
@@ -37,9 +49,11 @@ Usar el contexto como referencia para conservar Unity, primera persona, low poly
 
 **Criterio de cierre:** el siguiente paso está bloqueado antes de cumplir sus requisitos, se abre al resolver la prueba y permanece abierto al cargar la partida. No puede rodearse por un hueco accidental del escenario.
 
-**Puntos de partida:** `DiveZoneDefinition`, `GameSession.IsZoneUnlocked`, `WorldBuilder`, puzles y cofres. La fosa actual usa principalmente daño por presión y orden de tesoros; hacen falta barreras de recorrido.
+**Puntos de partida:** `DiveZoneDefinition`, `GameSession.IsZoneUnlocked`, `WorldBuilder`, puzles y cofres. La implementación añade `DiveGate` y `WorldBuilder.Gates` a las restricciones existentes de presión y orden de tesoros.
 
 ## Etapa 3 Completar la primera expedición
+
+**Estado: siguiente entrega pendiente. El recorrido humano de las etapas 1–2 sigue pendiente y debe informar el pulido de esta etapa.**
 
 **Objetivo:** pulir una experiencia pequeña de principio a fin antes de añadir sistemas grandes.
 
@@ -156,8 +170,8 @@ No hace falta multiplicar sistemas al principio: la construcción libre de bases
 
 No se fijan fechas sin estimar el trabajo y comprobar el prototipo. El criterio para avanzar es cumplir la entrega jugable de la etapa anterior.
 
-## Encargo inicial sugerido para Codex
+## Encargo inicial de referencia (implementado)
 
 > Lee `Docs/CONTEXTO_JUEGO.md`, `Docs/PLAN_MEJORAS.md`, `README.md` y `Docs/MAPA.md`. Implementa únicamente la etapa 1: guardado y carga del progreso. Conserva el inicio con manos, la compra del tridente antes del arpón, la pesca, la tienda, los vehículos y los tres mecanismos de piedra. Incluye dinero, inventario, equipo, tesoros, estados de los puzles y embarcaciones. Añade Nueva partida y Continuar. Verifica cerrar y cargar, compras y tesoros sin duplicación, y recuperación ante un archivo de guardado inválido. Documenta lo implementado y sus límites.
 
-Este encargo es una propuesta para la siguiente tarea; no se ha ejecutado como parte de la preparación del plan.
+Este encargo se implementó el 18 de octubre de 2026 y después se añadieron los accesos de la etapa 2. La comprobación manual pendiente y los límites están registrados en `Docs/PRUEBAS.md`; la siguiente implementación corresponde a la etapa 3.

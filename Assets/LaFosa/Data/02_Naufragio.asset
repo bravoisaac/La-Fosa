@@ -11,11 +11,16 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a5103810b1c07e43bdddcaa2e85d2da, type: 3}
   m_Name: 02_Naufragio
+  id: naufragio
   m_EditorClassIdentifier: Assembly-CSharp::LaFosa.DiveZoneDefinition
   displayName: "02 \xB7 Ecos del naufragio"
   subtitle: "El oc\xE9ano conserva sus secretos."
   stationPosition: {x: 0, y: -51.5, z: 58}
   startsAtDepth: 35
+  entryPosition: {x: 0, y: -32, z: 75}
+  requiredSafeDepth: 52
+  requiredOxygen: 155
+  barrierWidth: 60
   unlockedDepth: 100
   unlockedOxygen: 200
   accent: {r: 0.35, g: 0.67, b: 1, a: 1}

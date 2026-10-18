@@ -35,6 +35,10 @@ namespace LaFosa
                 float depth = Random.Range(species.playableDepth.x + .35f, species.playableDepth.y - .35f);
                 float extent = species.length * .85f + 1.3f;
                 bool clear = true;
+                foreach (var zone in config.zones)
+                    if (zone != config.zones[0] && Mathf.Abs(config.waterLevel - depth - zone.entryPosition.y) < species.height + 1.5f &&
+                        Mathf.Abs(x - zone.entryPosition.x) < zone.barrierWidth / 2 + extent && Mathf.Abs(z - zone.entryPosition.z) < zone.barrierWidth / 2 + extent)
+                    { clear = false; break; }
                 for (int j = 0; j < 12; j++)
                 {
                     float angle = j * Mathf.PI / 6;

@@ -1,5 +1,43 @@
 # Mapa dinámico
 
+## Bruma y visibilidad submarina
+
+- Objetivo: desde fuera, mar con tono y turbidez uniformes, sin mancha oscura sobre la fosa; solo la orilla conserva mayor transparencia. Se mantiene la atmósfera submarina existente.
+- Framework/entrada: Unity Built-in; `DiverController.UpdateAtmosphere` actualiza niebla exponencial cuadrática, luz y color según profundidad y posición. `Water.shader` suaviza el fondo visto a través de la superficie, sin desenfocar tierra ni HUD.
+- Datos: `GameConfig.coastalFogDensity` / `shallowFogDensity` / `deepFogDensity`, editables en `Expedicion.asset`, con valores 0,035 / 0,065 / 0,115. La fosa interpola por profundidad hasta 95 m; la transición radial entre exterior e interior va de 31 a 23 m alrededor del centro del terreno `(0,75)`.
+- Mundo conectado: `WorldBuilder` calcula la orilla a partir de la pendiente del terreno y el nivel del agua. Desde arriba, la opacidad pasa de 0,65 junto a la orilla a 0,85 tras 20 m, con tono uniforme, suavizado de cinco muestras y un único GrabPass nombrado. El ajuste intermedio aumenta el desenfoque junto a la orilla (3,5 píxeles a 900p) y lo reduce mar adentro (4,5 píxeles), con una diferencia de turbidez más suave. La máscara radial de la fosa solo cambia el tono visto desde abajo; la superficie submarina mantiene opacidad 0,3 sin desenfoque.
+- Configuración conectada: `GraphicsSettings.asset` conserva explícitamente las variantes Exp2, necesarias porque la escena procedural activa la niebla durante el juego y el modo automático puede eliminarlas al compilar.
+- Archivos modificados: controlador, configuración, asset de expedición, `WorldBuilder`, `Water.shader`, configuración gráfica, diagnóstico visual y documentación. Conservados: atmósfera del aire, alcance de herramientas, reglas, progreso y guardado.
+- Verificación visual: `--smoke-test --water-preview` captura panorama de playa, orilla, costa/fosa desde arriba y sumergido, incluida una pareja a la misma profundidad. No toca el guardado personal. Compilación y revisión de puzles/compuertas mediante el recorrido de integración existente; la dificultad de pesca requiere apreciación jugando.
+- Riesgo: coste gráfico del GrabPass y menor visibilidad a distancia; no se midió rendimiento en otras GPU. Sin dependencias nuevas ni cambios de formato de partida.
+
+## Etapa 2: requisitos y compuertas de descenso
+
+- Objetivo: impedir el acceso físico a capas nuevas hasta resolver el sello anterior y recoger su mejora, con requisitos visibles y regreso viable.
+- Framework: Unity 6.3 LTS; generación procedural, componentes pequeños, ScriptableObjects e IMGUI existentes.
+- Entrada: `GameBootstrap` → `WorldBuilder.Gates` → dos `DiveGate`, conectadas al mecanismo de la capa anterior y al evento `GameSession.ProgressChanged`.
+- Datos: `DiveZoneDefinition.entryPosition`, `requiredSafeDepth`, `requiredOxygen`, `barrierWidth` y `returnHint`. Configuración de las tres capas en sus assets y valores iniciales en `ProjectSetup`.
+- Flujo: abrir sello → recoger tesoro → aplicar mejora permanente → actualizar acceso y colisiones. Continuar/Nueva partida actualizan las compuertas a partir del progreso existente, sin otra copia de su estado en el archivo de guardado.
+- Pantallas/interacciones: `DiveHUD` apunta primero a la escotilla y después al santuario. `DiverController` muestra requisitos al chocar; compuerta, piedras, palanca y cofre consultan las condiciones de la zona. Rótulos distintos desde arriba y desde abajo.
+- Mundo: losas de cuatro bloques encajadas en el terreno, abertura central de 8 m y panel móvil. `WorldBuilder.Fish` evita generar fauna dentro de las nuevas losas; conserva las 49 especies y 132 individuos.
+- Archivos nuevos: `World/DiveGate.cs`, `World/WorldBuilder.Gates.cs`, `Diagnostics/SmokeCheck.Gates.cs`. Cambios en los componentes/datos enumerados, pruebas existentes y documentación.
+- Conservado: precios, orden manos → tridente → arpón, reglas de puzles, rescate, inventario y formato de guardado v1. No se implementan biomas ni tutoriales de etapas posteriores.
+- Riesgo medio: accesos físicos y retorno. Pruebas con CharacterController, muestreo de cobertura, perímetros enterrados, ida/vuelta, persistencia y objetos descartados; revisión de capturas. Pendiente recorrido humano y equilibrio de tiempos/oxígeno.
+
+Descripción del recorrido y configuración: `Docs/DESCENSOS.md`.
+
+## Etapa 1: progreso persistente
+
+- Objetivo: cerrar y continuar una expedición coherente, sin repetir compras ni recompensas.
+- Framework: Unity 6.3 LTS; componentes actuales, ScriptableObjects e IMGUI, sin dependencias nuevas.
+- Entrada: `GameBootstrap.Build` genera el mundo y registra `GameSession.InitializePersistence`; `DiveHUD` ofrece Nueva partida, Continuar y Guardar y volver al menú.
+- Flujo: componentes marcan cambios → `GameSession.Persistence` captura una transacción completa → `SaveStore` valida/escribe principal y respaldo → Continuar valida antes de restaurar y devuelve el buzo a la playa.
+- Estado conectado: `Inventory`, `Economy`, `DiverController`, `HarpoonGun`, `StoneCircuitPuzzle`, `TreasureChest`, `Pickup`, `SurfaceVehicle`; IDs estables en objetos, zonas, compras y conchas.
+- Archivos revisados/modificados: esos componentes, generadores de conchas/arranque, tres assets de zonas, `ProjectSetup`, HUD, pruebas y documentación. Nuevos: `SaveStore`, parciales `GameSession.Persistence`/`SaveValidation` y `SmokeCheck.Persistence`.
+- Conservado: inicio con manos, requisito del tridente, precios, fauna, movimiento, geometría de santuarios y reglas de circuitos. No se amplían etapas 2–10.
+- Riesgo medio: escritura, archivos incompatibles y consistencia de recompensas. Comprobaciones de respaldo, corrupción y reinicio en procesos separados; pruebas aisladas de la partida personal.
+- Límites: una ranura local; el buzo siempre reaparece en la playa; sin migraciones de contenido futuro. Detalles en `Docs/GUARDADO.md`.
+
 ## IA de peces y progresión de pesca
 
 - Objetivo: detectar al buzo y escapar; peces intermareales lentos para manos/tridente y peces del mar más rápidos que el nado con aletas.

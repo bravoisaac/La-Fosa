@@ -41,12 +41,20 @@ namespace LaFosa
             Check(bootstrap != null && bootstrap.Session != null, "Arranque de escena");
             if (bootstrap == null || bootstrap.Session == null) yield break;
             var session = bootstrap.Session; var diver = session.Diver;
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--water-preview") >= 0)
+            {
+                session.Begin(); yield return CaptureWaterViews(session);
+                Debug.Log("LA_FOSA_WATER_PREVIEW_OK"); Application.Quit(failed ? 2 : 0); yield break;
+            }
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--save-restart-write") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--save-restart-read") >= 0)
+            { TestPersistenceRestart(session); yield break; }
             Check(session.Intro && Time.timeScale == 0, "Introducción pausa el mundo");
             Capture(diver.View, "01-inicio.png");
             yield return new WaitForSecondsRealtime(.5f);
             session.Begin();
             yield return new WaitForSecondsRealtime(.3f);
             Capture(diver.View, "02-playa.png");
+            yield return TestClosedRoutes(session);
             Check(FindObjectsByType<TreasureChest>(FindObjectsSortMode.None).Length == session.Config.zones.Length, "Santuarios generados");
             CheckFauna(session);
             var pickup = FindFirstObjectByType<Pickup>(); pickup.Interact(diver);
@@ -83,6 +91,7 @@ namespace LaFosa
             yield return new WaitForSecondsRealtime(.4f);
             Check(diver.Health < health, "Daño por presión");
             yield return TestCommerce(session, diver, gun);
+            Check(Array.TrueForAll(session.GetComponentsInChildren<DiveGate>(), g => !g.IsOpen), "Comprar todo el equipo no abre las compuertas ni resuelve las piedras");
             yield return TestFishBehavior(session);
             var chests = FindObjectsByType<TreasureChest>(FindObjectsSortMode.None);
             foreach (var chest in chests)
@@ -102,6 +111,7 @@ namespace LaFosa
                 Check(chest.Claimed && session.Treasures == i + 1 && diver.SafeDepth == zone.unlockedDepth, "Tesoro mejora el equipo " + i);
                 Check(Mathf.Approximately(diver.MaxOxygen, zone.unlockedOxygen + session.Config.shop.oxygenBonus), "Bombona se acumula con tesoro " + i);
                 chest.Interact(diver); Check(session.Treasures == i + 1, "Recompensa única " + i);
+                if (i < session.Config.zones.Length - 1) TestOpenedRoute(session, i);
             }
             Check(session.Complete, "Expedición completada");
             int stacks = diver.Inventory.Stacks.Count;
@@ -112,6 +122,8 @@ namespace LaFosa
             Capture(diver.View, "06-regreso.png");
             TestSpeciesTrading(session);
             yield return CaptureFishGallery(session.Config);
+            TestPersistence(session);
+            TestRoutePersistence(session);
             yield return new WaitForSecondsRealtime(.6f);
             File.WriteAllText(Path.Combine(output, "result.txt"), (failed ? "FAILED" : "PASSED") + " · " + checks + " integration checks\n");
             Debug.Log("LA_FOSA_SMOKE_" + (failed ? "FAILED" : "OK") + " · " + checks);

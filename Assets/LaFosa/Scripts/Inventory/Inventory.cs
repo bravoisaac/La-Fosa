@@ -18,6 +18,12 @@ namespace LaFosa
         readonly List<InventoryStack> stacks = new List<InventoryStack>();
         public IReadOnlyList<InventoryStack> Stacks => stacks;
         public event Action Changed;
+        internal void Restore(InventoryStack[] saved)
+        {
+            stacks.Clear();
+            foreach (var stack in saved) stacks.Add(new InventoryStack(stack.item, stack.count));
+            Changed?.Invoke();
+        }
 
         public int FishCount { get { int n = 0; foreach (var s in stacks) if (s.item.isFish) n += s.count; return n; } }
         public long FishValue { get { long n = 0; foreach (var s in stacks) if (s.item.isFish) n += (long)s.count * s.item.salePrice; return n; } }

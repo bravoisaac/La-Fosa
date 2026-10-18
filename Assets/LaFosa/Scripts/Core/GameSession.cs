@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LaFosa
 {
-    public sealed class GameSession : MonoBehaviour
+    public sealed partial class GameSession : MonoBehaviour
     {
         public GameConfig Config { get; private set; }
         public DiverController Diver { get; set; }
@@ -15,13 +15,34 @@ namespace LaFosa
         public bool Paused { get; private set; }
         public bool Blocked => Intro || InventoryOpen || Paused || ShopOpen;
         public int Treasures { get; private set; }
+        public event System.Action ProgressChanged;
+        internal void RefreshRoutes() { ProgressChanged?.Invoke(); }
         public string Message { get; private set; }
         public float MessageUntil { get; private set; }
         public bool Complete => Treasures >= Config.zones.Length;
         public bool IsZoneUnlocked(DiveZoneDefinition zone)
         {
             int index = System.Array.IndexOf(Config.zones, zone);
-            return index >= 0 && index <= Treasures;
+            return index >= 0 && (index == 0 || IsTreasureClaimed(Config.zones[index - 1])) &&
+                Diver != null && Diver.SafeDepth >= zone.requiredSafeDepth && Diver.MaxOxygen >= zone.requiredOxygen;
+        }
+        public string ZoneRequirement(DiveZoneDefinition zone)
+        {
+            int index = System.Array.IndexOf(Config.zones, zone);
+            if (index < 0) return "Ruta no disponible.";
+            if (index > 0 && !IsTreasureClaimed(Config.zones[index - 1]))
+                return "Abre el sello y recoge " + Config.zones[index - 1].treasure.displayName + ".";
+            if (Diver.SafeDepth < zone.requiredSafeDepth || Diver.MaxOxygen < zone.requiredOxygen)
+                return "Equipo necesario: " + zone.requiredSafeDepth + " m y " + zone.requiredOxygen + " s de aire.";
+            return "Equipo preparado: " + zone.requiredSafeDepth + " m / " + zone.requiredOxygen + " s. " + zone.returnHint;
+        }
+        public Vector3 NextWaypoint(out string label)
+        {
+            int index = Mathf.Min(Treasures, Config.zones.Length - 1);
+            var zone = Config.zones[index];
+            bool approachGate = index > 0 && Diver.transform.position.y > zone.entryPosition.y - 2;
+            label = approachGate ? "ESCOTILLA DE DESCENSO" : "SANTUARIO";
+            return approachGate ? zone.entryPosition + Vector3.up : zone.stationPosition + Vector3.up * 3;
         }
         public void Initialize(GameConfig config)
         {
@@ -35,15 +56,19 @@ namespace LaFosa
             InventoryOpen = false; Paused = false; ShopOpen = true; ApplyPause();
         }
         public void CloseShop() { ShopOpen = false; ApplyPause(); }
-        public void Begin() { Intro = false; ApplyPause(); }
+        public void Begin() { NewGame(); }
         public void ToggleInventory() { if (ShopOpen) return; InventoryOpen = !InventoryOpen; ApplyPause(); }
         public void Resume() { Paused = false; InventoryOpen = false; ShopOpen = false; ApplyPause(); }
         public void Notify(string message) { Message = message; MessageUntil = Time.unscaledTime + 4; }
         public void Reward(DiveZoneDefinition zone)
         {
+            if (!claimedZones.Add(zone.id)) return;
+            discoveredZones.Add(zone.id);
             Treasures++;
             Diver.Upgrade(zone.unlockedDepth, zone.unlockedOxygen);
+            ProgressChanged?.Invoke();
             Notify(Complete ? "¡Expedición completa! Has recuperado los tres tesoros del Pacífico." : "Tesoro recuperado. Equipo mejorado: ya puedes descender más.");
+            SaveNow();
         }
         void Update()
         {
@@ -59,7 +84,7 @@ namespace LaFosa
         }
         void OnApplicationFocus(bool focused)
         {
-            if (!focused && !Intro) { Paused = true; ApplyPause(); }
+            if (!focused && !Intro) { Paused = true; ApplyPause(); SaveNow(); }
         }
         void ApplyPause()
         {
