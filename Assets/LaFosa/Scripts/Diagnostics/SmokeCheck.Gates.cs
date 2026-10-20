@@ -10,7 +10,20 @@ namespace LaFosa
         {
             var gates = session.GetComponentsInChildren<DiveGate>();
             var diver = session.Diver; Vector3 original = diver.transform.position;
-            Check(gates.Length == session.Config.zones.Length - 1 && gates.All(g => !g.IsOpen), "Una compuerta cerrada por transición de capa");
+            Check(gates.Length == session.Config.zones.Skip(1).Count(z => z.hasPhysicalGate) && gates.All(g => !g.IsOpen), "Solo las transiciones configuradas generan compuertas cerradas");
+            var freeZone = session.Config.zones[1];
+            Check(!freeZone.hasPhysicalGate && gates.All(g => g.Destination != freeZone), "Descenso al naufragio sin compuerta ni losa");
+            Check(gates.Any(g => g.Destination == session.Config.zones[2] && !g.IsOpen), "Abismo conserva su compuerta cerrada");
+            foreach (float x in new[] { -10f, 0f, 10f })
+            {
+                Vector3 start = freeZone.entryPosition + new Vector3(x, 3, 0);
+                Teleport(diver, start);
+                MoveSteps(diver, Vector3.down * 8);
+                Check(diver.transform.position.y < freeZone.entryPosition.y - 4, "Primer descenso libre sin tesoro por centro/lateral: " + x);
+                MoveSteps(diver, Vector3.up * 8);
+                Check(Vector3.Distance(diver.transform.position, start) < .5f, "Retorno libre por centro/lateral: " + x);
+            }
+            Check(!session.IsZoneUnlocked(freeZone) && session.Treasures == 0, "Acceso físico libre no concede progreso ni recompensas");
             foreach (var gate in gates)
             {
                 Check(gate.MissingRequirement.Contains("ABRIR SELLO"), "Paso cerrado explica el mecanismo requerido: " + gate.Destination.id);
@@ -44,8 +57,16 @@ namespace LaFosa
                 Mathf.Abs(f.transform.position.z - g.transform.position.z) > g.Destination.barrierWidth / 2)), "Fauna generada fuera de las losas");
             Teleport(diver, original);
         }
-        void TestOpenedRoute(GameSession session, int previousIndex)
+        IEnumerator TestOpenedRoute(GameSession session, int previousIndex)
         {
+            var destination = session.Config.zones[previousIndex + 1];
+            if (!destination.hasPhysicalGate)
+            {
+                Check(session.IsZoneUnlocked(destination), "Primer tesoro prepara el equipo para el naufragio libre");
+                session.NextWaypoint(out string marker);
+                Check(marker == "SANTUARIO", "Descenso libre señala el santuario sin escotilla inexistente");
+                yield break;
+            }
             var gate = session.GetComponentsInChildren<DiveGate>().First(g => g.Puzzle.zone == session.Config.zones[previousIndex]);
             var diver = session.Diver; Vector3 original = diver.transform.position;
             Check(gate.IsOpen && session.IsZoneUnlocked(gate.Destination), "Recoger tesoro abre la compuerta físicamente: " + gate.Destination.id);
@@ -72,8 +93,14 @@ namespace LaFosa
             MoveSteps(diver, new Vector3(4.5f, 0, 0));
             MoveSteps(diver, new Vector3(0, 0, shaft.z - diver.transform.position.z));
             MoveSteps(diver, shaft - diver.transform.position);
-            MoveSteps(diver, new Vector3(0, 1 - diver.transform.position.y, 0));
-            Check(diver.transform.position.y > .5f, "Regreso nadando a superficie por las compuertas ya abiertas");
+            // Let fauna update while ascending: moving the entire shaft in one frame
+            // can pin the controller beneath a fish that never gets its next Update.
+            for (int step = 0; step < 1200 && diver.transform.position.y < 1; step++)
+            {
+                MoveSteps(diver, Vector3.up * .2f);
+                yield return null;
+            }
+            Check(diver.transform.position.y > .5f, "Regreso nadando a superficie por las compuertas ya abiertas: " + diver.transform.position);
             Teleport(diver, original);
         }
         void TestRoutePersistence(GameSession session)

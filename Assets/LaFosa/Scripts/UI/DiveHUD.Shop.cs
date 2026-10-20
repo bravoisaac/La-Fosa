@@ -25,7 +25,7 @@ namespace LaFosa
             if (Button("VENDER TODOS LOS PECES", 204, 493, 282, 48)) economy.SellFish();
             GUI.enabled = true;
             Text("Las conchas y los tesoros se quedan en tu mochila. El equipo comprado no ocupa espacios.", 204, 566, 280, 75, 16, Muted);
-            Text("1 manos · 2 tridente · 3 arpón · 4 red\nPrimera herramienta: tridente ($60).", 204, 660, 280, 50, 13, Mint);
+            Text("1 manos · 2 tridente · 3 arpón · 4 red\nPrimera herramienta: tridente ($" + session.TridentPrice + ").", 204, 660, 280, 50, 13, Mint);
 
             Text("EQUÍPATE PARA LA PRÓXIMA SALIDA", 550, 216, 820, 28, 13, Muted);
             var offers = catalog.offers ?? new ShopOffer[0];

@@ -30,6 +30,7 @@ namespace LaFosa
         public void InitializePersistence()
         {
             puzzles = GetComponentsInChildren<StoneCircuitPuzzle>(true);
+            guideFish = GetComponentsInChildren<FishAgent>(true);
             chests = GetComponentsInChildren<TreasureChest>(true);
             pickups = GetComponentsInChildren<Pickup>(true);
             AddItem(Config.fish); AddItem(Config.shell);
@@ -77,7 +78,7 @@ namespace LaFosa
             };
             if (!saveStore.TrySave(fresh, out var message, true)) { SaveStatus = message; SaveFailed = true; return false; }
             ApplySave(fresh); Intro = false; CanContinue = true; SaveFailed = false; SaveStatus = message; ApplyPause();
-            Notify("Nueva expedición. Empiezas con las manos; vende dos peces para comprar el tridente.");
+            Notify("Nueva expedición. Sigue la guía de la izquierda: pesca en la orilla y reúne $" + TridentPrice + " para el tridente.");
             return true;
         }
         public bool ContinueGame()
@@ -100,6 +101,7 @@ namespace LaFosa
             {
                 if (Diver.Riding != null) Diver.LeaveVehicle(Config.spawn);
                 claimedZones.Clear(); claimedZones.UnionWith(data.treasures); Treasures = claimedZones.Count;
+                firstReturnPending = false; // Loading already returns the expedition safely to the coast.
                 discoveredZones.Clear(); discoveredZones.UnionWith(data.discoveredZones);
                 Economy.Restore(data.money, data.gear);
                 Diver.Inventory.Restore(data.inventory.Select(s => new InventoryStack(items[s.id], s.count)).ToArray());

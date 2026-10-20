@@ -40,7 +40,7 @@ namespace LaFosa
         {
             int index = Mathf.Min(Treasures, Config.zones.Length - 1);
             var zone = Config.zones[index];
-            bool approachGate = index > 0 && Diver.transform.position.y > zone.entryPosition.y - 2;
+            bool approachGate = index > 0 && zone.hasPhysicalGate && Diver.transform.position.y > zone.entryPosition.y - 2;
             label = approachGate ? "ESCOTILLA DE DESCENSO" : "SANTUARIO";
             return approachGate ? zone.entryPosition + Vector3.up : zone.stationPosition + Vector3.up * 3;
         }
@@ -65,6 +65,7 @@ namespace LaFosa
             if (!claimedZones.Add(zone.id)) return;
             discoveredZones.Add(zone.id);
             Treasures++;
+            if (Treasures == 1) firstReturnPending = true;
             Diver.Upgrade(zone.unlockedDepth, zone.unlockedOxygen);
             ProgressChanged?.Invoke();
             Notify(Complete ? "¡Expedición completa! Has recuperado los tres tesoros del Pacífico." : "Tesoro recuperado. Equipo mejorado: ya puedes descender más.");
@@ -73,6 +74,7 @@ namespace LaFosa
         void Update()
         {
             if (Intro) return;
+            if (!Blocked) UpdateExpeditionReturn();
             if (Input.GetKeyDown(KeyCode.Tab) && !Paused) ToggleInventory();
             if (Input.GetKeyDown(KeyCode.Escape))
             {

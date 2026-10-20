@@ -17,10 +17,12 @@ MonoBehaviour:
   subtitle: "El oc\xE9ano conserva sus secretos."
   stationPosition: {x: 0, y: -51.5, z: 58}
   startsAtDepth: 35
+  hasPhysicalGate: 0
   entryPosition: {x: 0, y: -32, z: 75}
   requiredSafeDepth: 52
   requiredOxygen: 155
   barrierWidth: 60
+  returnHint: "Ascenso libre hacia la superficie. Fuera del límite del equipo el oxígeno se agota rápidamente. R permite volver a la playa."
   unlockedDepth: 100
   unlockedOxygen: 200
   accent: {r: 0.35, g: 0.67, b: 1, a: 1}

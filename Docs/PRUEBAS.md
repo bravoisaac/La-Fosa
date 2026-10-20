@@ -1,5 +1,29 @@
 # Validación
 
+## Entrega 3.2: descenso libre y peligro por aire (19 de octubre de 2026)
+
+- [x] Compilación `Builds/FirstExpedition/La Fosa.exe` y validación del editor correctas: `LA_FOSA_BUILD_OK`, `LA_FOSA_TESTS_OK`. Log: `unity-descent-build.log`.
+- [x] **458 comprobaciones de integración aprobadas**, proceso con salida 0. Evidencia: `runtime-descent-test.log` y `Builds/FirstExpedition/Verification/result.txt`. Se revisaron las expectativas anteriores de dos compuertas; el total no representa simplemente pruebas añadidas a la versión de 448.
+- [x] Movimiento real del CharacterController por centro y laterales del primer descenso, ida/vuelta sin tesoro; ausencia de compuerta del naufragio y conservación de la compuerta cerrada del abismo, su cobertura, apertura, retorno y persistencia.
+- [x] Consumo normal dentro del límite, ×8 fuera, ×12 acelerando, pausa sin consumo, recuperación de consumo normal al ascender y recarga de superficie. Aire agotado causa asfixia; rescate restaura vitales y conserva hallazgos. No hay daño directo de presión con aire disponible.
+- [x] Acceso físico libre no concede tesoros ni desbloquea el segundo mecanismo. Se mantienen compra, piedras, palanca, cofre, mochila llena, orientación, equipo y persistencia. La guía ya no señala la escotilla retirada.
+- [x] Reinicio real en dos procesos: **7 comprobaciones al escribir y 5 al cargar**, ambos con salida 0; progreso exacto, tesoro sin duplicación y mejoras aplicadas una vez. Logs: `runtime-descent-restart-write.log` y `runtime-descent-restart-read.log`. Resultados: `restart-write.txt` / `restart-read.txt` en `Verification`.
+- [x] Registro de pruebas corregido: cada modo comienza como `RUNNING`, un error deja `FAILED` y solo completar la integración escribe `PASSED`. Reinicio y vista de agua usan sus propios archivos de resultado para no mezclar evidencias ni conservar aprobaciones antiguas tras un fallo.
+- [ ] Revisión visual del HUD en ventana renderizada, recorrido con persona nueva y equilibrio. Ficha en `Docs/PRIMERA_EXPEDICION.md`; **la etapa 3 no está cerrada**.
+
+La primera ejecución detectó una prueba de puzles que aún exigía la compuerta retirada; se corrigió y se repitió toda la integración. Una repetición también falló en el regreso vertical calculado completo dentro de un solo frame: la prueba ahora deja avanzar la simulación entre pasos del ascenso para que la fauna pueda moverse. Unity necesitó acceso fuera del entorno restringido a la licencia local. El reemplazo de la partida aislada de reinicio falló dentro de las restricciones y pasó al ejecutar fuera de ellas. Las pruebas usan `Verification/SaveTests-*` y `Verification/RestartSave`; no utilizan la partida personal. Las capturas de cámara verifican geometría, no el HUD ni la facilidad de aprendizaje.
+
+## Etapa 3: primera entrega de guía (18 de octubre de 2026)
+
+- Compilación aislada `Builds/FirstExpedition/La Fosa.exe`: correcta, `LA_FOSA_BUILD_OK`; validación del editor: `LA_FOSA_TESTS_OK`.
+- **448 comprobaciones de integración aprobadas**, incluidas las 422 anteriores y 26 de primera expedición. Resultado final en `Builds/FirstExpedition/Verification/result.txt`; `errors.txt` vacío; proceso con salida 0. Log: `runtime-expedition-test.log`.
+- Casos nuevos: pesca costera disponible, valor real y precio editable, reunir el coste en una salida, venta, compra/equipado, circuito listo, sello, cofre, mochila llena, regreso, escotilla de ascenso, prioridad por presión, exploración fuera del orden sugerido y continuidad tras guardar/cargar. Las pruebas manipulan posiciones/objetos y resuelven el circuito de forma programática; no equivalen a una persona aprendiendo a jugar.
+- La primera ejecución pasó 447 comprobaciones. Después se ajustó el marcador de ascenso bajo losas, se añadió su comprobación y se repitió la integración completa: 448 correctas.
+- La captura mediante `ScreenCapture` en las ejecuciones ocultas produjo imágenes negras, también sin `-batchmode`. **No se verificó visualmente el HUD.** Las capturas `guia-*.png` no se presentan como prueba visual.
+- Pendientes: comprobar legibilidad del HUD y señales, recorrido humano de las etapas 1–3 y equilibrio de tiempo/precios/aire. Procedimiento en `Docs/PRIMERA_EXPEDICION.md`. No se da por cerrada la etapa 3.
+
+## Base anterior y comprobaciones conservadas
+
 Verificado con Unity **6000.3.26f1**, Windows x64 y renderizador integrado. Fauna: 17 de octubre de 2026. Ampliación de puzles de piedras: 18 de octubre de 2026.
 
 - Compilación del ejecutable: correcta (`LA_FOSA_BUILD_OK`).

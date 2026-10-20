@@ -144,6 +144,7 @@ namespace LaFosa
             Shape("Bandera azul", PrimitiveType.Cube, new Vector3(-6.6f, 8.9f, -23), new Vector3(.8f, .65f, .06f), Mat("Azul bandera", new Color(.05f, .18f, .48f)), false);
             Label("★", new Vector3(-6.6f, 8.92f, -23.08f), .13f, Color.white);
             Label("LA FOSA\n↓  SIGUE LAS BOYAS", new Vector3(2, 4, -9), .2f, new Color(.1f, .25f, .27f));
+            Label("PRIMERA PESCA · ORILLA\nManos: acércate y haz CLIC\nESPACIO: sube a respirar", new Vector3(-3, 1.2f, 12), .12f, new Color(.86f, .96f, .82f));
             for (int i = 0; i < 5; i++)
             {
                 Vector3 position = new Vector3(0, .15f, 10 + i * 9);

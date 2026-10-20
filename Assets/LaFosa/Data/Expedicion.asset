@@ -20,6 +20,7 @@ MonoBehaviour:
   deepFogDensity: 0.115
   initialOxygen: 115
   initialSafeDepth: 34
+  pressureOxygenMultiplier: 8
   inventorySlots: 12
   fish: {fileID: 11400000, guid: ed4e03ae66648d4409b34965c8116d28, type: 2}
   fishSpecies:

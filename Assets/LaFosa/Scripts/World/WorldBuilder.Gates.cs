@@ -15,6 +15,7 @@ namespace LaFosa
             for (int i = 1; i < config.zones.Length; i++)
             {
                 var zone = config.zones[i];
+                if (!zone.hasPhysicalGate) continue;
                 var obj = new GameObject("Compuerta · " + zone.id); obj.transform.SetParent(root, false); obj.transform.position = zone.entryPosition;
                 var gate = obj.AddComponent<DiveGate>();
                 float half = zone.barrierWidth / 2, hole = DiveGate.OpeningWidth / 2;

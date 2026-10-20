@@ -8,7 +8,7 @@ namespace LaFosa
     // Opt-in integration check: never runs during a normal game.
     public sealed partial class SmokeCheck : MonoBehaviour
     {
-        string output;
+        string output, resultPath;
         bool failed;
         int checks;
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -21,12 +21,19 @@ namespace LaFosa
         {
             output = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Verification"));
             Directory.CreateDirectory(output); File.WriteAllText(Path.Combine(output, "errors.txt"), ""); Application.logMessageReceived += OnLog;
+            var args = Environment.GetCommandLineArgs();
+            string resultName = Array.IndexOf(args, "--save-restart-write") >= 0 ? "restart-write.txt"
+                : Array.IndexOf(args, "--save-restart-read") >= 0 ? "restart-read.txt"
+                : Array.IndexOf(args, "--water-preview") >= 0 ? "water-preview.txt" : "result.txt";
+            resultPath = Path.Combine(output, resultName);
+            File.WriteAllText(resultPath, "RUNNING · Checks not completed");
         }
         void OnDestroy() { Application.logMessageReceived -= OnLog; }
         void OnLog(string message, string trace, LogType type)
         {
             if (type != LogType.Exception && type != LogType.Error && type != LogType.Assert) return;
             failed = true; File.AppendAllText(Path.Combine(output, "errors.txt"), message + "\n" + trace + "\n"); Application.Quit(2);
+            if (resultPath != null) File.WriteAllText(resultPath, "FAILED · " + checks + " checks reached; see errors.txt");
         }
         void Check(bool condition, string message)
         {
@@ -44,6 +51,7 @@ namespace LaFosa
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--water-preview") >= 0)
             {
                 session.Begin(); yield return CaptureWaterViews(session);
+                File.WriteAllText(resultPath, failed ? "FAILED" : "CAPTURED · Requires visual inspection");
                 Debug.Log("LA_FOSA_WATER_PREVIEW_OK"); Application.Quit(failed ? 2 : 0); yield break;
             }
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--save-restart-write") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--save-restart-read") >= 0)
@@ -54,6 +62,8 @@ namespace LaFosa
             session.Begin();
             yield return new WaitForSecondsRealtime(.3f);
             Capture(diver.View, "02-playa.png");
+            yield return TestFirstExpedition(session);
+            TestDepthOxygen(session);
             yield return TestClosedRoutes(session);
             Check(FindObjectsByType<TreasureChest>(FindObjectsSortMode.None).Length == session.Config.zones.Length, "Santuarios generados");
             CheckFauna(session);
@@ -88,8 +98,9 @@ namespace LaFosa
             gun.Fire(); Check(diver.Inventory.Stacks[1].count == 1, "Recarga evita disparo duplicado");
             Teleport(diver, new Vector3(0, -40, 75));
             float health = diver.Health;
+            oxygen = diver.Oxygen;
             yield return new WaitForSecondsRealtime(.4f);
-            Check(diver.Health < health, "Daño por presión");
+            Check(diver.Health == health && diver.Oxygen < oxygen && diver.PressureOxygenMultiplier > 1, "Profundidad peligrosa consume aire sin daño directo");
             yield return TestCommerce(session, diver, gun);
             Check(Array.TrueForAll(session.GetComponentsInChildren<DiveGate>(), g => !g.IsOpen), "Comprar todo el equipo no abre las compuertas ni resuelve las piedras");
             yield return TestFishBehavior(session);
@@ -111,7 +122,7 @@ namespace LaFosa
                 Check(chest.Claimed && session.Treasures == i + 1 && diver.SafeDepth == zone.unlockedDepth, "Tesoro mejora el equipo " + i);
                 Check(Mathf.Approximately(diver.MaxOxygen, zone.unlockedOxygen + session.Config.shop.oxygenBonus), "Bombona se acumula con tesoro " + i);
                 chest.Interact(diver); Check(session.Treasures == i + 1, "Recompensa única " + i);
-                if (i < session.Config.zones.Length - 1) TestOpenedRoute(session, i);
+                if (i < session.Config.zones.Length - 1) yield return TestOpenedRoute(session, i);
             }
             Check(session.Complete, "Expedición completada");
             int stacks = diver.Inventory.Stacks.Count;

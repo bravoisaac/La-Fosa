@@ -14,6 +14,7 @@ namespace LaFosa
         public float Health { get; private set; } = 100;
         public float Depth => Mathf.Max(0, Session.Config.waterLevel - View.transform.position.y);
         public bool Underwater => Depth > .15f;
+        public float PressureOxygenMultiplier => Depth > SafeDepth ? Mathf.Max(1, Session.Config.pressureOxygenMultiplier) : 1;
         public Interactable Target { get; private set; }
         public FishAgent ObservedFish { get; private set; }
         public float sensitivity = 2;
@@ -80,9 +81,15 @@ namespace LaFosa
         }
         void UpdateVitals()
         {
-            Oxygen = Mathf.Clamp(Oxygen + (Underwater ? -(Input.GetKey(KeyCode.LeftShift) ? 1.5f : 1) : 22) * Time.deltaTime, 0, MaxOxygen);
-            float damage = (Oxygen <= 0 ? 16 : 0) + (Depth > SafeDepth ? 14 : 0);
-            Health = Mathf.Clamp(Health + (damage > 0 ? -damage : !Underwater ? 14 : 0) * Time.deltaTime, 0, 100);
+            AdvanceVitals(Time.deltaTime, Input.GetKey(KeyCode.LeftShift));
+        }
+        internal void AdvanceVitals(float deltaTime, bool sprint)
+        {
+            if (Session.Blocked || deltaTime <= 0) return;
+            float consumption = (sprint ? 1.5f : 1) * PressureOxygenMultiplier;
+            Oxygen = Mathf.Clamp(Oxygen + (Underwater ? -consumption : 22) * deltaTime, 0, MaxOxygen);
+            float damage = Oxygen <= 0 ? 16 : 0;
+            Health = Mathf.Clamp(Health + (damage > 0 ? -damage : !Underwater ? 14 : 0) * deltaTime, 0, 100);
             if (Health <= 0) Rescue("Rescate de emergencia. Recuperaste tu equipo y tus hallazgos.");
         }
         void UpdateTarget()

@@ -94,17 +94,7 @@ namespace LaFosa
 
         public GameObject[] BuildFishingTools(Transform camera)
         {
-            var hands = new GameObject("Manos · equipo inicial"); hands.transform.SetParent(camera, false);
-            var skin = Mat("Manos del buzo", new Color(.64f, .42f, .29f));
-            var sleeve = Mat("Mangas del traje", new Color(.06f, .12f, .15f));
-            foreach (float side in new[] { -1f, 1f })
-            {
-                Shape("Antebrazo", PrimitiveType.Cube, new Vector3(side * .24f, -.27f, .3f), new Vector3(.09f, .09f, .25f), sleeve, false, hands.transform);
-                Shape("Palma", PrimitiveType.Cube, new Vector3(side * .22f, -.24f, .47f), new Vector3(.095f, .055f, .13f), skin, false, hands.transform);
-                for (int finger = 0; finger < 4; finger++)
-                    Shape("Dedo", PrimitiveType.Cube, new Vector3(side * .22f - .033f + finger * .022f, -.235f, .56f), new Vector3(.018f, .035f, .08f), skin, false, hands.transform);
-                Shape("Pulgar", PrimitiveType.Cube, new Vector3(side * .16f, -.25f, .48f), new Vector3(.035f, .035f, .07f), skin, false, hands.transform);
-            }
+            var hands = BuildHands(camera);
             var harpoon = BuildHarpoon(camera);
             var steel = Mat("Acero arpón", new Color(.23f, .29f, .32f));
             var rope = Mat("Cuerda de red", new Color(.7f, .74f, .53f));

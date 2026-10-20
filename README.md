@@ -2,7 +2,7 @@
 
 Prototipo original en **Unity 6.3 LTS (6000.3.26f1)**. Exploración low poly en primera persona, ambientada en Caleta Bruma, una playa ficticia de Chile. La profundidad está comprimida para jugar: no es una simulación realista de buceo ni de geografía.
 
-Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md) y [plan de mejora por etapas](Docs/PLAN_MEJORAS.md). Estos documentos distinguen la visión futura de las funciones implementadas que se describen aquí.
+Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md) y [plan de mejora por etapas](Docs/PLAN_MEJORAS.md). Para continuar el desarrollo, empezar por **Reanudar aquí**, al inicio del plan: contiene objetivo, pasos marcados, evidencia y pendiente inmediato. Estos documentos distinguen la visión futura de las funciones implementadas que se describen aquí.
 
 ## Jugar
 
@@ -13,6 +13,8 @@ Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md
 Si aún no existe la escena, usa **La Fosa → Preparar escena inicial**. El mundo se construye al pulsar Play; es normal que la escena en edición contenga solamente el objeto de inicio.
 
 Si está disponible la compilación, abre `Builds/Windows/La Fosa.exe` directamente.
+
+La entrega de guía de la etapa 3 se compiló por separado en `Builds/FirstExpedition/La Fosa.exe`. Cierra el juego anterior antes de usarla: ambos ejecutables comparten la misma partida local.
 
 ## Controles
 
@@ -35,6 +37,8 @@ Si está disponible la compilación, abre `Builds/Windows/La Fosa.exe` directame
 
 ## Bucle de juego
 
+El cuaderno guía la **primera expedición**: pesca lenta en la orilla → vender → comprar tridente → resolver sello → recoger tesoro → regresar. Calcula cuánto falta reunir según el valor real de las especies y recuerda los controles necesarios. El marcador sigue el objetivo actual, incluso si queda detrás de ti. Aire bajo o presión excesiva priorizan el ascenso. Al cargar se reconstruye el objetivo a partir del progreso. [Recorrido, compatibilidad y revisión pendiente](Docs/PRIMERA_EXPEDICION.md).
+
 Recoge conchas en la playa, sigue las boyas hasta el punto de inmersión y explora. Empiezas sin armas: acércate a un pez bajo el agua, apúntalo y haz clic para atraparlo con las manos (alcance de 1,6 m y 0,8 s entre intentos). Las manos no disparan y no atraviesan obstáculos. Vende tu pesca para obtener el tridente y, más adelante, el arpón.
 
 El mar incluye **49 especies o grupos del documento aportado, con 49 modelos 3D propios y 132 peces**, repartidos desde la orilla hasta el abismo. Cada especie tiene su forma, colores, precio y franja de profundidad. Apunta a un pez cercano para identificarlo. Los modelos reutilizables están en `Assets/LaFosa/Models/Fish/`; consulta [la guía de fauna](Docs/FAUNA.md) y [la lámina de modelos](Docs/peces-catalogo.jpg).
@@ -45,9 +49,9 @@ Hay tres santuarios: Bosque de huiros (~24 m), Ecos del naufragio (~52 m) y Cora
 
 Los giros equivocados no borran tus avances. La piedra **REINICIAR** restaura solo ese tablero si quieres empezar de nuevo. Puedes leer la pista mirando el cofre cerrado y pulsando E. Los giros y los sellos abiertos se guardan también al cerrar el juego. Consulta [los puzles de piedras](Docs/PUZLES.md).
 
-Los tesoros mejoran automáticamente la reserva de aire y la profundidad segura. Abrir un cofre repone oxígeno y salud. El exceso de profundidad y la falta de oxígeno causan daño. La superficie repone aire y salud; si agotas la salud, regresas a la playa conservando tus objetos. R permite regresar en cualquier momento.
+Los tesoros mejoran automáticamente la reserva de aire y la profundidad segura. Abrir un cofre repone oxígeno y salud. Superar la profundidad segura consume aire ×8 (×12 al acelerar), sin daño directo de presión mientras quede oxígeno. La falta de aire causa daño. La superficie repone aire y salud; si agotas la salud, regresas a la playa conservando tus objetos. R permite regresar en cualquier momento.
 
-**El descenso tiene dos compuertas físicas**, a 32 y 64 m. Las losas cubren la fosa y dejan una escotilla central: abre el sello anterior y recoge su tesoro para preparar el equipo y liberar el paso. Comprar la bombona no resuelve el mecanismo. E sobre la compuerta, o chocar con ella, muestra lo que falta. El marcador guía primero a la escotilla y después al santuario; vuelve por la misma abertura iluminada. Las rutas permanecen abiertas al cargar y aunque descartes el objeto del tesoro. Consulta [rutas y requisitos de descenso](Docs/DESCENSOS.md).
+**El descenso al naufragio es libre; el abismo conserva su compuerta a 64 m.** Sin la mejora de huiros puedes explorar hacia abajo, pero gastarás aire rápidamente y no podrás saltarte el orden de los mecanismos. La losa del abismo deja una escotilla central: abre el sello del naufragio y recoge su tesoro para liberar el paso. Comprar la bombona no resuelve el mecanismo. E sobre la compuerta, o chocar con ella, muestra lo que falta. El marcador guía a esa escotilla antes del santuario; vuelve por la misma abertura iluminada. El estado persiste al cargar y aunque descartes el objeto del tesoro. Consulta [rutas y requisitos de descenso](Docs/DESCENSOS.md).
 
 La mochila tiene 12 espacios y pilas limitadas. Un inventario lleno no consume tesoros ni capturas. Puedes descartar pilas desde Tab. Las mejoras adquiridas permanecen aunque descartes su tesoro. Inventario y pausa detienen la simulación.
 
@@ -84,7 +88,7 @@ El bote comprado aparece a la izquierda del muelle y la moto a la derecha. Acér
 - **Create → La Fosa → Objeto**: crea recursos, peces y tesoros con identificador estable, nombre, descripción, color y tamaño de pila.
 - **Create → La Fosa → Zona de buceo**: crea una zona con ID estable único, posición, profundidad, tesoro y mejoras. Asígnale un **Puzle de piedras** y añádela a `Expedicion.zones` en orden de profundidad. Se genera su santuario automáticamente. El campo antiguo `sequence` ya no controla los nuevos mecanismos. Cambiar IDs o estructura del contenido exige planificar una migración del guardado.
 - `GameSession.Persistence`, `GameSession.SaveValidation` y `SaveStore`: captura/restauración de la partida, validación previa y escritura con respaldo. Los cambios de inventario/puzles se guardan al final del frame; compras, ventas y tesoros se guardan tras completar la transacción.
-- `DiveGate` y `WorldBuilder.Gates`: compuertas, losas y señalización de retorno. Cada zona define entrada, requisitos de profundidad/aire, ancho de barrera y pista de regreso; validar de nuevo el perímetro si cambia el terreno.
+- `DiveGate` y `WorldBuilder.Gates`: compuertas, losas y señalización de retorno solo donde `hasPhysicalGate` esté activo. Cada zona define entrada, requisitos de profundidad/aire, ancho de barrera y pista de regreso; validar de nuevo el perímetro si cambia el terreno. `GameConfig.pressureOxygenMultiplier` ajusta el consumo fuera de la profundidad segura.
 - `WorldBuilder.FloorHeight`: amplía el fondo si añades niveles por debajo de los 88 m. Ajusta también los límites de rescate de `DiverController` para profundidades mayores a 120 m. Las posiciones y alturas del paisaje base asumen agua a 0 m.
 - `Interactable`: hereda esta clase para añadir puertas, herramientas, misiones o nuevos puzles. El buzo detecta automáticamente los objetos a menos de 4,5 m.
 - `StonePuzzleDefinition` define dimensiones, recorrido y mezcla; `StoneCircuitPuzzle` evalúa conexiones y corriente; `RuneStone` gira las piedras; `StonePuzzleLever` activa o reinicia; `StonePuzzleView` anima el cierre; `TreasureChest` entrega la recompensa. `SequencePuzzle` conserva el código anterior por compatibilidad, pero ya no se usa en los santuarios.

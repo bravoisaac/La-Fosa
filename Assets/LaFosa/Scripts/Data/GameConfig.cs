@@ -14,6 +14,7 @@ namespace LaFosa
         [Range(.01f, .2f)] public float deepFogDensity = .115f;
         public float initialOxygen = 115;
         public float initialSafeDepth = 34;
+        [Min(1)] public float pressureOxygenMultiplier = 8;
         public int inventorySlots = 12;
         public ItemDefinition fish;
         public FishSpeciesDefinition[] fishSpecies;

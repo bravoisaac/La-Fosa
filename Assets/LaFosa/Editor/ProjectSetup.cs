@@ -89,6 +89,8 @@ namespace LaFosa.Editor
             zone.requiredSafeDepth = zone.id == "huiros" ? 24 : zone.id == "naufragio" ? 52 : 88;
             zone.requiredOxygen = zone.id == "huiros" ? 115 : zone.id == "naufragio" ? 155 : 200;
             zone.barrierWidth = zone.id == "abismo" ? 40 : 60;
+            zone.hasPhysicalGate = zone.id == "abismo";
+            if (!zone.hasPhysicalGate) zone.returnHint = "Ascenso libre hacia la superficie. Fuera del límite del equipo el oxígeno se agota rápidamente. R permite volver a la playa.";
             AssetDatabase.CreateAsset(zone, DataPath + "/" + id + ".asset"); return zone;
         }
         static void EnsureMouseAxes()
@@ -135,13 +137,15 @@ namespace LaFosa.Editor
                     Check(zone.stationPosition.y > WorldBuilder.FloorHeight(zone.stationPosition.x, zone.stationPosition.z), "Santuario sobre el terreno");
                 }
                 Check(-config.zones[0].stationPosition.y < config.initialSafeDepth, "Primera zona alcanzable");
+                Check(config.pressureOxygenMultiplier > 1 && !float.IsInfinity(config.pressureOxygenMultiplier), "Consumo peligroso de oxígeno válido");
                 for (int i = 1; i < config.zones.Length; i++) Check(-config.zones[i].stationPosition.y < config.zones[i - 1].unlockedDepth, "Progresión alcanzable");
                 for (int i = 1; i < config.zones.Length; i++)
                 {
                     var zone = config.zones[i]; var previous = config.zones[i - 1];
                     Check(zone.requiredSafeDepth <= previous.unlockedDepth && zone.requiredOxygen <= previous.unlockedOxygen, "Tesoro anterior permite preparar el descenso");
-                    Check(zone.entryPosition.y < previous.stationPosition.y - 4 && zone.entryPosition.y > zone.stationPosition.y + 4, "Compuerta entre los dos santuarios");
+                    Check(zone.entryPosition.y < previous.stationPosition.y - 4 && zone.entryPosition.y > zone.stationPosition.y + 4, "Entrada entre los dos santuarios");
                     Check(zone.barrierWidth >= 12 && zone.requiredSafeDepth >= -zone.stationPosition.y, "Dimensiones y equipo de descenso válidos");
+                    if (!zone.hasPhysicalGate) continue;
                     float half = zone.barrierWidth / 2;
                     for (float edge = -half; edge <= half; edge += 1)
                         foreach (float side in new[] { -half, half })
@@ -157,7 +161,11 @@ namespace LaFosa.Editor
         public static void BuildWindows()
         {
             Validate(); Directory.CreateDirectory("Builds/Windows");
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { ScenePath }, locationPathName = "Builds/Windows/La Fosa.exe", target = BuildTarget.StandaloneWindows64, options = BuildOptions.None });
+            // Allow an isolated preview while the player keeps the previous build open.
+            string destination = "Builds/Windows/La Fosa.exe";
+            var args = Environment.GetCommandLineArgs();
+            if (Array.IndexOf(args, "--expedition-preview") >= 0) destination = "Builds/FirstExpedition/La Fosa.exe";
+            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { ScenePath }, locationPathName = destination, target = BuildTarget.StandaloneWindows64, options = BuildOptions.None });
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Falló la compilación: " + report.summary.result);
             Debug.Log("LA_FOSA_BUILD_OK · " + report.summary.totalSize + " bytes");
         }

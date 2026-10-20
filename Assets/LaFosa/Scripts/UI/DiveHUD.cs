@@ -30,18 +30,19 @@ namespace LaFosa
             Text("N   ·   NE   ·   E   ·   SE   ·   S   ·   SO   ·   O   ·   NO", 550, 34, 500, 25, 12, Muted, TextAnchor.MiddleCenter);
             Text(Mathf.RoundToInt(diver.transform.eulerAngles.y).ToString("000") + "°", 740, 65, 120, 30, 21, Color.white, TextAnchor.MiddleCenter);
 
-            Panel(30, 137, 315, 126);
+            var objective = session.ExpeditionObjective();
+            Panel(30, 137, 315, 220);
             Text("CUADERNO · ZONAS " + session.DiscoveredZoneCount + "/" + session.Config.zones.Length, 50, 153, 280, 22, 12, Gold);
-            Text(session.Complete ? "Los secretos del abismo" : "El siguiente descenso", 50, 184, 280, 28, 20, Color.white);
-            Text(session.Complete ? "Expedición completada. Sigue explorando y pescando." : "Gira las piedras, une los canales y abre los sellos. Tesoros: " + session.Treasures + " / " + session.Config.zones.Length, 50, 220, 270, 40, 13, Muted);
-            Panel(30, 280, 315, 90);
-            Text("BOLSILLO   $" + session.Economy.Money, 50, 294, 275, 30, 22, Gold);
-            Text("Vende peces en la cabaña de Don Lucho.\nLa tienda está a la izquierda del inicio.", 50, 330, 270, 36, 12, Muted);
+            Text(objective.Title, 50, 184, 275, 55, 20, Color.white);
+            Text(objective.Hint, 50, 242, 270, 102, 14, Muted);
+            Panel(30, 375, 315, 90);
+            Text("BOLSILLO   $" + session.Economy.Money, 50, 389, 275, 30, 22, Gold);
+            Text("PESCA PARA VENDER   $" + session.Economy.SaleValue + "\nTesoros: " + session.Treasures + " / " + session.Config.zones.Length, 50, 425, 270, 36, 12, Muted);
 
             Panel(30, 720, 345, 150);
             Text("O₂", 50, 733, 50, 35, 25, Mint);
             Text(Mathf.CeilToInt(diver.Oxygen) + " / " + Mathf.CeilToInt(diver.MaxOxygen) + " s", 225, 742, 130, 25, 16, Color.white, TextAnchor.MiddleRight);
-            Bar(50, 779, 305, 7, diver.Oxygen / diver.MaxOxygen, diver.Oxygen < 25 ? Gold : Mint);
+            Bar(50, 779, 305, 7, diver.Oxygen / diver.MaxOxygen, diver.Oxygen < 25 || diver.Depth > diver.SafeDepth ? Gold : Mint);
             Text("SALUD  " + Mathf.CeilToInt(diver.Health) + "%", 50, 807, 160, 24, 13, Muted);
             Text("MOCHILA  " + diver.Inventory.Stacks.Count + "/" + diver.Inventory.capacity, 210, 807, 145, 24, 13, Muted, TextAnchor.MiddleRight);
             Text("TAB  inventario", 50, 839, 260, 20, 12, Mint);
@@ -51,17 +52,16 @@ namespace LaFosa
             Text(harpoon.ToolName + (harpoon.ReadyIn > 0 ? " · RECARGANDO" : " · LISTO"), 1260, 833, 280, 24, 13, Mint, TextAnchor.MiddleRight);
             if (!session.Blocked)
             {
-                if (!session.Complete)
+                if (objective.Step != ExpeditionStep.Complete)
                 {
-                    Vector3 destination = session.NextWaypoint(out string waypointLabel);
+                    Vector3 destination = objective.Destination;
                     Vector3 point = diver.View.WorldToViewportPoint(destination);
-                    if (point.z > 0)
-                    {
-                        float markerX = Mathf.Clamp(point.x * 1600, 400, 1200);
-                        float markerY = Mathf.Clamp((1 - point.y) * 900, 200, 610);
-                        Text("◇", markerX - 20, markerY - 20, 40, 36, 27, Gold, TextAnchor.MiddleCenter);
-                        Text(waypointLabel + " · " + Mathf.RoundToInt(Vector3.Distance(diver.transform.position, destination)) + " m", markerX - 140, markerY + 20, 280, 28, 12, Gold, TextAnchor.MiddleCenter);
-                    }
+                    bool behind = point.z <= 0;
+                    Vector3 local = diver.View.transform.InverseTransformPoint(destination);
+                    float markerX = behind ? (local.x < 0 ? 500 : 1100) : Mathf.Clamp(point.x * 1600, 500, 1100);
+                    float markerY = behind ? 350 : Mathf.Clamp((1 - point.y) * 900, 200, 610);
+                    Text("◇", markerX - 20, markerY - 20, 40, 36, 27, Gold, TextAnchor.MiddleCenter);
+                    Text((behind ? (local.x < 0 ? "← GIRA A LA IZQUIERDA\n" : "GIRA A LA DERECHA →\n") : "") + objective.Marker + " · " + Mathf.RoundToInt(Vector3.Distance(diver.transform.position, destination)) + " m", markerX - 140, markerY + 20, 280, 46, 12, Gold, TextAnchor.MiddleCenter);
                 }
                 RectColor(798, 440, 4, 4, Color.white);
                 if (diver.Riding != null)
@@ -75,13 +75,15 @@ namespace LaFosa
                     Text("[ E ]   " + diver.Target.Prompt, 530, 509, 540, 30, 17, Color.white, TextAnchor.MiddleCenter);
                 }
                 if (diver.Depth > diver.SafeDepth || diver.Oxygen < 25)
-                    Text(diver.Depth > diver.SafeDepth ? "¡PRESIÓN CRÍTICA! ASCIENDE O PULSA R" : "OXÍGENO BAJO · ASCIENDE O PULSA R", 460, 630, 680, 35, 21, Gold, TextAnchor.MiddleCenter);
+                    Text(diver.Depth > diver.SafeDepth ? "PROFUNDIDAD EXCESIVA · O₂ ×" + diver.PressureOxygenMultiplier.ToString("0.#") + " · ASCIENDE O R" : "OXÍGENO BAJO · ASCIENDE O PULSA R", 460, 630, 680, 35, 21, Gold, TextAnchor.MiddleCenter);
                 if (diver.Target == null && diver.ObservedFish != null && diver.ObservedFish.Available)
                 {
                     var fish = diver.ObservedFish;
-                    Panel(510, 500, 580, 72);
+                    Panel(510, 500, 580, 94);
                     Text(fish.item.displayName + " · $" + fish.item.salePrice, 530, 508, 540, 28, 19, Color.white, TextAnchor.MiddleCenter);
                     Text(fish.species != null ? fish.species.scientificName : "CLIC para pescar", 530, 538, 540, 25, 13, Mint, TextAnchor.MiddleCenter);
+                    float distance = Vector3.Distance(diver.View.transform.position, fish.transform.position);
+                    Text(distance.ToString("0.0") + " m · " + (distance <= harpoon.EffectiveRange ? "CLIC para capturar" : "Acércate") + " · Alcance " + harpoon.EffectiveRange.ToString("0.#") + " m", 530, 566, 540, 22, 13, Gold, TextAnchor.MiddleCenter);
                 }
                 if (showControls) Text("1 MANOS   2 TRIDENTE   3 ARPÓN   4 RED   ·   CLIC pescar   E interactuar   TAB mochila   R rescate", 385, 853, 835, 25, 12, Muted, TextAnchor.MiddleCenter);
             }
@@ -104,7 +106,7 @@ namespace LaFosa
             Text("UNA EXPEDICIÓN AL PACÍFICO", 450, 208, 700, 25, 14, Mint);
             Text("Bajo la calma,\nun mundo por descubrir.", 450, 257, 700, 120, 42, Color.white);
             Text("Explora una caleta chilena y desciende por una fosa ficticia. Tres santuarios, tres tesoros y la oscuridad del océano te esperan.", 450, 398, 685, 65, 20, Muted);
-            Text("01  Atrapa los peces lentos de la orilla con las manos.\n02  Vende tu pesca y compra el tridente por $60.\n03  Compra el arpón para los peces rápidos del mar.", 450, 482, 690, 100, 18, Color.white);
+            Text("01  Atrapa peces lentos en la orilla y reúne $" + session.TridentPrice + ".\n02  Vende en la cabaña y compra tu primer tridente.\n03  Sigue la guía al santuario y regresa con su tesoro.", 450, 482, 690, 100, 18, Color.white);
             if (confirmNewGame)
             {
                 Text("Se reemplazará la partida guardada y su respaldo. ¿Empezar desde cero?", 450, 597, 690, 48, 18, Gold);

@@ -17,6 +17,7 @@ MonoBehaviour:
   subtitle: Un resplandor en la oscuridad.
   stationPosition: {x: 0, y: -87.5, z: 70}
   startsAtDepth: 67
+  hasPhysicalGate: 1
   entryPosition: {x: 0, y: -64, z: 75}
   requiredSafeDepth: 88
   requiredOxygen: 200

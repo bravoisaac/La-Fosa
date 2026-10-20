@@ -19,6 +19,7 @@ namespace LaFosa
         float lineUntil;
         float reachUntil;
         Vector3[] restingPositions;
+        DiverHands handsPose;
         void Start()
         {
             line = gameObject.AddComponent<LineRenderer>();
@@ -29,12 +30,18 @@ namespace LaFosa
             {
                 restingPositions = new Vector3[toolModels.Length];
                 for (int i = 0; i < toolModels.Length; i++) restingPositions[i] = toolModels[i].transform.localPosition;
+                if (toolModels.Length > 0) handsPose = toolModels[0].GetComponent<DiverHands>();
             }
             SelectTool(0);
         }
         void Update()
         {
             line.enabled = Time.time < lineUntil;
+            if (handsPose != null)
+            {
+                float progress = 1 - Mathf.Clamp01((reachUntil - Time.time) / .25f);
+                handsPose.SetGrip(SelectedTool == 0 && Time.time < reachUntil ? Mathf.Sin(progress * Mathf.PI) : 0);
+            }
             if (restingPositions != null)
                 for (int i = 0; i < toolModels.Length; i++)
                     toolModels[i].transform.localPosition = restingPositions[i] + Vector3.forward * (i == SelectedTool && i < 2 && Time.time < reachUntil ? Mathf.Sin((reachUntil - Time.time) / .25f * Mathf.PI) * .18f : 0);

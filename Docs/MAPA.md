@@ -1,5 +1,63 @@
 # Mapa dinámico
 
+## Mejora actual: manos de primera persona
+
+- Objetivo: reemplazar las manos cúbicas por anatomía low poly legible y un gesto corto de captura, sin ejecutar el juego por indicación del usuario.
+- Entrada: `WorldBuilder.BuildFishingTools` → nuevo parcial de manos → modelo 0; `HarpoonGun` conduce el gesto con el tiempo de alcance existente.
+- Estado/componentes: muñecas, palmas, pulgar y cuatro dedos por mano; articulaciones locales y materiales existentes; no se añaden colisiones a las manos.
+- Archivos a modificar: `WorldBuilder.Shop`, nuevo `WorldBuilder.Hands`, nuevo `DiverHands`, `HarpoonGun`; mapa, plan, README y resultados.
+- Conservar: herramientas 1–3, alcance manual de 1,6 m, recarga de 0,8 s, pesca, inventario y persistencia. Riesgo bajo/medio: orientación de mallas, oclusión y postura de los dedos.
+- Validación: compilación de Unity sin abrir el juego; revisión de geometría en editor si es posible. La revisión jugable queda pendiente.
+
+## Entrega 3.3 interrumpida: revisión visual del HUD
+
+El usuario pidió dejar de usar el juego y mejorar las manos. La inspección del HUD quedó incompleta y no se marca como terminada.
+
+- Objetivo: comprobar cuaderno, avisos, marcadores y menús renderizados sin tocar la partida personal.
+- Framework/entrada: Unity IMGUI, `DiveHUD.OnGUI` y `DiveHUD.Shop`; datos desde `GameSession.Expedition`, inventario, economía y controlador.
+- Componentes/estado: objetivo y destino, interacción observada, aire/profundidad, pausa/tienda/inventario; colores y coordenadas virtuales 1600 × 900 existentes.
+- Plataformas: Windows en ventana; revisar 1600 × 900 y 1280 × 720, y conservar proporciones al cambiar el formato de pantalla.
+- Archivos candidatos/modificables: HUD y diagnóstico optativo de previsualización; mapa, plan, pruebas y guía de primera expedición.
+- Patrón: parciales y herramientas del diagnóstico existente, guardado aislado mediante `--smoke-test`; no añadir dependencias.
+- Conservar: precios, vitales, progresión, fauna y guardado v1. Riesgo bajo/medio: solapamientos, texto recortado o coordenadas de clic desajustadas; comprobar capturas y controles reales.
+
+## Entrega activa: validación del primer descenso libre (19 de octubre de 2026)
+
+- Objetivo: cerrar la verificación pendiente del cambio existente y mantener un punto de reanudación breve en `PLAN_MEJORAS.md`.
+- Framework/entrada: Unity 6.3 LTS; `SmokeCheck.Start` → pruebas de expedición, rutas y vitales.
+- Flujo conectado: `hasPhysicalGate` → mundo/colisiones → `NextWaypoint` y guía; profundidad → `AdvanceVitals` → oxígeno/salud/rescate.
+- Estado: progreso persistente v1, inventario y recompensas existentes; la ausencia de losa no desbloquea el segundo puzle.
+- Candidatos revisados: sesión, guía, controlador, generador de compuertas, assets de zonas, pruebas y compilador editorial.
+- Archivos modificados: diagnósticos `SmokeCheck`, `SmokeCheck.Gates`, `SmokeCheck.Expedition` y `SmokeCheck.Puzzles`; plan, mapa y documentación de rutas/pruebas/primera expedición/README.
+- Patrones: pruebas optativas con guardado aislado y movimiento mediante CharacterController; sin dependencias nuevas.
+- Conservar: cambios locales previos, precios, arte, guardado personal, escena, reglas de progresión y equilibrio hasta la prueba humana.
+- Riesgo medio: confundir acceso físico con progreso o dar por válida una compilación antigua. Validar ejecutable recompilado y registrar resultado real.
+- Resultado: compilación/editor correctos, 458 comprobaciones de integración y 12 entre procesos aprobadas. El diagnóstico distingue en curso/fallo/éxito por modo. Paso 3.2 marcado en el plan; pendiente inmediato 3.3 (HUD), luego recorrido y equilibrio humanos. Detalles en `PRUEBAS.md`.
+
+## Primer descenso libre y peligro por consumo de aire
+
+- Objetivo solicitado: retirar toda la barrera entre huiros y naufragio; sustituir el bloqueo físico por consumo de oxígeno rápido fuera de la profundidad segura.
+- Entrada/flujo: `DiveZoneDefinition.hasPhysicalGate` → generación de mundo y fauna → marcadores; `DiverController` → consumo de aire → daño por falta de aire → rescate existente.
+- Estado: equipo y progreso guardados sin cambiar el formato v1. El abismo conserva su compuerta y los puzles mantienen sus requisitos de progreso.
+- Archivos candidatos/modificados: configuración de zona y expedición, generador/editor, controlador, sesión/guía/HUD, diagnósticos de rutas/vitales y documentación.
+- Patrón: datos editables, componentes y pruebas existentes; consumo ×8 al sobrepasar el límite, sin daño directo adicional de presión.
+- Conservar: shader, precios, mejoras, pesca y rescate con inventario. Riesgo medio: límites de profundidad, retorno y coherencia de indicaciones.
+- Validación prevista: cruzar libremente el antiguo centro y laterales sin tesoro, compuerta profunda intacta, consumo dentro/fuera del límite, recuperación al ascender, agotamiento/rescate y guardado.
+
+## Etapa 3: primera expedición guiada
+
+- Objetivo: orientar la primera pesca, venta, compra del tridente, sello, tesoro y regreso; entrega acotada de la etapa 3.
+- Framework/entrada: Unity 6.3 LTS, `GameSession` → guía contextual → `DiveHUD` y marcador.
+- Componentes conectados: `Economy`, inventario, controlador, puzles y cofres; catálogo como fuente del precio del tridente.
+- Estado: objetivos derivados de saldo, pesca, compras y sellos guardados. El regreso tras el primer tesoro es una indicación de la sesión; cargar ya devuelve a la playa.
+- Patrones: parciales pequeños, generación procedural, IMGUI y pruebas del ejecutable existentes. Sin dependencias nuevas.
+- Candidatos revisados: sesión/persistencia, HUD/tienda, mundo/cabaña/fauna, herramientas, controlador, inventario, mecanismos y diagnóstico.
+- Archivos modificados: nuevos `GameSession.Expedition.cs` y `SmokeCheck.Expedition.cs`; sesión/persistencia, HUD/tienda, señalización costera en `WorldBuilder`, entrada de pruebas, opción de compilación aislada en `ProjectSetup` y documentación.
+- Conservar: shader del agua, fauna, precios, alcances, oxígeno, reglas de rescate y formato de guardado v1.
+- Riesgo medio: orientar hacia un lugar incorrecto o repetir objetivos al cargar. Verificar transiciones, inventario lleno, avance fuera de orden, persistencia y capturas de la interfaz.
+- Pendiente: recorrido humano para decidir ajustes de ritmo, precios y aire; no declarar cerrada la etapa sin esa prueba.
+- Resultado: compilación aislada y validación del editor correctas; 448 comprobaciones de integración aprobadas (26 nuevas). La captura de pantalla de una ventana oculta resultó negra; revisión visual del HUD pendiente. Detalles en `Docs/PRIMERA_EXPEDICION.md` y `Docs/PRUEBAS.md`.
+
 ## Bruma y visibilidad submarina
 
 - Objetivo: desde fuera, mar con tono y turbidez uniformes, sin mancha oscura sobre la fosa; solo la orilla conserva mayor transparencia. Se mantiene la atmósfera submarina existente.

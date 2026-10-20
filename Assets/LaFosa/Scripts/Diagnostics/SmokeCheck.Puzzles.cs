@@ -51,8 +51,13 @@ namespace LaFosa
             lever.Interact(diver); Check(puzzle.Solved, "Palanca abre sello " + level);
             if (level < session.Config.zones.Length - 1)
             {
-                var gate = session.GetComponentsInChildren<DiveGate>().First(g => g.Puzzle == puzzle);
-                Check(!gate.IsOpen && gate.MissingRequirement.Contains(puzzle.zone.treasure.displayName), "Sello resuelto pide recoger la mejora antes del descenso " + level);
+                var nextZone = session.Config.zones[level + 1];
+                Check(!session.IsZoneUnlocked(nextZone), "Sello resuelto sin recoger mejora no habilita el siguiente mecanismo " + level);
+                if (nextZone.hasPhysicalGate)
+                {
+                    var gate = session.GetComponentsInChildren<DiveGate>().First(g => g.Puzzle == puzzle);
+                    Check(!gate.IsOpen && gate.MissingRequirement.Contains(puzzle.zone.treasure.displayName), "Sello resuelto pide recoger la mejora antes del descenso " + level);
+                }
             }
             int moves = puzzle.Moves;
             stones[0].Interact(diver); reset.Interact(diver); lever.Interact(diver);

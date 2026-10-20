@@ -11,6 +11,7 @@ namespace LaFosa
         public Vector3 stationPosition;
         public float startsAtDepth;
         [Header("Acceso y preparación")]
+        public bool hasPhysicalGate = true;
         public Vector3 entryPosition;
         [Min(0)] public float requiredSafeDepth;
         [Min(0)] public float requiredOxygen;
