@@ -13,6 +13,8 @@ Primera entrega del 18 de octubre de 2026. Implementa orientación contextual; e
 
 Con aire por debajo de 30 s o presión excesiva, el ascenso tiene prioridad sobre la guía normal. R sigue rescatando con inventario conservado. Un destino detrás de la cámara muestra hacia dónde girar; no desaparece.
 
+Entrega 3.3a (23 de octubre): el HUD mantiene proporciones al cambiar el formato de la ventana, amplía el texto del cuaderno y adapta su altura. El marcador tiene fondo propio y se mantiene por encima de los paneles de captura/interacción; añade indicaciones de mirada para destinos fuera de pantalla. La barra y el aviso de aire usan el mismo umbral de 30 s de la guía. Los controles y la alarma tienen fondo oscuro para poder leerse sobre la playa o el agua. Cambios compilados; comprobación visual en juego pendiente.
+
 ## Estado y compatibilidad
 
 `GameSession.Expedition` deriva los objetivos de inventario, saldo, compras y puzles. El precio se consulta en `Tienda.asset`. No escribe pasos en el guardado ni modifica el formato v1.

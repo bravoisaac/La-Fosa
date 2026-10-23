@@ -77,7 +77,7 @@ namespace LaFosa
             }
             controller.Move(move * Time.deltaTime);
             if (transform.position.y < -120 || Mathf.Abs(transform.position.x) > 145 || transform.position.z > 200 || transform.position.z < -85)
-                Rescue("La corriente te devuelve al campamento.");
+                Rescue("La corriente te devuelve al campamento.", "world_boundary");
         }
         void UpdateVitals()
         {
@@ -90,7 +90,7 @@ namespace LaFosa
             Oxygen = Mathf.Clamp(Oxygen + (Underwater ? -consumption : 22) * deltaTime, 0, MaxOxygen);
             float damage = Oxygen <= 0 ? 16 : 0;
             Health = Mathf.Clamp(Health + (damage > 0 ? -damage : !Underwater ? 14 : 0) * deltaTime, 0, 100);
-            if (Health <= 0) Rescue("Rescate de emergencia. Recuperaste tu equipo y tus hallazgos.");
+            if (Health <= 0) Rescue("Rescate de emergencia. Recuperaste tu equipo y tus hallazgos.", "oxygen_depleted");
         }
         void UpdateTarget()
         {
@@ -162,8 +162,9 @@ namespace LaFosa
             pitch = -Mathf.Asin(direction.normalized.y) * Mathf.Rad2Deg;
             View.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
         }
-        public void Rescue(string message)
+        public void Rescue(string message, string reason = "manual")
         {
+            Session.RecordRescue(reason);
             if (Riding != null) LeaveVehicle(Session.Config.spawn);
             controller.enabled = false; transform.position = Session.Config.spawn;
             transform.rotation = Quaternion.identity; pitch = 0; View.transform.localRotation = Quaternion.identity;

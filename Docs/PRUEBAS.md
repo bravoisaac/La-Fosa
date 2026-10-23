@@ -1,5 +1,24 @@
 # Validación
 
+## Entrega 3.3a: legibilidad y distribución del HUD (23 de octubre de 2026)
+
+- [x] Compilación Windows y validación existente del editor correctas: `LA_FOSA_TESTS_OK`, `LA_FOSA_BUILD_OK`, salida del editor 0 en `unity-hud-layout-build.log`. Ejecutable actualizado: `Builds/FirstExpedition/La Fosa.exe`.
+- [x] Revisión del código y geometría de paneles: escala uniforme sobre lienzo 1600 × 900 centrado, conversión del destino proyectado al lienzo y restauración de `GUI.matrix`. Menús oscurecen toda la ventana, incluidos los márgenes fuera del lienzo.
+- [x] Marcador limitado a una franja por encima de la mira: etiqueta termina como máximo en y=430; interacción empieza en y=500, pesca termina en y=594 y aviso de aire ocupa y=620–694. Cuaderno termina en x=345 y marcador empieza como mínimo en x=370. Esto comprueba la distribución declarada, no sustituye una inspección renderizada.
+- [x] Cuaderno con texto a 16 px virtuales y altura calculada; bolsillo desplazado según esa altura. Texto secundario más claro, fondo para marcador/controles/alarma y espacio para dos líneas de interacción.
+- [x] Aviso y barra de aire comparten la condición de la guía: bajo el agua, menos de 30 s o profundidad excesiva. En superficie no pide ascender mientras el aire se recupera. No se modificaron consumo, equipo, recompensas ni guardados.
+- [ ] Revisión visual y clics en 1280 × 720, 1600 × 900, 4:3 y pantalla ancha; revisar destinos detrás/arriba/abajo, lectura al pescar, textos largos, tienda, pausa y menús. No se abrió el juego ni se ejecutó integración de runtime por indicación del usuario. **3.3b y el cierre de la etapa 3 continúan pendientes.**
+
+## Manos de primera persona (23 de octubre de 2026)
+
+- [x] Corregido el GUID inválido de `WorldBuilder.Hands.cs.meta` que impedía importar el parcial y causaba el error de compilación «BuildHands no existe».
+- [x] Scripts y ejecutable Windows compilados: `LA_FOSA_TESTS_OK` y `LA_FOSA_BUILD_OK` en `unity-hands-build.log`; salida del editor 0. Compilación actualizada en `Builds/FirstExpedition/La Fosa.exe`.
+- [x] Revisadas vistas estáticas del modelo abierto, medio cerrado y cerrado, generadas con `HandsPreview.Export`: `Docs/Manos/manos-0.png`, `manos-50.png`, `manos-100.png`. Se corrigió la postura demasiado cerrada en reposo; dedos visibles, pulgar opuesto y muñecas acompañando el agarre. La vista usa FOV de 76°, fondo e iluminación de estudio.
+- [x] Revisión del código: captura sigue siendo inmediata, alcance manual 1,6 m, recarga 0,8 s; el gesto visual dura 0,48 s. La animación anterior se cancela al cambiar de herramienta sin reiniciar la recarga. La postura se calcula desde transformaciones de reposo, sin acumular giros.
+- [ ] Validar la sensación del movimiento durante una partida, bajo iluminación submarina y con HUD. No se ejecutó el juego ni la integración de runtime, por indicación del usuario. Las 458 comprobaciones históricas pertenecen a la entrega 3.2, no a esta revisión visual.
+
+Para regenerar las vistas sin jugar: menú **La Fosa → Exportar vistas de manos (sin jugar)** o Unity en batch con `-executeMethod LaFosa.Editor.HandsPreview.Export` (con renderizador gráfico, sin `-nographics`). Es una escena temporal de editor; no carga la expedición ni toca partidas guardadas.
+
 ## Entrega 3.2: descenso libre y peligro por aire (19 de octubre de 2026)
 
 - [x] Compilación `Builds/FirstExpedition/La Fosa.exe` y validación del editor correctas: `LA_FOSA_BUILD_OK`, `LA_FOSA_TESTS_OK`. Log: `unity-descent-build.log`.

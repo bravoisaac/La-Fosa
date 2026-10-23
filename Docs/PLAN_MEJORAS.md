@@ -4,18 +4,23 @@ El objetivo es transformar el prototipo actual en un juego de expediciones por u
 
 El orden de construcción no es idéntico al orden en que el jugador comprará el equipo. Primero hay que conseguir una expedición completa que se guarde, se entienda y permita avanzar; después se amplía el mundo.
 
-## Reanudar aquí — 19 de octubre de 2026
+## Reanudar aquí — 23 de octubre de 2026
 
 **Objetivo activo:** completar la primera expedición persistente (etapas 1–3): pescar con las manos, vender, comprar tridente, resolver el primer sello, recuperar el tesoro y volver para continuar otra salida.
 
-**Última entrega terminada:** 3.2, descenso libre al naufragio y consumo de aire por profundidad verificados. **Siguiente paso: 3.3**, revisión visual del HUD en una ventana renderizada; después, recorrido humano antes de avanzar a la lancha.
+**Última entrega terminada:** 3.3a, mejoras de legibilidad/distribución del HUD implementadas y compiladas. **Siguiente paso: 3.3b**, comprobación visual del resultado y señales; después, recorrido humano antes de avanzar a la lancha.
+
+**Restricción vigente del usuario:** no abrir ni usar el juego. Continuar con código, compilación y vistas estáticas de editor; no dar por completadas las pruebas visuales o jugables que todavía no se hayan realizado.
+
+- [x] Manos · Geometría, pulgar articulado, gesto de 0,48 s y compilación terminados; vistas de editor en `Docs/Manos`. Detalles en `Docs/MAPA.md` y `Docs/PRUEBAS.md`; sensación en partida pendiente.
 
 - [x] 0 · Dirección y orden de desarrollo documentados.
 - [x] 1 · Guardado implementado y probado automáticamente; falta comprobación humana.
 - [x] 2 · Requisitos de progreso y ajuste de descenso libre verificados automáticamente; falta recorrido humano.
 - [x] 3.1 · Guía de pesca → venta → tridente → sello → tesoro → regreso implementada.
 - [x] 3.2 · Descenso libre al naufragio, consumo de aire ×8 fuera del límite y compuerta del abismo conservada: verificados.
-- [ ] 3.3 · Revisar visualmente HUD, señales y orientación en una ventana renderizada.
+- [x] 3.3a · HUD: escala uniforme, cuaderno adaptable, marcadores separados de interacción, fondos legibles y aviso de aire coherente a 30 s. Compilación/editor correctos: `unity-hud-layout-build.log`.
+- [ ] 3.3b · Revisar visualmente HUD, señales y orientación en una ventana renderizada. No ejecutado; conserva abierto el paso 3.3.
 - [ ] 3.4 · Recorrido con una persona nueva; registrar tiempos, capturas, viajes y rescates.
 - [ ] 3.5 · Ajustar ritmo según esa prueba y cerrar las etapas 1–3 con guardado/carga manual.
 - [ ] 4–10 · Lancha, puzles, biomas, fauna, base, exploradores y equilibrio final; pendientes.
@@ -78,6 +83,8 @@ Verificación: **422 comprobaciones de integración aprobadas**, incluidas 33 nu
 **Estado al 18 de octubre de 2026: primera entrega implementada, guía contextual de la expedición. Etapa todavía abierta: falta revisión visual del HUD, recorrido humano de las etapas 1–3 y ajuste de ritmo según esa prueba.**
 
 **Actualización al 19 de octubre:** entrega 3.2 verificada (descenso libre, coste de aire y regresiones de progreso). La etapa sigue abierta; los pasos 3.3–3.5 del resumen inicial conservan el cierre visual y humano pendiente.
+
+**Actualización al 23 de octubre:** 3.3a implementada y compilada sin ejecutar el juego. El HUD conserva proporciones, separa marcadores de interacción/avisos y mejora contraste y texto; la comprobación visual 3.3b sigue pendiente. No se adelanta el cierre humano ni el equilibrio.
 
 La guía orienta hacia peces lentos de la orilla, calcula cuánto falta para el tridente según el catálogo y el valor real de la pesca, indica cuándo vender/comprar y acompaña el primer sello, cofre y regreso. Incluye instrucciones breves, distancia de captura, recuperación con mochila llena y prioridad de ascenso por presión/aire. Cargar una partida reconstruye los objetivos sin repetir compras ni recompensas. Detalles y prueba manual: `Docs/PRIMERA_EXPEDICION.md`.
 

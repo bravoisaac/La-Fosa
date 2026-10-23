@@ -1,6 +1,35 @@
 # Mapa dinámico
 
+## Entrega activa 3.4a: preparar medición del recorrido (23 de octubre)
+
+- Objetivo: registrar una futura prueba humana con tiempos, intentos, capturas, compras, visitas y rescates; no ejecutar el juego ni simular resultados humanos.
+- Entrada/patrón: Unity C#, parcial de `GameSession` y modelo local serializable; activación explícita mediante `--expedition-report`, sin dependencias nuevas.
+- Conexiones: inicio/carga/menú/pausa → reloj del informe; `HarpoonGun`, `FishAgent`, `Economy`, puzle, recompensa y `DiverController` → sucesos confirmados.
+- Estado: cada Nueva partida/Continuar abre un segmento independiente con progreso inicial; separar tiempo total, tiempo sin pausa y tiempo de movimiento. No contar restauraciones como rescates.
+- Archivos: nuevo modelo en Diagnostics, parcial de sesión y validación de editor; puntos de integración citados y documentación del plan/prueba.
+- Conservar: formato de guardado v1, HUD, precios, alcance, manos y mecánicas. Riesgo medio: clasificación de sucesos y ciclo de vida; el informe debe poder fallar sin afectar la partida.
+- Validación prevista: casos sintéticos del modelo/escritura en editor y compilación Windows; integración jugable y medición humana pendientes.
+
+## Entrega activa 3.3a: legibilidad y distribución del HUD (23 de octubre)
+
+- Objetivo: corregir desde el código solapamientos, estiramiento y avisos inconsistentes, sin abrir el juego.
+- Framework/entrada: Unity IMGUI; `DiveHUD.OnGUI` → escala uniforme y paneles → `DiveHUD.Shop` para tienda.
+- Estado conectado: guía de `GameSession.Expedition`, destino proyectado, interacción/pez observado, profundidad/oxígeno y menús; no se cambia el progreso.
+- Archivos revisados/modificables: `DiveHUD.cs`, `DiveHUD.Shop.cs`, plan, mapa, pruebas, guía y README.
+- Patrón: conservar coordenadas virtuales 1600 × 900, paleta marina, parciales y controles actuales; no migrar sistema de UI ni añadir paquetes.
+- Cambios: margen de marcadores separado de interacción/avisos, fondo para textos sobre el mundo, cuaderno con altura según texto, escala sin deformar, umbral visual de aire coherente a 30 s.
+- Conservar: manos, mecánicas, economía, guardado y rescate. Riesgo bajo/medio: distribución y coordenadas de botones en formatos distintos.
+- Validación: compilación Windows y comprobaciones existentes del editor; revisión visual en partida expresamente pendiente por la indicación de no usar el juego.
+- Resultado: `LA_FOSA_TESTS_OK` y `LA_FOSA_BUILD_OK` en `unity-hud-layout-build.log`; cambios de distribución revisados en el código y `git diff --check` sin problemas. 3.3a terminada; 3.3b visual pendiente. Ejecutable actualizado sin lanzarlo.
+
 ## Mejora actual: manos de primera persona
+
+Actualización del 23 de octubre: revisar anatomía y cierre sobre el modelo ya existente. `HandsPreview` exporta vistas estáticas en editor, sin Play Mode. Detectado y corregido GUID inválido de `WorldBuilder.Hands.cs.meta`, que impedía compilar `BuildFishingTools`. Mantener pendientes las comprobaciones dentro del juego.
+
+- Resultado visual: dedos extendidos con separación y longitudes distintas, uñas discretas, pulgar con oposición en tres ejes y muñecas que acompañan el cierre. `DiverHands` guarda/restaura posturas locales sin acumular desplazamientos.
+- Animación: `HarpoonGun` conserva la captura inmediata y recarga de 0,8 s; solo el gesto manual pasa a 0,48 s, abre al alcanzar y cierra al recoger. Cambiar herramienta cancela el gesto anterior conservando la recarga.
+- Artefactos: `HandsPreview` genera `Docs/Manos/manos-0.png`, `manos-50.png` y `manos-100.png` con el FOV de primera persona (76°). Las capturas muestran el modelo aislado, sin HUD ni iluminación del mundo.
+- Verificación final: compilación Windows y validación editorial correctas (`unity-hands-build.log`); vistas estáticas inspeccionadas. No se ejecutó el juego ni las pruebas de runtime en esta entrega.
 
 - Objetivo: reemplazar las manos cúbicas por anatomía low poly legible y un gesto corto de captura, sin ejecutar el juego por indicación del usuario.
 - Entrada: `WorldBuilder.BuildFishingTools` → nuevo parcial de manos → modelo 0; `HarpoonGun` conduce el gesto con el tiempo de alcance existente.

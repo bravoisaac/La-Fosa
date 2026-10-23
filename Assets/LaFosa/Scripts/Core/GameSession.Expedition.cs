@@ -35,6 +35,7 @@ namespace LaFosa
         {
             if (firstReturnPending && !Diver.Underwater && Vector3.Distance(Diver.transform.position, Config.spawn) < 12)
             {
+                ReportExpeditionReturn();
                 firstReturnPending = false;
                 Notify("Primera expedición recuperada. Tu equipo permite bajar más profundo; prepara otra salida en la cabaña.");
             }

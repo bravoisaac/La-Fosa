@@ -54,6 +54,7 @@ namespace LaFosa
             RefreshSaveAvailability();
             Diver.Inventory.Changed += MarkSaveDirty;
             foreach (var puzzle in puzzles) puzzle.Changed += MarkSaveDirty;
+            foreach (var puzzle in puzzles) puzzle.Changed += ReportPuzzleChange;
         }
         void AddItem(ItemDefinition item)
         {
@@ -78,6 +79,7 @@ namespace LaFosa
             };
             if (!saveStore.TrySave(fresh, out var message, true)) { SaveStatus = message; SaveFailed = true; return false; }
             ApplySave(fresh); Intro = false; CanContinue = true; SaveFailed = false; SaveStatus = message; ApplyPause();
+            StartExpeditionReport("new");
             Notify("Nueva expedición. Sigue la guía de la izquierda: pesca en la orilla y reúne $" + TridentPrice + " para el tridente.");
             return true;
         }
@@ -85,11 +87,13 @@ namespace LaFosa
         {
             if (!Intro || saveStore == null) return false;
             if (!saveStore.TryLoad(out var data, out var message)) { CanContinue = false; SaveStatus = message; return false; }
-            ApplySave(data); Intro = false; SaveStatus = message; SaveFailed = false; ApplyPause(); Notify(message); return true;
+            ApplySave(data); Intro = false; SaveStatus = message; SaveFailed = false; ApplyPause();
+            StartExpeditionReport("continue"); Notify(message); return true;
         }
         public bool ReturnToMenu()
         {
             if (!SaveNow()) return false;
+            FinishExpeditionReport("menu");
             Intro = true; Paused = false; InventoryOpen = false; ShopOpen = false;
             ApplyPause(); RefreshSaveAvailability(); return true;
         }
@@ -148,6 +152,7 @@ namespace LaFosa
         }
         void LateUpdate()
         {
+            UpdateExpeditionReport();
             if (Intro || saveStore == null) return;
             if (!Blocked)
             {
@@ -159,7 +164,10 @@ namespace LaFosa
             // End-of-frame saving keeps inventory + reward/transaction in one snapshot.
             if (saveDirty || Time.unscaledTime >= nextPeriodicSave) SaveNow();
         }
-        void OnApplicationQuit() { SaveNow(); }
-        void OnApplicationPause(bool paused) { if (paused) SaveNow(); }
+        void OnApplicationQuit() { SaveNow(); FinishExpeditionReport("quit"); }
+        void OnApplicationPause(bool paused)
+        {
+            if (paused && !Intro) { Paused = true; ApplyPause(); SaveNow(); WriteExpeditionReport(); }
+        }
     }
 }

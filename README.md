@@ -57,7 +57,9 @@ La mochila tiene 12 espacios y pilas limitadas. Un inventario lleno no consume t
 
 **El progreso se guarda en el equipo**, con versión de formato y copia de respaldo. Se conservan dinero, inventario, compras, tesoros, piedras, zonas descubiertas, conchas recogidas y propiedad/posición de vehículos. **Continuar** devuelve al buzo a la playa con aire y salud recuperados. En pausa, **Guardar y volver al menú** permite comprobar el guardado antes de salir. Un error de escritura se muestra en pantalla; un archivo principal inválido permite recuperar el respaldo. Consulta [guardado y recuperación](Docs/GUARDADO.md).
 
-No incluye multijugador, sonido ni animación de brazos. Es una base jugable para ampliar; los objetos y paisajes se generan con geometría simple, sin recursos externos.
+Las manos tienen dedos articulados de longitudes distintas, uñas discretas, mangas de neopreno y pulgares que acompañan el agarre. El gesto de captura abre, cierra y retira las manos en 0,48 s; conserva alcance de 1,6 m y recarga de 0,8 s. Puedes exportar vistas estáticas desde **La Fosa → Exportar vistas de manos (sin jugar)**; se guardan en `Docs/Manos`.
+
+No incluye multijugador ni sonido. Es una base jugable para ampliar; los objetos y paisajes se generan con geometría simple, sin recursos externos.
 
 ## Cabaña y tienda de Don Lucho
 
@@ -93,7 +95,7 @@ El bote comprado aparece a la izquierda del muelle y la moto a la derecha. Acér
 - `Interactable`: hereda esta clase para añadir puertas, herramientas, misiones o nuevos puzles. El buzo detecta automáticamente los objetos a menos de 4,5 m.
 - `StonePuzzleDefinition` define dimensiones, recorrido y mezcla; `StoneCircuitPuzzle` evalúa conexiones y corriente; `RuneStone` gira las piedras; `StonePuzzleLever` activa o reinicia; `StonePuzzleView` anima el cierre; `TreasureChest` entrega la recompensa. `SequencePuzzle` conserva el código anterior por compatibilidad, pero ya no se usa en los santuarios.
 - `FishAgent` y `HarpoonGun`: puntos de extensión para especies, comportamiento, daño y proyectiles físicos. Manos/tridente/arpón usan barrido de esfera y la red consulta peces cercanos con comprobación de visibilidad. Manos y tridente tienen un movimiento corto de alcance; el arpón muestra la línea del disparo.
-- `DiveHUD`: interfaz de prototipo con IMGUI escalada a la ventana. Para un inventario mayor a 12 espacios, añade paginación o migra a UI Toolkit/uGUI.
+- `DiveHUD`: IMGUI con escala uniforme y lienzo centrado de 1600 × 900; el cuaderno ajusta su altura y los marcadores reservan espacio separado de interacción y avisos. Los menús cubren toda la ventana. Aviso de aire y guía coinciden por debajo de 30 s bajo el agua. La entrega 3.3a está compilada y pendiente de revisión visual en distintos formatos. Para un inventario mayor a 12 espacios, añade paginación o migra a UI Toolkit/uGUI.
 
 La escena usa el renderizador integrado de Unity y entrada clásica, sin paquetes externos. Si importas los scripts en otro proyecto, habilita **Active Input Handling: Input Manager (Old)** o **Both**, y conserva los ejes Mouse X / Mouse Y. Las referencias a shaders en la configuración evitan que la compilación los elimine.
 

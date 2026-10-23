@@ -31,6 +31,7 @@ namespace LaFosa
             if (value <= 0 || value > int.MaxValue - Money) return Reject("No se puede completar esta venta.");
             if (!session.Diver.Inventory.TryRemoveAllFish(count, value)) return Reject("La pesca disponible cambió; inténtalo de nuevo.");
             Money += (int)value;
+            session.RecordExpeditionEvent("sale", count + " fish / " + value);
             Feedback = "Vendiste " + count + " peces por $" + value + ". ¡Buena pesca!";
             session.SaveNow();
             return true;
@@ -47,6 +48,7 @@ namespace LaFosa
                 return Reject("No hay un amarre disponible para esta embarcación.");
             Money -= offer.price;
             owned.Add(offer.gear);
+            if (offer.gear == GearKind.Trident) session.RecordExpeditionEvent("trident", offer.price.ToString(), true);
             if (offer.gear == GearKind.Trident) session.Diver.GetComponent<HarpoonGun>()?.SelectTool(1);
             if (offer.gear == GearKind.OxygenTank) session.Diver.ApplyOxygenTank(session.Config.shop.oxygenBonus);
             if (offer.gear == GearKind.Boat) session.Boat.Deliver();

@@ -18,6 +18,7 @@ namespace LaFosa
         LineRenderer line;
         float lineUntil;
         float reachUntil;
+        float reachDuration = .25f;
         Vector3[] restingPositions;
         DiverHands handsPose;
         void Start()
@@ -39,12 +40,14 @@ namespace LaFosa
             line.enabled = Time.time < lineUntil;
             if (handsPose != null)
             {
-                float progress = 1 - Mathf.Clamp01((reachUntil - Time.time) / .25f);
-                handsPose.SetGrip(SelectedTool == 0 && Time.time < reachUntil ? Mathf.Sin(progress * Mathf.PI) : 0);
+                float progress = 1 - Mathf.Clamp01((reachUntil - Time.time) / reachDuration);
+                float grip = progress < .25f ? 0 : progress < .65f
+                    ? Mathf.InverseLerp(.25f, .65f, progress) : 1 - Mathf.InverseLerp(.65f, 1, progress);
+                handsPose.SetGrip(SelectedTool == 0 && Time.time < reachUntil ? grip : 0);
             }
             if (restingPositions != null)
                 for (int i = 0; i < toolModels.Length; i++)
-                    toolModels[i].transform.localPosition = restingPositions[i] + Vector3.forward * (i == SelectedTool && i < 2 && Time.time < reachUntil ? Mathf.Sin((reachUntil - Time.time) / .25f * Mathf.PI) * .18f : 0);
+                    toolModels[i].transform.localPosition = restingPositions[i] + Vector3.forward * (i == SelectedTool && i < 2 && Time.time < reachUntil ? Mathf.Sin((reachUntil - Time.time) / reachDuration * Mathf.PI) * .18f : 0);
             if (diver.Session.Blocked) return;
             if (Input.GetKeyDown(KeyCode.Alpha1)) SelectTool(0);
             if (Input.GetKeyDown(KeyCode.Alpha2)) SelectTool(1);
@@ -57,6 +60,11 @@ namespace LaFosa
             if (tool < 0 || tool > 3) return false;
             if ((tool == 1 && !diver.Session.Economy.Has(GearKind.Trident)) || (tool == 2 && !diver.Session.Economy.Has(GearKind.ReinforcedHarpoon)) || (tool == 3 && !diver.Session.Economy.Has(GearKind.Net)))
             { diver.Session.Notify("Compra esta herramienta en la cabaña de Don Lucho."); return false; }
+            if (SelectedTool != tool)
+            {
+                reachUntil = 0;
+                if (handsPose != null) handsPose.SetGrip(0);
+            }
             SelectedTool = tool;
             diver.Session.MarkSaveDirty();
             if (toolModels != null) for (int i = 0; i < toolModels.Length; i++) toolModels[i].SetActive(i == tool);
@@ -67,10 +75,12 @@ namespace LaFosa
             if (diver.Session.Blocked || ReadyIn > 0 || line == null) return;
             if (!diver.Underwater && !(SelectedTool == 3 && diver.Riding != null)) { diver.Session.Notify("Sumérgete para pescar. También puedes lanzar la red desde una embarcación."); return; }
             nextShot = Time.time + EffectiveCooldown;
+            diver.Session.RecordCaptureAttempt(SelectedTool);
             Vector3 origin = diver.View.transform.position;
             Vector3 direction = diver.View.transform.forward;
             Vector3 end = origin + direction * EffectiveRange;
-            reachUntil = Time.time + .25f;
+            reachDuration = SelectedTool == 0 ? .48f : .25f;
+            reachUntil = Time.time + reachDuration;
             if (SelectedTool == 3)
             {
                 if (diver.Riding != null)

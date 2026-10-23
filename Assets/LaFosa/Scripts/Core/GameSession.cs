@@ -53,6 +53,7 @@ namespace LaFosa
         public void OpenShop()
         {
             if (Intro || Config.shop == null || Diver.Riding != null) return;
+            if (!ShopOpen) RecordExpeditionEvent("shop");
             InventoryOpen = false; Paused = false; ShopOpen = true; ApplyPause();
         }
         public void CloseShop() { ShopOpen = false; ApplyPause(); }
@@ -63,6 +64,7 @@ namespace LaFosa
         public void Reward(DiveZoneDefinition zone)
         {
             if (!claimedZones.Add(zone.id)) return;
+            if (zone == Config.zones[0]) RecordExpeditionEvent("treasure", zone.id, true);
             discoveredZones.Add(zone.id);
             Treasures++;
             if (Treasures == 1) firstReturnPending = true;
@@ -86,14 +88,15 @@ namespace LaFosa
         }
         void OnApplicationFocus(bool focused)
         {
-            if (!focused && !Intro) { Paused = true; ApplyPause(); SaveNow(); }
+            if (!focused && !Intro) { Paused = true; ApplyPause(); SaveNow(); WriteExpeditionReport(); }
         }
         void ApplyPause()
         {
+            UpdateReportMode();
             Time.timeScale = Blocked ? 0 : 1;
             Cursor.lockState = Blocked ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = Blocked;
         }
-        void OnDestroy() { Time.timeScale = 1; Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
+        void OnDestroy() { FinishExpeditionReport("destroyed"); Time.timeScale = 1; Cursor.lockState = CursorLockMode.None; Cursor.visible = true; }
     }
 }

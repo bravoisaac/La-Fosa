@@ -104,6 +104,7 @@ namespace LaFosa
             if (!Available) return false;
             if (!diver.Inventory.TryAdd(item)) { diver.Session.Notify("Mochila llena. Libera espacio antes de pescar."); return false; }
             SetAvailable(false); CurrentSpeed = 0; respawnAt = Time.time + respawnSeconds;
+            diver.Session.RecordExpeditionEvent("capture", item.id);
             diver.Session.Notify("Captura: " + item.displayName + " · véndelo en la cabaña"); return true;
         }
         void SetAvailable(bool available)

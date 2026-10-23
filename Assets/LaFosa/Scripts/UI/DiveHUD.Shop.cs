@@ -9,7 +9,7 @@ namespace LaFosa
         {
             var economy = session.Economy;
             var catalog = session.Config.shop;
-            RectColor(0, 0, 1600, 900, new Color(.015f, .03f, .035f, .86f));
+            DimWorld(new Color(.015f, .03f, .035f, .86f));
             Panel(140, 100, 1320, 710);
             Text("DON LUCHO", 180, 130, 600, 50, 36, Gold);
             Text("ALMACÉN DE MAR  /  CALETA BRUMA", 182, 190, 600, 26, 13, Mint);

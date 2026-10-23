@@ -15,12 +15,14 @@ namespace LaFosa
             var sleeve = Mat("Mangas del traje", new Color(.06f, .12f, .15f));
             var cuff = Mat("Puños de neopreno", new Color(.035f, .075f, .09f));
             var seam = Mat("Costura del traje", new Color(.19f, .39f, .38f));
+            var nail = Mat("Uñas naturales", new Color(.69f, .52f, .41f));
             foreach (float side in new[] { -1f, 1f })
             {
                 var wrist = new GameObject(side < 0 ? "Mano izquierda" : "Mano derecha").transform;
                 wrist.SetParent(hands.transform, false);
                 wrist.localPosition = new Vector3(side * .235f, -.255f, .45f);
-                wrist.localRotation = Quaternion.Euler(-7, -side * 10, side * 9);
+                wrist.localRotation = Quaternion.Euler(-12, -side * 9, side * 3);
+                pose.RegisterWrist(wrist, side);
                 // Rings store half-width, half-thickness and longitudinal position.
                 HandSection("Manga entallada", wrist, sleeve, pose,
                     new Vector3(.053f, .047f, -.27f), new Vector3(.044f, .037f, -.12f), new Vector3(.033f, .026f, -.025f));
@@ -33,49 +35,58 @@ namespace LaFosa
                     new Vector3(.044f, .024f, .065f), new Vector3(.046f, .021f, .095f),
                     new Vector3(.042f, .017f, .111f));
 
-                float[] lengths = { .077f, .086f, .079f, .061f };
+                float[] lengths = { .085f, .094f, .086f, .068f };
                 string[] names = { "Índice", "Medio", "Anular", "Meñique" };
                 for (int finger = 0; finger < 4; finger++)
                 {
                     float width = finger == 3 ? .008f : .0095f;
                     var joint = new GameObject(names[finger]).transform;
                     joint.SetParent(wrist, false);
-                    joint.localPosition = new Vector3(side * (-.032f + finger * .021f), 0, finger == 3 ? .098f : .108f);
-                    joint.localRotation = Quaternion.Euler(12 + finger * 3, side * (finger - 1.5f) * 4, 0);
-                    BuildFinger(joint, lengths[finger], width, skin, pose, false);
+                    joint.localPosition = new Vector3(side * (-.0345f + finger * .023f), 0, finger == 3 ? .098f : .108f);
+                    joint.localRotation = Quaternion.Euler(2 + finger * 2, side * (finger - 1.5f) * 7, 0);
+                    BuildFinger(joint, lengths[finger], width, skin, nail, pose, false, side);
                 }
                 var thumb = new GameObject("Pulgar opuesto").transform;
                 thumb.SetParent(wrist, false);
                 thumb.localPosition = new Vector3(-side * .035f, -.009f, .039f);
                 thumb.localRotation = Quaternion.Euler(18, -side * 43, -side * 28);
-                BuildFinger(thumb, .067f, .012f, skin, pose, true);
+                BuildFinger(thumb, .067f, .012f, skin, nail, pose, true, side);
             }
             return hands;
         }
 
-        void BuildFinger(Transform rootJoint, float length, float width, Material skin, DiverHands pose, bool thumb)
+        void BuildFinger(Transform rootJoint, float length, float width, Material skin, Material nail, DiverHands pose, bool thumb, float side)
         {
             var joint = rootJoint;
             float[] proportions = thumb ? new[] { .55f, .45f } : new[] { .45f, .32f, .23f };
             for (int part = 0; part < proportions.Length; part++)
             {
                 float segment = length * proportions[part];
-                pose.RegisterJoint(joint, thumb ? 25 : part == 1 ? 62 : 46);
+                pose.RegisterJoint(joint, thumb && part == 0 ? new Vector3(30, side * 65, side * 28)
+                    : new Vector3(thumb ? 40 : part == 0 ? 45 : part == 1 ? 60 : 35, 0, 0));
                 float taper = 1 - part * .12f;
                 HandSection("Falange " + (part + 1), joint, skin, pose,
                     new Vector3(width * taper, width * .88f * taper, -.003f),
                     new Vector3(width * taper, width * .88f * taper, segment * .72f),
                     new Vector3(width * taper * .72f, width * .67f * taper, segment));
-                if (part == proportions.Length - 1) break;
+                if (part == proportions.Length - 1)
+                {
+                    var nailPart = HandSection("Uña", joint, nail, pose,
+                        new Vector3(width * taper * .55f, .0008f, segment * .2f),
+                        new Vector3(width * taper * .65f, .0012f, segment * .5f),
+                        new Vector3(width * taper * .42f, .0008f, segment * .85f));
+                    nailPart.localPosition = Vector3.up * (width * .84f * taper);
+                    break;
+                }
                 var next = new GameObject("Articulación " + (part + 2)).transform;
                 next.SetParent(joint, false);
                 next.localPosition = Vector3.forward * (segment - .001f);
-                next.localRotation = Quaternion.Euler(thumb ? 12 : 16, 0, 0);
+                next.localRotation = Quaternion.Euler(thumb ? 10 : 5, 0, 0);
                 joint = next;
             }
         }
 
-        static void HandSection(string name, Transform parent, Material material, DiverHands owner, params Vector3[] rings)
+        static Transform HandSection(string name, Transform parent, Material material, DiverHands owner, params Vector3[] rings)
         {
             // Beveled octagonal sections give a soft silhouette with flat, deliberate facets.
             var outline = new[] { new Vector2(-.65f, -1), new Vector2(.65f, -1), new Vector2(1, -.55f), new Vector2(1, .55f),
@@ -110,6 +121,7 @@ namespace LaFosa
             var renderer = obj.AddComponent<MeshRenderer>(); renderer.sharedMaterial = material;
             renderer.shadowCastingMode = ShadowCastingMode.Off;
             renderer.receiveShadows = false;
+            return obj.transform;
         }
     }
 }

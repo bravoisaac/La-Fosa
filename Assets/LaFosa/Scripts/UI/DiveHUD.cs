@@ -8,7 +8,7 @@ namespace LaFosa
         public HarpoonGun harpoon;
         static readonly Color Ink = new Color(.025f, .075f, .1f, .93f);
         static readonly Color Mint = new Color(.45f, .93f, .79f);
-        static readonly Color Muted = new Color(.61f, .74f, .76f);
+        static readonly Color Muted = new Color(.75f, .84f, .85f);
         static readonly Color Gold = new Color(1, .73f, .39f);
         GUIStyle style;
         bool showControls = true;
@@ -16,8 +16,16 @@ namespace LaFosa
         void OnGUI()
         {
             if (session == null || session.Diver == null) return;
-            GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(Screen.width / 1600f, Screen.height / 900f, 1));
+            var previousMatrix = GUI.matrix;
+            float scale = Mathf.Min(Screen.width / 1600f, Screen.height / 900f);
+            var offset = new Vector3((Screen.width - 1600 * scale) * .5f, (Screen.height - 900 * scale) * .5f, 0);
+            GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, new Vector3(scale, scale, 1));
             if (style == null) style = new GUIStyle(GUI.skin.label) { font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"), wordWrap = true, richText = false };
+            try { DrawHud(scale, offset); }
+            finally { GUI.matrix = previousMatrix; }
+        }
+        void DrawHud(float scale, Vector3 offset)
+        {
             var diver = session.Diver;
             Panel(30, 28, 270, 82);
             Text("L A  F O S A", 50, 38, 260, 36, 29, Color.white);
@@ -31,18 +39,22 @@ namespace LaFosa
             Text(Mathf.RoundToInt(diver.transform.eulerAngles.y).ToString("000") + "°", 740, 65, 120, 30, 21, Color.white, TextAnchor.MiddleCenter);
 
             var objective = session.ExpeditionObjective();
-            Panel(30, 137, 315, 220);
+            float hintHeight = Mathf.Max(102, TextHeight(objective.Hint, 270, 16));
+            float notebookBottom = 242 + hintHeight + 14;
+            Panel(30, 137, 315, notebookBottom - 137);
             Text("CUADERNO · ZONAS " + session.DiscoveredZoneCount + "/" + session.Config.zones.Length, 50, 153, 280, 22, 12, Gold);
             Text(objective.Title, 50, 184, 275, 55, 20, Color.white);
-            Text(objective.Hint, 50, 242, 270, 102, 14, Muted);
-            Panel(30, 375, 315, 90);
-            Text("BOLSILLO   $" + session.Economy.Money, 50, 389, 275, 30, 22, Gold);
-            Text("PESCA PARA VENDER   $" + session.Economy.SaleValue + "\nTesoros: " + session.Treasures + " / " + session.Config.zones.Length, 50, 425, 270, 36, 12, Muted);
+            Text(objective.Hint, 50, 242, 270, hintHeight, 16, Muted);
+            float pocketY = notebookBottom + 18;
+            Panel(30, pocketY, 315, 94);
+            Text("BOLSILLO   $" + session.Economy.Money, 50, pocketY + 12, 275, 30, 22, Gold);
+            Text("PESCA PARA VENDER   $" + session.Economy.SaleValue + "\nTesoros: " + session.Treasures + " / " + session.Config.zones.Length, 50, pocketY + 48, 270, 40, 14, Muted);
 
             Panel(30, 720, 345, 150);
             Text("O₂", 50, 733, 50, 35, 25, Mint);
             Text(Mathf.CeilToInt(diver.Oxygen) + " / " + Mathf.CeilToInt(diver.MaxOxygen) + " s", 225, 742, 130, 25, 16, Color.white, TextAnchor.MiddleRight);
-            Bar(50, 779, 305, 7, diver.Oxygen / diver.MaxOxygen, diver.Oxygen < 25 || diver.Depth > diver.SafeDepth ? Gold : Mint);
+            bool needsAir = diver.Underwater && (diver.Oxygen < 30 || diver.Depth > diver.SafeDepth);
+            Bar(50, 779, 305, 7, diver.Oxygen / diver.MaxOxygen, needsAir ? Gold : Mint);
             Text("SALUD  " + Mathf.CeilToInt(diver.Health) + "%", 50, 807, 160, 24, 13, Muted);
             Text("MOCHILA  " + diver.Inventory.Stacks.Count + "/" + diver.Inventory.capacity, 210, 807, 145, 24, 13, Muted, TextAnchor.MiddleRight);
             Text("TAB  inventario", 50, 839, 260, 20, 12, Mint);
@@ -56,26 +68,40 @@ namespace LaFosa
                 {
                     Vector3 destination = objective.Destination;
                     Vector3 point = diver.View.WorldToViewportPoint(destination);
+                    // Convert the camera's full-window viewport into the centered HUD canvas.
+                    float projectedX = (point.x * Screen.width - offset.x) / scale;
+                    float projectedY = ((1 - point.y) * Screen.height - offset.y) / scale;
                     bool behind = point.z <= 0;
                     Vector3 local = diver.View.transform.InverseTransformPoint(destination);
-                    float markerX = behind ? (local.x < 0 ? 500 : 1100) : Mathf.Clamp(point.x * 1600, 500, 1100);
-                    float markerY = behind ? 350 : Mathf.Clamp((1 - point.y) * 900, 200, 610);
+                    // Reserve the upper central band: never cover the notebook, reticle,
+                    // fish/interaction panel (y=500) or air warning (y=620).
+                    float markerX = behind ? (local.x < 0 ? 522 : 1078) : Mathf.Clamp(projectedX, 522, 1078);
+                    float markerY = behind ? 330 : Mathf.Clamp(projectedY, 265, 350);
+                    string direction = behind || point.x < 0 || point.x > 1
+                        ? (local.x < 0 ? "← GIRA A LA IZQUIERDA\n" : "GIRA A LA DERECHA →\n")
+                        : point.y > 1 ? "↑ SUBE LA MIRADA\n" : point.y < 0 ? "↓ BAJA LA MIRADA\n" : "";
+                    RectColor(markerX - 22, markerY - 20, 44, 38, Ink);
                     Text("◇", markerX - 20, markerY - 20, 40, 36, 27, Gold, TextAnchor.MiddleCenter);
-                    Text((behind ? (local.x < 0 ? "← GIRA A LA IZQUIERDA\n" : "GIRA A LA DERECHA →\n") : "") + objective.Marker + " · " + Mathf.RoundToInt(Vector3.Distance(diver.transform.position, destination)) + " m", markerX - 140, markerY + 20, 280, 46, 12, Gold, TextAnchor.MiddleCenter);
+                    Panel(markerX - 152, markerY + 20, 304, 60);
+                    Text(direction + objective.Marker + " · " + Mathf.RoundToInt(Vector3.Distance(diver.transform.position, destination)) + " m", markerX - 142, markerY + 24, 284, 52, 14, Gold, TextAnchor.MiddleCenter);
                 }
                 RectColor(798, 440, 4, 4, Color.white);
                 if (diver.Riding != null)
                 {
-                    Panel(540, 675, 520, 50);
-                    Text(diver.Riding.DisplayName + " · WASD conducir · E desembarcar", 550, 686, 500, 28, 16, Mint, TextAnchor.MiddleCenter);
+                    Panel(540, 720, 520, 50);
+                    Text(diver.Riding.DisplayName + " · WASD conducir · E desembarcar", 550, 731, 500, 28, 16, Mint, TextAnchor.MiddleCenter);
                 }
                 if (diver.Target != null)
                 {
-                    Panel(510, 500, 580, 48);
-                    Text("[ E ]   " + diver.Target.Prompt, 530, 509, 540, 30, 17, Color.white, TextAnchor.MiddleCenter);
+                    Panel(510, 500, 580, 76);
+                    Text("[ E ]   " + diver.Target.Prompt, 530, 510, 540, 56, 17, Color.white, TextAnchor.MiddleCenter);
                 }
-                if (diver.Depth > diver.SafeDepth || diver.Oxygen < 25)
-                    Text(diver.Depth > diver.SafeDepth ? "PROFUNDIDAD EXCESIVA · O₂ ×" + diver.PressureOxygenMultiplier.ToString("0.#") + " · ASCIENDE O R" : "OXÍGENO BAJO · ASCIENDE O PULSA R", 460, 630, 680, 35, 21, Gold, TextAnchor.MiddleCenter);
+                if (needsAir)
+                {
+                    Panel(460, 620, 680, 74);
+                    Text(diver.Depth > diver.SafeDepth ? "PROFUNDIDAD EXCESIVA · AIRE ×" + diver.PressureOxygenMultiplier.ToString("0.#") : "OXÍGENO BAJO · RECUPERA AIRE", 480, 630, 640, 26, 20, Gold, TextAnchor.MiddleCenter);
+                    Text("ESPACIO para ascender · R para regresar con tus hallazgos", 480, 660, 640, 24, 15, Color.white, TextAnchor.MiddleCenter);
+                }
                 if (diver.Target == null && diver.ObservedFish != null && diver.ObservedFish.Available)
                 {
                     var fish = diver.ObservedFish;
@@ -85,7 +111,12 @@ namespace LaFosa
                     float distance = Vector3.Distance(diver.View.transform.position, fish.transform.position);
                     Text(distance.ToString("0.0") + " m · " + (distance <= harpoon.EffectiveRange ? "CLIC para capturar" : "Acércate") + " · Alcance " + harpoon.EffectiveRange.ToString("0.#") + " m", 530, 566, 540, 22, 13, Gold, TextAnchor.MiddleCenter);
                 }
-                if (showControls) Text("1 MANOS   2 TRIDENTE   3 ARPÓN   4 RED   ·   CLIC pescar   E interactuar   TAB mochila   R rescate", 385, 853, 835, 25, 12, Muted, TextAnchor.MiddleCenter);
+                if (showControls)
+                {
+                    Panel(395, 810, 810, 65);
+                    Text("1 MANOS   2 TRIDENTE   3 ARPÓN   4 RED", 410, 819, 780, 22, 14, Mint, TextAnchor.MiddleCenter);
+                    Text("CLIC pescar   E interactuar   TAB mochila   R rescate", 410, 846, 780, 22, 14, Muted, TextAnchor.MiddleCenter);
+                }
             }
             if (Time.unscaledTime < session.MessageUntil)
             {
@@ -101,7 +132,7 @@ namespace LaFosa
         }
         void Intro()
         {
-            RectColor(0, 0, 1600, 900, new Color(.015f, .04f, .065f, .65f));
+            DimWorld(new Color(.015f, .04f, .065f, .65f));
             Panel(390, 165, 820, 650);
             Text("UNA EXPEDICIÓN AL PACÍFICO", 450, 208, 700, 25, 14, Mint);
             Text("Bajo la calma,\nun mundo por descubrir.", 450, 257, 700, 120, 42, Color.white);
@@ -125,7 +156,7 @@ namespace LaFosa
         }
         void Inventory()
         {
-            RectColor(0, 0, 1600, 900, new Color(0, .025f, .045f, .75f));
+            DimWorld(new Color(0, .025f, .045f, .75f));
             Panel(310, 145, 980, 610);
             Text("EQUIPO & HALLAZGOS", 350, 181, 600, 50, 32, Color.white);
             Text("$" + session.Economy.Money + " · Aletas " + (session.Economy.Has(GearKind.Fins) ? "equipadas" : "básicas") + " · Descartar elimina la pila sin pagar dinero.", 350, 240, 820, 30, 16, Muted);
@@ -150,7 +181,7 @@ namespace LaFosa
         }
         void Pause()
         {
-            RectColor(0, 0, 1600, 900, new Color(0, .025f, .045f, .75f));
+            DimWorld(new Color(0, .025f, .045f, .75f));
             Panel(535, 210, 530, 470);
             Text("EN LA CALMA", 580, 246, 440, 50, 33, Color.white);
             Text("Expedición en pausa", 580, 304, 440, 30, 17, Muted);
@@ -159,6 +190,19 @@ namespace LaFosa
             if (Button(showControls ? "OCULTAR CONTROLES" : "MOSTRAR CONTROLES", 580, 506, 440, 52)) showControls = !showControls;
             if (Button("GUARDAR Y VOLVER AL MENÚ", 580, 574, 440, 42)) session.ReturnToMenu();
             Text(session.SaveStatus, 580, 626, 440, 44, 13, session.SaveFailed ? Gold : Muted);
+        }
+        void DimWorld(Color color)
+        {
+            // Menus still cover the whole window outside the centered 16:9 HUD canvas.
+            var matrix = GUI.matrix;
+            GUI.matrix = Matrix4x4.identity;
+            RectColor(0, 0, Screen.width, Screen.height, color);
+            GUI.matrix = matrix;
+        }
+        float TextHeight(string value, float width, int size)
+        {
+            style.fontSize = size;
+            return style.CalcHeight(new GUIContent(value), width);
         }
         void Panel(float x, float y, float w, float h) { RectColor(x, y, w, h, Ink); RectColor(x, y, 3, h, new Color(.35f, .76f, .68f, .6f)); }
         void RectColor(float x, float y, float w, float h, Color color) { GUI.color = color; GUI.DrawTexture(new Rect(x, y, w, h), Texture2D.whiteTexture); GUI.color = Color.white; }
