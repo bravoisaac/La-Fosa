@@ -1,5 +1,15 @@
 # Mapa dinámico
 
+## Corrección activa: la fosa limita por aire (28 de octubre)
+
+- Objetivo del usuario: descenso libre en todas las capas; eliminar la losa/escotilla que aún cerraba el abismo. El aire disponible y el coste por profundidad determinan hasta dónde conviene avanzar.
+- Entrada: `GameBootstrap` → construcción de descensos; `DiverController.AdvanceVitals` ya consume aire ×8 fuera de profundidad segura (×12 acelerando).
+- Conexiones: configuración de zonas, generación de fauna, marcadores de descenso/ascenso, validación de editor y diagnósticos de rutas.
+- Cambios: sustituir compuertas por señales sin colisión, quitar lógica y configuración de barreras, actualizar pruebas y documentación vigente.
+- Conservar: consumo de aire, daño solo al agotarlo, rescate, inventario, guardado v1 y orden de puzles/recompensas. Los requisitos de mecanismos no impiden nadar.
+- Riesgo medio: referencias históricas a compuertas y pruebas de rutas. Validar construcción/configuración en editor y compilar; no abrir el juego ni dar por ejecutado el recorrido humano.
+- Resultado: retirados `DiveGate` y los campos de barrera; `WorldBuilder.Descents` sustituye el constructor anterior con guías sin colisión. `SmokeCheck.Descents` sustituye el diagnóstico de compuertas. 11 comprobaciones nuevas de construcción/terreno, 20 del informe y validaciones existentes aprobadas; compilación correcta (`unity-air-descent-build.log`, salida 0). 3.2b marcada en el plan; pruebas jugables pendientes.
+
 ## Entrega activa 3.4a: preparar medición del recorrido (28 de octubre)
 
 - Objetivo: registrar una futura prueba humana con tiempos, intentos, capturas, compras, visitas y rescates; no ejecutar el juego ni simular resultados humanos.

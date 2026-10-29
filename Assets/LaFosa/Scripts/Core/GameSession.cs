@@ -22,6 +22,7 @@ namespace LaFosa
         public bool Complete => Treasures >= Config.zones.Length;
         public bool IsZoneUnlocked(DiveZoneDefinition zone)
         {
+            // Puzzle/reward progression only. Swimming is limited by air consumption.
             int index = System.Array.IndexOf(Config.zones, zone);
             return index >= 0 && (index == 0 || IsTreasureClaimed(Config.zones[index - 1])) &&
                 Diver != null && Diver.SafeDepth >= zone.requiredSafeDepth && Diver.MaxOxygen >= zone.requiredOxygen;
@@ -40,9 +41,8 @@ namespace LaFosa
         {
             int index = Mathf.Min(Treasures, Config.zones.Length - 1);
             var zone = Config.zones[index];
-            bool approachGate = index > 0 && zone.hasPhysicalGate && Diver.transform.position.y > zone.entryPosition.y - 2;
-            label = approachGate ? "ESCOTILLA DE DESCENSO" : "SANTUARIO";
-            return approachGate ? zone.entryPosition + Vector3.up : zone.stationPosition + Vector3.up * 3;
+            label = "SANTUARIO";
+            return zone.stationPosition + Vector3.up * 3;
         }
         public void Initialize(GameConfig config)
         {

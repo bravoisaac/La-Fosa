@@ -103,10 +103,6 @@ namespace LaFosa
                 ObservedFish = hit.collider.GetComponentInParent<FishAgent>();
             }
         }
-        void OnControllerColliderHit(ControllerColliderHit hit)
-        {
-            hit.collider.GetComponentInParent<DiveGate>()?.NotifyBlocked(this);
-        }
         void UpdateAtmosphere()
         {
             float t = Mathf.Clamp01(Depth / 95);

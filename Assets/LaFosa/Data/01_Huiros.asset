@@ -17,11 +17,9 @@ MonoBehaviour:
   subtitle: "La luz a\xFAn alcanza las ruinas."
   stationPosition: {x: 0, y: -23.5, z: 50}
   startsAtDepth: 12
-  hasPhysicalGate: 0
   entryPosition: {x: 0, y: -2, z: 46}
   requiredSafeDepth: 24
   requiredOxygen: 115
-  barrierWidth: 60
   unlockedDepth: 64
   unlockedOxygen: 155
   accent: {r: 0.38, g: 0.91, b: 0.74, a: 1}

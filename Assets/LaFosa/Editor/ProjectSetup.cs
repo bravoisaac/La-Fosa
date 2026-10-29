@@ -88,9 +88,7 @@ namespace LaFosa.Editor
             zone.entryPosition = zone.id == "huiros" ? new Vector3(0, -2, 46) : new Vector3(0, zone.id == "naufragio" ? -32 : -64, 75);
             zone.requiredSafeDepth = zone.id == "huiros" ? 24 : zone.id == "naufragio" ? 52 : 88;
             zone.requiredOxygen = zone.id == "huiros" ? 115 : zone.id == "naufragio" ? 155 : 200;
-            zone.barrierWidth = zone.id == "abismo" ? 40 : 60;
-            zone.hasPhysicalGate = zone.id == "abismo";
-            if (!zone.hasPhysicalGate) zone.returnHint = "Ascenso libre hacia la superficie. Fuera del límite del equipo el oxígeno se agota rápidamente. R permite volver a la playa.";
+            zone.returnHint = "Ascenso libre hacia la superficie. Fuera del límite del equipo el oxígeno se agota rápidamente. R permite volver a la playa.";
             AssetDatabase.CreateAsset(zone, DataPath + "/" + id + ".asset"); return zone;
         }
         static void EnsureMouseAxes()
@@ -119,6 +117,7 @@ namespace LaFosa.Editor
             Setup();
             ExpeditionReportChecks.Validate();
             var config = AssetDatabase.LoadAssetAtPath<GameConfig>(DataPath + "/Expedicion.asset");
+            DescentChecks.Validate(config);
             var obj = new GameObject("Checks temporales");
             FishCatalogBuilder.Validate(config);
             Check(config.coastalFishBehavior.escapeSpeed > 0 && config.coastalFishBehavior.escapeSpeed < 6, "Fauna de orilla alcanzable nadando");
@@ -145,13 +144,7 @@ namespace LaFosa.Editor
                     var zone = config.zones[i]; var previous = config.zones[i - 1];
                     Check(zone.requiredSafeDepth <= previous.unlockedDepth && zone.requiredOxygen <= previous.unlockedOxygen, "Tesoro anterior permite preparar el descenso");
                     Check(zone.entryPosition.y < previous.stationPosition.y - 4 && zone.entryPosition.y > zone.stationPosition.y + 4, "Entrada entre los dos santuarios");
-                    Check(zone.barrierWidth >= 12 && zone.requiredSafeDepth >= -zone.stationPosition.y, "Dimensiones y equipo de descenso válidos");
-                    if (!zone.hasPhysicalGate) continue;
-                    float half = zone.barrierWidth / 2;
-                    for (float edge = -half; edge <= half; edge += 1)
-                        foreach (float side in new[] { -half, half })
-                            Check(WorldBuilder.FloorHeight(zone.entryPosition.x + edge, zone.entryPosition.z + side) > zone.entryPosition.y + 1 &&
-                                WorldBuilder.FloorHeight(zone.entryPosition.x + side, zone.entryPosition.z + edge) > zone.entryPosition.y + 1, "Perímetro de compuerta enterrado sin atajos laterales");
+                    Check(zone.requiredSafeDepth >= -zone.stationPosition.y, "Equipo preparado para el mecanismo de la zona");
                 }
                 Debug.Log("LA_FOSA_TESTS_OK · Inventario, capacidad atómica, puzles y progresión.");
             }

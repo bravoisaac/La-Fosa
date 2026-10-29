@@ -1,35 +1,33 @@
 # Rutas entre capas
 
-Estado vigente al 19 de octubre de 2026: el primer descenso, entre huiros y naufragio, es libre y no tiene losa ni escotilla. Superar la profundidad segura consume oxígeno ×8 (×12 al acelerar), sin daño directo de presión mientras quede aire. El HUD avisa y orienta el ascenso. Al agotar el aire se conserva el daño por asfixia y el rescate con inventario.
+**Decisión vigente del usuario, 28 de octubre de 2026: el límite de la fosa es el aire disponible. Todas las capas tienen descenso y ascenso libres, incluido el abismo.** No se construyen losas, escotillas ni paredes para exigir una mejora antes de nadar hacia abajo.
 
-El abismo conserva una compuerta física a 64 m: una losa encajada en las paredes deja una escotilla central de 8 m. El panel se aparta al completar el mecanismo del naufragio y recoger su tesoro. Nadar hasta el naufragio sin equipo es posible, pero no permite saltarse el orden de sus puzles y recompensas.
+Superar la profundidad segura consume oxígeno ×8 (×12 al acelerar). No hay daño directo por presión mientras quede aire; agotarlo produce asfixia y finalmente rescate con inventario conservado. El equipo amplía el alcance práctico de la salida. El HUD prioriza el ascenso cuando queda poco aire o se supera la profundidad segura.
 
-| Capa | Entrada | Equipo mínimo (capacidad) | Prueba y recompensa | Regreso |
+| Capa | Entrada libre | Preparación del mecanismo | Prueba y recompensa | Regreso |
 |---|---|---|---|---|
-| Bosque de huiros | Boyas, entrada libre cerca de `(0, -2, 46)` | 24 m / 115 s; el equipo inicial lo cumple | Mural de 6 piedras, activar sello y recoger Perla: 64 m / 155 s | Ascender hacia las boyas; R permite rescate |
-| Ecos del naufragio | Descenso libre por `(0, -32, 75)` y sus laterales | Para el mecanismo: 52 m / 155 s, sello de huiros abierto y Perla recogida | Mural de 9 piedras y Brújula: 100 m / 200 s | Ascenso libre hacia superficie; R permite rescate |
-| Corazón del abismo | Escotilla a 64 m, centro `(0, -64, 75)` | 88 m / 200 s, sello del naufragio abierto y Brújula recogida | Mural de 12 piedras y Corazón: 110 m / 240 s | Ascender por la escotilla abierta y continuar hasta superficie; R sigue disponible |
+| Bosque de huiros | Boyas cerca de `(0, -2, 46)` | 24 m / 115 s; equipo inicial | Mural de 6 piedras, activar sello y recoger Perla: 64 m / 155 s | Ascender hacia superficie; R permite rescate |
+| Ecos del naufragio | Referencia `(0, -32, 75)` y laterales | 52 m / 155 s y Perla recuperada | Mural de 9 piedras y Brújula: 100 m / 200 s | Ascenso libre hacia superficie; R permite rescate |
+| Corazón del abismo | Referencia `(0, -64, 75)` y laterales | 88 m / 200 s y Brújula recuperada | Mural de 12 piedras y Corazón: 110 m / 240 s | Ascenso libre hacia superficie; R permite rescate |
 
-Las cifras de aire son capacidad del equipo, no el aire restante exigido para cruzar. En el naufragio son requisitos de progreso del mecanismo, no una barrera al movimiento. La bombona de tienda sigue sumando 60 s. Su compra no abre sellos ni sustituye los tesoros. Un tablero conectado todavía requiere activar ABRIR SELLO; después hay que recoger el cofre para recibir la mejora y, en el naufragio, abrir el paso al abismo. Si la mochila está llena, el cofre y la solución esperan al jugador.
+Los requisitos de esta tabla corresponden a los mecanismos y sus recompensas; nunca bloquean el movimiento. Se puede explorar más profundo con el equipo inicial si se asume el gasto de aire. La bombona de tienda suma 60 s y no resuelve puzles. Un tablero conectado necesita activar ABRIR SELLO y recoger su cofre para recibir la mejora. Con la mochila llena, el cofre y la solución esperan.
 
-Hacia el naufragio, el marcador apunta al santuario; el regreso apunta directamente a superficie. Hacia el abismo, dirige primero a la escotilla y después al santuario. Su baliza y rótulos indican el estado del paso. E sobre la compuerta o chocar con ella explica la condición pendiente. Debajo de la losa hay una señal de superficie y cristales; al regresar desde el abismo abierto, la guía señala primero la escotilla superior.
+El marcador de descenso apunta al santuario; el regreso apunta directamente a la superficie sobre el buzo. Las balizas y señales recuerdan vigilar el aire y reservarlo para volver. Todos esos elementos de orientación carecen de collider.
 
-## Persistencia y objetos
+## Persistencia
 
-Las compuertas consultan los mecanismos y tesoros ya guardados. No añaden otro indicador de apertura que pudiera quedar desincronizado. Continuar las restaura inmediatamente, incluso durante la pausa del menú; Nueva partida las cierra. Se comprobó la carga de la partida de prueba creada durante la etapa 1 con su formato v1.
+Se mantiene el guardado v1: equipo, tesoros y puzles conservan su estado. Las barreras se generaban desde el código y no estaban guardadas; retirarlas no requiere reiniciar la partida. Descartar un objeto de tesoro conserva su mejora. Continuar devuelve al jugador a la playa, como antes.
 
-El requisito es **haber recuperado** el tesoro. Descartar su objeto no elimina las mejoras ni cierra la ruta. La tienda sigue vendiendo solamente peces. No se introduce una llave que el jugador pueda perder y que bloquee permanentemente el descenso.
+## Configuración y código
 
-## Configurar y ampliar
+`DiveZoneDefinition.entryPosition` sitúa la señal de referencia. `requiredSafeDepth` y `requiredOxygen` siguen definiendo la preparación de los mecanismos; `unlockedDepth` y `unlockedOxygen` definen la recompensa. Se eliminaron `hasPhysicalGate` y `barrierWidth`, así como `DiveGate`, para que una configuración antigua no vuelva a crear paredes.
 
-En cada `DiveZoneDefinition`, `hasPhysicalGate` controla si se construye una losa con escotilla; `entryPosition` define la entrada, `requiredSafeDepth` y `requiredOxygen` definen la preparación, `barrierWidth` cubre la sección de la fosa y `returnHint` explica la salida. La primera zona es de acceso libre; cada zona posterior mantiene el requisito del tesoro anterior para su mecanismo, incluso sin barrera física. `GameConfig.pressureOxygenMultiplier` configura el coste de aire fuera del límite seguro (8 actualmente).
+`WorldBuilder.Descents.BuildDescentGuides` construye únicamente señales y balizas sin colisión. `GameSession.NextWaypoint` orienta al santuario y `GameSession.Expedition.AscentWaypoint` a superficie. `DiverController.AdvanceVitals` conserva el coste por aire definido por `GameConfig.pressureOxygenMultiplier`. La fauna respeta el terreno y ya no evita alturas reservadas a losas inexistentes.
 
-`WorldBuilder.Gates` construye las losas y escotillas; `DiveGate` controla panel, señalización e interacción. El panel cambia de posición inmediatamente: la animación mecánica gradual queda para pulido posterior. Los colliders son cajas de doble cara con juntas solapadas, y el perímetro exterior debe quedar enterrado en el terreno. No basta con ampliar una puerta si se modifica el paisaje.
+## Validación y límites
 
-`ProjectSetup.Validate` comprueba la posición entre santuarios, equipo alcanzable y perímetros enterrados. `SmokeCheck.Gates` muestrea la superficie cerrada y usa el CharacterController real para intentar atravesar centro/laterales, cruzar una escotilla abierta, alcanzar el siguiente santuario rodeando el mural y regresar a la superficie. La posición de la fauna evita las losas desde su generación.
+`DescentChecks`, incluido en `ProjectSetup.Validate`, construye solo las guías en editor: comprueba las dos transiciones, ausencia de colliders/interacciones de bloqueo y espacio bajo los puntos de cruce en la función de terreno. No entra en Play Mode ni construye la partida completa.
 
-Antes de cambiar estas posiciones en una versión distribuida hay que revisar colisiones, visibilidad, aparición de fauna, tiempos de aire y compatibilidad con partidas. La incorporación actual conserva el retorno a la playa al cargar y las posiciones guardadas de las embarcaciones de superficie.
+`SmokeCheck.Descents` queda preparado para verificar en una futura ejecución autorizada el cruce por centro/laterales de ambas transiciones desde Nueva partida, el acceso a santuarios con equipo, ascenso y persistencia. Actualizar el diagnóstico no equivale a haberlo ejecutado. Revisión visual, colisiones del mundo completo y equilibrio de aire siguen pendientes de recorrido humano. Evidencia de compilación/editor en `Docs/PRUEBAS.md`.
 
-## Límites
-
-Son accesos funcionales sobre la fosa actual; todavía no son biomas nuevos ni túneles detallados. Las pruebas de movimiento programado y las capturas no sustituyen un recorrido humano para comprobar orientación, dificultad y comodidad. La siguiente etapa del plan trabaja la primera expedición y sus indicaciones.
+Las comprobaciones antiguas sobre losas cerradas y escotillas pertenecen a versiones anteriores; no describen el diseño vigente.

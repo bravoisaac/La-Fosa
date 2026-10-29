@@ -44,12 +44,7 @@ namespace LaFosa
         Vector3 AscentWaypoint()
         {
             var position = Diver.transform.position;
-            Vector3 ascent = new Vector3(position.x, Config.waterLevel + .5f, position.z);
-            // Keep the target above the nearest overhead hatch until the whole diver clears it.
-            foreach (var zone in Config.zones)
-                if (zone != Config.zones[0] && zone.hasPhysicalGate && position.y < zone.entryPosition.y + 2 && IsZoneUnlocked(zone))
-                    ascent = zone.entryPosition + Vector3.up * 2.5f;
-            return ascent;
+            return new Vector3(position.x, Config.waterLevel + .5f, position.z);
         }
 
         public ExpeditionObjective ExpeditionObjective()
@@ -114,7 +109,7 @@ namespace LaFosa
             }
             var destination = NextWaypoint(out var label);
             return new ExpeditionObjective(ExpeditionStep.Descend, "Prepara el siguiente descenso",
-                "Equipo mejorado. El arpón (tecla 3) alcanza 40 m para peces rápidos. Compra aire si lo necesitas y sigue el marcador.", label, destination);
+                "Descenso libre: tu aire limita la salida. Mejora el equipo y reserva aire para volver. El arpón (tecla 3) alcanza 40 m.", label, destination);
         }
     }
 }

@@ -45,11 +45,11 @@ No todas las recompensas tienen que ser dinero. Una ruta descubierta, una pista,
 
 Antes de salir, el jugador decide qué llevar y qué objetivo perseguir. Bajo el agua administra aire, capacidad de carga y exposición al peligro. Al regresar puede invertir en herramientas, equipo, transporte o infraestructura.
 
-La siguiente meta debe ser comprensible: por ejemplo, una entrada bloqueada que requiere una herramienta, una corriente que se puede desviar mediante piedras o una zona cuya presión exige mejor equipo. El jugador debe poder entender qué le falta y cómo conseguirlo.
+La siguiente meta debe ser comprensible: conseguir más aire y mejorar el equipo permite explorar más profundo y reservar lo necesario para volver. La profundidad incrementa el consumo. El jugador debe poder entender qué le falta y cómo conseguirlo.
 
 ## Estructura de la fosa
 
-La ruta principal de descenso es fácil de reconocer. A su alrededor hay cuevas, desvíos, secretos y lugares opcionales. Una ruta legible no significa acceso libre al fondo: la preparación y las pruebas delimitan hasta dónde se puede avanzar.
+La ruta principal de descenso es fácil de reconocer. A su alrededor hay cuevas, desvíos, secretos y lugares opcionales. **Decisión del usuario del 28 de octubre: el acceso físico a toda la fosa es libre; el límite es el aire disponible, no una pared.** La preparación amplía el alcance de la expedición y los puzles entregan mejoras, sin crear compuertas obligatorias entre capas.
 
 Cada bioma debe tener identidad visual y sonora, fauna, recursos, un fenómeno ambiental y una prueba principal. La profundidad aumenta la extrañeza y el peligro, pero debe haber espacios de calma y referencias que permitan orientarse.
 
@@ -68,7 +68,7 @@ Los nombres, el número final de capas y sus profundidades todavía pueden cambi
 
 ## Puzles y pruebas
 
-Los puzles deben formar parte del lugar: mecanismos de piedra, cauces, ruinas, corrientes, iluminación y comportamiento de criaturas. Resolverlos debe producir un cambio visible, como abrir una compuerta, detener una corriente o habilitar un atajo.
+Los puzles deben formar parte del lugar: mecanismos de piedra, cauces, ruinas, corrientes, iluminación y comportamiento de criaturas. Resolverlos debe producir un cambio visible, como revelar un tesoro, detener una corriente local o habilitar un atajo. No deben cerrar la ruta principal entre capas con una pared: ese alcance depende del aire.
 
 Los mosaicos de piedras giratorias ya construidos se conservan como una familia de puzles. Las futuras capas deben incorporar otras reglas para que avanzar no consista únicamente en repetir tableros más grandes.
 
@@ -114,7 +114,7 @@ Una criatura peligrosa debe mostrar señales que el jugador pueda aprender: post
 
 **Añadido en la etapa 1:** guardado persistente local con respaldo, Nueva partida/Continuar y recuperación desde la playa. Conserva inventario, dinero, compras, tesoros, puzles, descubrimientos, conchas y embarcaciones. El rescate conserva los objetos.
 
-**Añadido en la etapa 2:** compuertas físicas entre las tres capas, requisitos de equipo y tesoro, indicadores de acceso/retorno y persistencia de las rutas abiertas. Falta probar manualmente su orientación y equilibrio junto con la primera expedición.
+**Etapa 2, diseño vigente al 28 de octubre:** descenso libre entre las tres capas, coste de aire por profundidad, señales sin colisión y mejoras persistentes. Se retiraron las compuertas de las versiones anteriores. Los requisitos de equipo y tesoro siguen aplicándose a mecanismos/recompensas, no al movimiento. Falta probar manualmente orientación y equilibrio junto con la primera expedición.
 
 **Todavía no está implementado:** base flotante; exploradores; ballesta; fauna fantástica agresiva; capas con fenómenos ambientales propios; viajes rápidos desbloqueables; historia desarrollada y sonido.
 

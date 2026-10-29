@@ -33,7 +33,7 @@ namespace LaFosa
             gun.toolModels = builder.BuildFishingTools(camera.transform);
             var hud = gameObject.AddComponent<DiveHUD>(); hud.session = Session; hud.harpoon = gun;
             Session.InitializePersistence();
-            builder.BuildDiveGates(Session);
+            builder.BuildDescentGuides();
         }
         void Awake() { Build(); }
     }

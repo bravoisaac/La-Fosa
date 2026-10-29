@@ -1,5 +1,14 @@
 # Validación
 
+## Corrección 3.2b: toda la fosa limita por aire (28 de octubre de 2026)
+
+- [x] Eliminados `DiveGate`, construcción de losas/escotillas, avisos de choque y opciones `hasPhysicalGate`/`barrierWidth`. `GameBootstrap` construye guías de descenso sin colisión. No quedan referencias a esos tipos/campos en `Assets/LaFosa` ni referencias al GUID del componente retirado.
+- [x] **11 comprobaciones de construcción/terreno en editor**, sin Play Mode: dos grupos de guías en las entradas correctas, cero colliders, cero interacciones que exijan abrir un paso y terreno por debajo de seis puntos de cruce (centro/laterales de ambas transiciones). Evidencia: `LA_FOSA_DESCENT_TESTS_OK` en `unity-air-descent-build.log`. No es una prueba del movimiento ni de todos los objetos del mundo completo.
+- [x] Las 20 comprobaciones del informe, las validaciones existentes del editor y la compilación Windows también pasan: `LA_FOSA_REPORT_TESTS_OK`, `LA_FOSA_TESTS_OK`, `LA_FOSA_BUILD_OK`; salida del editor 0. Ejecutable actualizado: `Builds/FirstExpedition/La Fosa.exe`, sin lanzarlo.
+- [x] Revisión del código: descenso apunta al santuario y ascenso a superficie; consumo de aire por profundidad ×8/×12 conservado, sin daño directo mientras quede aire. Guardado v1 y requisitos de mecanismos/recompensas conservados. La fauna deja de reservar espacio a losas retiradas.
+- [x] Diagnóstico de runtime actualizado en `SmokeCheck.Descents`: cruce de ambas transiciones desde Nueva partida, rutas a santuarios, ascenso y persistencia. Sustituidas las expectativas de compuertas cerradas y eliminadas comprobaciones vacías sobre una colección inexistente.
+- [ ] Ejecutar ese diagnóstico, revisar señales/colisiones en el mundo completo y medir el equilibrio de aire con una persona. No se abrió ni utilizó el juego. Los resultados históricos de 458 comprobaciones corresponden a la versión anterior y no se atribuyen a este cambio.
+
 ## Entrega 3.4a: registro del recorrido (28 de octubre de 2026)
 
 - [x] **20 comprobaciones del modelo/archivo en editor**, sin Play Mode: `LA_FOSA_REPORT_TESTS_OK` en `unity-expedition-report-build.log`. Incluyen relojes de actividad/menús/pausa, intervalos inválidos, intentos por herramienta, primera captura, contadores, hitos únicos, instantáneas independientes y fin de segmento sin nuevas mediciones.

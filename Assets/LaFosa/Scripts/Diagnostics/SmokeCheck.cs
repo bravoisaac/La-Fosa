@@ -64,7 +64,7 @@ namespace LaFosa
             Capture(diver.View, "02-playa.png");
             yield return TestFirstExpedition(session);
             TestDepthOxygen(session);
-            yield return TestClosedRoutes(session);
+            yield return TestFreeRoutes(session);
             Check(FindObjectsByType<TreasureChest>(FindObjectsSortMode.None).Length == session.Config.zones.Length, "Santuarios generados");
             CheckFauna(session);
             var pickup = FindFirstObjectByType<Pickup>(); pickup.Interact(diver);
@@ -102,7 +102,7 @@ namespace LaFosa
             yield return new WaitForSecondsRealtime(.4f);
             Check(diver.Health == health && diver.Oxygen < oxygen && diver.PressureOxygenMultiplier > 1, "Profundidad peligrosa consume aire sin daño directo");
             yield return TestCommerce(session, diver, gun);
-            Check(Array.TrueForAll(session.GetComponentsInChildren<DiveGate>(), g => !g.IsOpen), "Comprar todo el equipo no abre las compuertas ni resuelve las piedras");
+            Check(Array.TrueForAll(session.GetComponentsInChildren<StoneCircuitPuzzle>(), p => !p.Solved), "Comprar todo el equipo no resuelve las piedras");
             yield return TestFishBehavior(session);
             var chests = FindObjectsByType<TreasureChest>(FindObjectsSortMode.None);
             foreach (var chest in chests)
@@ -122,7 +122,7 @@ namespace LaFosa
                 Check(chest.Claimed && session.Treasures == i + 1 && diver.SafeDepth == zone.unlockedDepth, "Tesoro mejora el equipo " + i);
                 Check(Mathf.Approximately(diver.MaxOxygen, zone.unlockedOxygen + session.Config.shop.oxygenBonus), "Bombona se acumula con tesoro " + i);
                 chest.Interact(diver); Check(session.Treasures == i + 1, "Recompensa única " + i);
-                if (i < session.Config.zones.Length - 1) yield return TestOpenedRoute(session, i);
+                if (i < session.Config.zones.Length - 1) yield return TestPreparedRoute(session, i);
             }
             Check(session.Complete, "Expedición completada");
             int stacks = diver.Inventory.Stacks.Count;

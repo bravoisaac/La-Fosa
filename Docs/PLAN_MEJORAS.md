@@ -8,7 +8,7 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 
 **Objetivo activo:** completar la primera expedición persistente (etapas 1–3): pescar con las manos, vender, comprar tridente, resolver el primer sello, recuperar el tesoro y volver para continuar otra salida.
 
-**Última entrega terminada:** 3.4a, registro local opcional del recorrido, con 20 comprobaciones de modelo/archivo en editor y compilación Windows correctas. **Siguiente cierre pendiente: 3.3b y 3.4b**, revisión visual e integración del registro durante un recorrido humano antes de ajustar el ritmo o avanzar a la lancha. No repetir la implementación del registro; consultar `Docs/PRIMERA_EXPEDICION.md` para campos y límites.
+**Última entrega terminada:** 3.2b, corrección solicitada: toda la fosa tiene paso libre y el límite de la salida es el aire. Retiradas compuertas/losas y su configuración; 11 comprobaciones de construcción/terreno en editor y compilación correctas. 3.4a (registro local del recorrido) también está terminada. **Siguiente cierre pendiente: 3.3b y 3.4b**, revisión visual e integración del registro durante un recorrido humano antes de ajustar el ritmo o avanzar a la lancha.
 
 **Restricción vigente del usuario:** no abrir ni usar el juego. Continuar con código, compilación y vistas estáticas de editor; no dar por completadas las pruebas visuales o jugables que todavía no se hayan realizado.
 
@@ -18,7 +18,8 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 - [x] 1 · Guardado implementado y probado automáticamente; falta comprobación humana.
 - [x] 2 · Requisitos de progreso y ajuste de descenso libre verificados automáticamente; falta recorrido humano.
 - [x] 3.1 · Guía de pesca → venta → tridente → sello → tesoro → regreso implementada.
-- [x] 3.2 · Descenso libre al naufragio, consumo de aire ×8 fuera del límite y compuerta del abismo conservada: verificados.
+- [x] 3.2 · Consumo de aire ×8 fuera del límite (×12 acelerando), aviso y rescate implementados. La entrega histórica conservaba una compuerta; 3.2b la sustituye.
+- [x] 3.2b · Toda la fosa, incluido el abismo, tiene paso libre. Retiradas paredes/escotillas de progresión; señales sin colisión y marcadores directos a santuario/superficie. 11 comprobaciones de editor y compilación: `unity-air-descent-build.log`. Movimiento en partida pendiente.
 - [x] 3.3a · HUD: escala uniforme, cuaderno adaptable, marcadores separados de interacción, fondos legibles y aviso de aire coherente a 30 s. Compilación/editor correctos: `unity-hud-layout-build.log`.
 - [ ] 3.3b · Revisar visualmente HUD, señales y orientación en una ventana renderizada. No ejecutado; conserva abierto el paso 3.3.
 - [x] 3.4a · Preparar registro opcional de tiempos, intentos por herramienta, capturas, visitas, ventas, tridente, sello, cofre y rescates. Segmentos por inicio/carga, aire antes de recompensa y contadores por hito. 20 comprobaciones de editor y compilación: `unity-expedition-report-build.log`.
@@ -28,9 +29,9 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 
 **Cómo continuar:** leer este bloque y solo el apartado/documento del paso pendiente. Marcar `[x]` al terminar una entrega y anotar evidencia y pendiente inmediato. Una implementación o prueba automática terminada no cierra una etapa que exige juego humano. Mantener el objetivo y el criterio de cierre al resumir; no borrar las decisiones de diseño.
 
-**Evidencia de 3.2:** compilación Windows y validación del editor correctas, 458 comprobaciones de integración y 12 de guardado/carga entre procesos aprobadas. Ejecutable: `Builds/FirstExpedition/La Fosa.exe`. Resultados y límites: `Docs/PRUEBAS.md`. Ficha para el recorrido humano: `Docs/PRIMERA_EXPEDICION.md`.
+**Evidencia histórica de 3.2:** 458 comprobaciones de integración y 12 de guardado/carga entre procesos aprobadas en la versión anterior. No validan el cambio 3.2b: este se comprobó en editor y compilación sin jugar. Ejecutable actualizado: `Builds/FirstExpedition/La Fosa.exe`. Resultados y límites: `Docs/PRUEBAS.md`. Ficha humana: `Docs/PRIMERA_EXPEDICION.md`.
 
-**Decisión vigente que modifica la etapa 2:** el paso huiros → naufragio es físicamente libre; exceder la profundidad segura multiplica el consumo de oxígeno. El abismo conserva su compuerta; los puzles y recompensas conservan el orden de progreso. Las descripciones históricas de dos compuertas corresponden a la entrega anterior.
+**Decisión vigente del usuario:** el bloqueo de la fosa es por aire, no por una pared. Huiros → naufragio → abismo tienen descenso/ascenso libres; exceder la profundidad segura multiplica el consumo de oxígeno. Los mecanismos conservan su orden de recompensas, pero no impiden nadar. No reintroducir barreras físicas para exigir equipo o tesoros al cruzar capas.
 
 ## Etapa 0 Consolidar la dirección
 
@@ -63,21 +64,21 @@ Verificación: compilación Windows correcta; **389 comprobaciones de integraci�
 
 **Estado al 18 de octubre de 2026: implementada y verificada automáticamente. Pendiente el recorrido humano, junto con la comprobación manual de la etapa 1.**
 
-La entrega original añadió dos compuertas físicas a 32 y 64 m. El ajuste vigente conserva solo la del abismo: el naufragio tiene descenso libre con peligro por consumo de aire fuera de la profundidad segura. Los mecanismos conservan el requisito del tesoro anterior; la compuerta del abismo exige abrir el sello del naufragio y recoger su mejora. Requisitos editables, mensajes al interactuar/chocar, señalización de retorno y marcador de escotilla donde existe barrera. El estado de progreso se deriva del guardado existente, sin cambiar el formato v1. Detalles por capa: `Docs/DESCENSOS.md`.
+La entrega original añadió compuertas a 32 y 64 m. **Ambas están retiradas en el diseño vigente del 28 de octubre.** Se puede nadar entre todas las capas, con peligro por consumo de aire fuera de la profundidad segura. Los mecanismos conservan el requisito del tesoro anterior y entregan mejoras; las guías de profundidad/retorno no tienen colisión. El progreso se deriva del guardado existente, sin cambiar el formato v1. Detalles: `Docs/DESCENSOS.md`.
 
-Verificación: **422 comprobaciones de integración aprobadas**, incluidas 33 nuevas sobre accesos; cobertura de 5.957 y 1.693 puntos de las losas, cruce real con CharacterController y regreso a superficie, persistencia y descarte de tesoros sin bloqueo. La partida de prueba de la etapa 1 cargó con el ejecutable de la etapa 2 (**5 comprobaciones de compatibilidad aprobadas**). Revisión visual de compuertas abiertas/cerradas; orientación y equilibrio pendientes de juego humano.
+Verificación histórica: **422 comprobaciones de integración aprobadas** en la versión con compuertas, incluidas persistencia y compatibilidad con etapa 1. Las pruebas de losas/escotillas ya no describen el comportamiento vigente. La corrección 3.2b tiene comprobación de construcción en editor y compilación; el diagnóstico de movimiento está actualizado, pendiente de ejecución autorizada.
 
 **Objetivo:** que el jugador sepa qué necesita para avanzar.
 
 - [x] 1. Definir por capa su entrada, equipo necesario, prueba principal, recompensa y salida segura.
-- [x] 2. Separar la compra de equipo de la apertura de una ruta: tener mejor oxígeno no debe completar un puzle.
-- [x] 3. Conectar la compuerta del abismo al mecanismo de piedra del naufragio; conservar el primer descenso libre según la decisión vigente.
-- [x] 4. Mostrar el requisito que falta cuando el jugador intenta atravesar un paso bloqueado.
+- [x] 2. Separar las mejoras de equipo de resolver mecanismos: tener más oxígeno no completa un puzle.
+- [x] 3. Mantener todas las rutas físicamente libres; profundidad y aire determinan el alcance práctico de la salida.
+- [x] 4. Avisar del consumo peligroso y señalar el ascenso; los requisitos de progreso se explican al interactuar con mecanismos.
 - [x] 5. Mantener un regreso viable a la superficie y evitar que un objeto obligatorio pueda venderse o perderse sin recuperación.
 
-**Criterio de cierre actualizado:** el mecanismo siguiente respeta los requisitos de progreso aunque se pueda nadar libremente hasta el naufragio. La compuerta del abismo permanece cerrada hasta resolver el sello del naufragio y recoger su mejora, conserva su apertura al cargar y no puede rodearse por un hueco accidental. Fuera de la profundidad segura, el consumo y la guía explican el peligro y permiten regresar.
+**Criterio de cierre actualizado:** se puede nadar entre las tres capas y regresar sin paredes de progresión. El consumo de aire y la guía explican el peligro y hacen comprensible mejorar el equipo. Los mecanismos conservan su progreso al cargar. Hay que verificar jugando que el aire permita decisiones y un regreso viable.
 
-**Puntos de partida:** `DiveZoneDefinition`, `GameSession.IsZoneUnlocked`, `WorldBuilder`, puzles y cofres. La implementación añade `DiveGate` y `WorldBuilder.Gates` a las restricciones existentes de presión y orden de tesoros.
+**Puntos de partida:** `DiveZoneDefinition`, `DiverController.AdvanceVitals`, `WorldBuilder.Descents` y `GameSession.Expedition`. `GameSession.IsZoneUnlocked` corresponde solo a mecanismos/recompensas; no se usa para bloquear desplazamiento.
 
 ## Etapa 3 Completar la primera expedición
 
@@ -88,6 +89,8 @@ Verificación: **422 comprobaciones de integración aprobadas**, incluidas 33 nu
 **Actualización al 23 de octubre:** 3.3a implementada y compilada sin ejecutar el juego. El HUD conserva proporciones, separa marcadores de interacción/avisos y mejora contraste y texto; la comprobación visual 3.3b sigue pendiente. No se adelanta el cierre humano ni el equilibrio.
 
 **Actualización al 28 de octubre:** 3.4a terminada sin abrir el juego. `--expedition-report` prepara informes locales por inicio/carga, con relojes separados, contadores por hito y regreso asistido diferenciado. Validación del modelo/archivo en editor y compilación aprobadas; 3.3b, 3.4b y 3.5 siguen abiertos. No hay mediciones humanas nuevas ni cambios de equilibrio.
+
+**Corrección del usuario, 3.2b:** retirado también el bloqueo físico del abismo; toda la fosa limita la salida por aire. No se cambiaron los multiplicadores ni se adelantó el cierre humano. Las referencias anteriores a compuertas son históricas.
 
 La guía orienta hacia peces lentos de la orilla, calcula cuánto falta para el tridente según el catálogo y el valor real de la pesca, indica cuándo vender/comprar y acompaña el primer sello, cofre y regreso. Incluye instrucciones breves, distancia de captura, recuperación con mochila llena y prioridad de ascenso por presión/aire. Cargar una partida reconstruye los objetivos sin repetir compras ni recompensas. Detalles y prueba manual: `Docs/PRIMERA_EXPEDICION.md`.
 
@@ -100,7 +103,7 @@ Se conservan los precios, oxígeno, capacidad y alcance actuales para no confund
 - [x] 1. Guiar al jugador desde la cabaña hasta una zona segura de pesca manual.
 - [x] 2. Explicar mirar, nadar, respirar, capturar, vender y comprar mediante acciones cortas.
 - [x] 3. Mantener manos → tridente → arpón y hacer visible la utilidad de cada compra.
-- [x] 4. Integrar el primer puzle, su compuerta y una recompensa que permita preparar la siguiente salida.
+- [x] 4. Integrar el primer puzle, su sello y una recompensa de equipo que permita preparar la siguiente salida.
 - [ ] 5. Ajustar capacidad, distancia de captura, oxígeno y precios para reducir viajes repetitivos sin decisiones interesantes.
 
 **Criterio de cierre:** una persona que no conozca el proyecto puede empezar sin equipo, capturar, vender, comprar el tridente, resolver el primer mecanismo, regresar y continuar su partida. Se comprueba jugando, además de con pruebas automáticas.

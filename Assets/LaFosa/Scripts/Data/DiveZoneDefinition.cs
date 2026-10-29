@@ -10,13 +10,11 @@ namespace LaFosa
         public string subtitle;
         public Vector3 stationPosition;
         public float startsAtDepth;
-        [Header("Acceso y preparación")]
-        public bool hasPhysicalGate = true;
+        [Header("Orientación y preparación del mecanismo")]
         public Vector3 entryPosition;
         [Min(0)] public float requiredSafeDepth;
         [Min(0)] public float requiredOxygen;
-        [Min(12)] public float barrierWidth = 60;
-        public string returnHint = "Asciende por la escotilla iluminada. R permite volver a la playa.";
+        public string returnHint = "Ascenso libre hacia la superficie. Reserva aire para volver. R permite volver a la playa.";
         public float unlockedDepth = 65;
         public float unlockedOxygen = 150;
         public Color accent = Color.cyan;

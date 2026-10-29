@@ -68,7 +68,7 @@ namespace LaFosa
             chest.Interact(diver);
             Check(chest.Claimed && session.ExpeditionObjective().Step == ExpeditionStep.Return, "Primer tesoro orienta a regresar");
             yield return CaptureGuide("guia-04-regreso.png");
-            Check(session.IsZoneUnlocked(session.Config.zones[1]) && session.GetComponentsInChildren<DiveGate>().All(g => !g.IsOpen), "Primera recompensa prepara el naufragio sin abrir la compuerta del abismo");
+            Check(session.IsZoneUnlocked(session.Config.zones[1]) && !session.IsZoneUnlocked(session.Config.zones[2]), "Primera recompensa prepara el mecanismo del naufragio, conservando el orden de tesoros");
             Teleport(diver, session.Config.zones[1].entryPosition + Vector3.down * 4);
             Check(session.ExpeditionObjective().Destination == new Vector3(diver.transform.position.x, session.Config.waterLevel + .5f, diver.transform.position.z), "Regreso desde naufragio apunta a superficie sin escotilla inexistente");
             Teleport(diver, new Vector3(0, -80, 75));
