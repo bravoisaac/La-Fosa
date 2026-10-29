@@ -1,5 +1,15 @@
 # Validación
 
+## Entrega 3.4a: registro del recorrido (28 de octubre de 2026)
+
+- [x] **20 comprobaciones del modelo/archivo en editor**, sin Play Mode: `LA_FOSA_REPORT_TESTS_OK` en `unity-expedition-report-build.log`. Incluyen relojes de actividad/menús/pausa, intervalos inválidos, intentos por herramienta, primera captura, contadores, hitos únicos, instantáneas independientes y fin de segmento sin nuevas mediciones.
+- [x] JSON conserva eventos, relojes y contadores; archivo bloqueado produce fallo controlado y conserva el informe anterior, reintento actualiza los datos y cierre persiste estado final. Archivos sintéticos temporales eliminados por la validación; no se crean mediciones humanas ni se modifica la partida personal.
+- [x] Validación existente `LA_FOSA_TESTS_OK`, compilación `LA_FOSA_BUILD_OK` y salida del editor 0. Ejecutable actualizado: `Builds/FirstExpedition/La Fosa.exe`, sin lanzarlo.
+- [x] Integraciones revisadas en código: intento después de validar herramienta/recarga/agua; captura después de añadir a mochila; venta/compra confirmadas; cofre antes de recargar aire; rescate antes de teletransportar, con restauración excluida. Inicio/carga separan segmentos y `--smoke-test` desactiva informes.
+- [ ] Contrastar esos puntos de integración durante una partida, medir el recorrido humano y revisar HUD/señales. Las pruebas del modelo no verifican el orden de actualizaciones de Unity en juego ni la experiencia de una persona. **3.3b y 3.4b siguen pendientes por la indicación de no usar el juego.**
+
+Repetir solo las comprobaciones del informe: menú **La Fosa → Validar informes (sin jugar)** o `-executeMethod LaFosa.Editor.ExpeditionReportChecks.Validate` en batch. `ProjectSetup.Validate` también las incluye. Definiciones de campos y ficha humana en `Docs/PRIMERA_EXPEDICION.md`.
+
 ## Entrega 3.3a: legibilidad y distribución del HUD (23 de octubre de 2026)
 
 - [x] Compilación Windows y validación existente del editor correctas: `LA_FOSA_TESTS_OK`, `LA_FOSA_BUILD_OK`, salida del editor 0 en `unity-hud-layout-build.log`. Ejecutable actualizado: `Builds/FirstExpedition/La Fosa.exe`.

@@ -25,11 +25,35 @@ Se conservan el rescate, los precios, la capacidad de 12 espacios, el aire inici
 
 ## Probar y evaluar
 
+### Registro opcional del recorrido (3.4a, 28 de octubre de 2026)
+
+Preparado para una futura prueba humana; no se ha ejecutado el juego para obtener mediciones. Al iniciar el ejecutable con el argumento `--expedition-report`, cada **Nueva partida** o **Continuar** abre un informe JSON independiente en `%USERPROFILE%/AppData/LocalLow/Caleta Bruma/La Fosa/ExpeditionReports/`. Sin ese argumento no se generan informes; `--smoke-test` los desactiva también. Esta opción no cambia la ranura de guardado personal.
+
+El archivo incluye fecha UTC, identificador de compilación, resolución inicial, semilla, modo `new`/`continue` y progreso inicial. Un segmento de Continuar empieza a medir desde esa carga: no reconstruye los tiempos anteriores ni registra la restauración en la playa como rescate. Conservar el identificador del informe en la ficha de la persona evaluadora.
+
+| Campo | Interpretación |
+|---|---|
+| `elapsedSeconds` | Tiempo total desde el inicio del segmento, incluidas pausas. |
+| `engagedSeconds` | Tiempo sin pausa; incluye leer inventario y comprar/vender. Usarlo como referencia de duración del recorrido. |
+| `activeSeconds` | Tiempo con controles habilitados; excluye pausa, inventario y tienda. No representa solo desplazamiento físico. |
+| `attemptsByTool` | Intentos aceptados por manos, tridente, arpón y red, en ese orden. Excluye clics durante recarga, menús o en una posición no válida para pescar. |
+| `captures`, `shopVisits`, `sales`, `rescues` | Peces añadidos a mochila, aperturas de tienda, ventas exitosas y rescates. Abrir tienda cuenta una visita; no equivale a medir el trayecto hasta la cabaña. Una red puede capturar varios peces en un intento. |
+| `events` | Primera captura, visitas, ventas, compra de tridente, llegada al santuario, sello, cofre, rescates y primer regreso. Cada evento conserva tiempos, aire, profundidad y una copia de los contadores. |
+
+La llegada al santuario (`shrine`) se mide cuando la cámara queda a 5 m del marcador de la primera zona; no prueba que la persona haya entendido la señal. El aire del cofre (`treasure`) se toma **antes** de que la recompensa recargue el equipo. `return` indica llegada a menos de 12 m del inicio, fuera del agua; `return_rescued` distingue haber usado un rescate después de recoger el tesoro. Los contadores del evento de regreso no cambian con salidas posteriores. Para rescates se conserva `manual`, `world_boundary` u `oxygen_depleted` como causa.
+
+El informe se actualiza en los eventos, cada 15 segundos, al perder foco y al salir. `status` distingue `recording`, `menu`, `quit` o destrucción de sesión; `recording` tras un cierre inesperado es un registro parcial, no una prueba completada. La escritura temporal conserva el informe anterior si falla el reemplazo; el fallo se avisa en el log y no altera el guardado de la expedición. Un cierre brusco puede perder datos desde la última escritura.
+
+La ficha sigue necesitando observación humana para legibilidad, orientación, viajes reales y comprobación de carga. Antes de usar sus cifras para equilibrar, contrastar en una partida autorizada una captura, una venta, una pausa, un rescate y un regreso con sus eventos. La validación de editor comprueba el modelo y el archivo, no esa integración jugable.
+
+### Ficha humana
+
 Registrar el recorrido en esta ficha antes de ajustar el equilibrio. Dejar los datos sin medir como «pendiente»; las comprobaciones automáticas no rellenan esta ficha.
 
 | Dato | Resultado |
 |---|---|
 | Persona nueva, fecha, versión y resolución | Pendiente |
+| Identificador del informe y modo new/continue | Pendiente |
 | Tiempo hasta primera captura / venta / tridente | Pendiente |
 | Intentos de captura y viajes a la cabaña | Pendiente |
 | Tiempo hasta sello / cofre / regreso | Pendiente |

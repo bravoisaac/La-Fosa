@@ -4,11 +4,11 @@ El objetivo es transformar el prototipo actual en un juego de expediciones por u
 
 El orden de construcción no es idéntico al orden en que el jugador comprará el equipo. Primero hay que conseguir una expedición completa que se guarde, se entienda y permita avanzar; después se amplía el mundo.
 
-## Reanudar aquí — 23 de octubre de 2026
+## Reanudar aquí — 28 de octubre de 2026
 
 **Objetivo activo:** completar la primera expedición persistente (etapas 1–3): pescar con las manos, vender, comprar tridente, resolver el primer sello, recuperar el tesoro y volver para continuar otra salida.
 
-**Última entrega terminada:** 3.3a, mejoras de legibilidad/distribución del HUD implementadas y compiladas. **Siguiente paso: 3.3b**, comprobación visual del resultado y señales; después, recorrido humano antes de avanzar a la lancha.
+**Última entrega terminada:** 3.4a, registro local opcional del recorrido, con 20 comprobaciones de modelo/archivo en editor y compilación Windows correctas. **Siguiente cierre pendiente: 3.3b y 3.4b**, revisión visual e integración del registro durante un recorrido humano antes de ajustar el ritmo o avanzar a la lancha. No repetir la implementación del registro; consultar `Docs/PRIMERA_EXPEDICION.md` para campos y límites.
 
 **Restricción vigente del usuario:** no abrir ni usar el juego. Continuar con código, compilación y vistas estáticas de editor; no dar por completadas las pruebas visuales o jugables que todavía no se hayan realizado.
 
@@ -21,7 +21,8 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 - [x] 3.2 · Descenso libre al naufragio, consumo de aire ×8 fuera del límite y compuerta del abismo conservada: verificados.
 - [x] 3.3a · HUD: escala uniforme, cuaderno adaptable, marcadores separados de interacción, fondos legibles y aviso de aire coherente a 30 s. Compilación/editor correctos: `unity-hud-layout-build.log`.
 - [ ] 3.3b · Revisar visualmente HUD, señales y orientación en una ventana renderizada. No ejecutado; conserva abierto el paso 3.3.
-- [ ] 3.4 · Recorrido con una persona nueva; registrar tiempos, capturas, viajes y rescates.
+- [x] 3.4a · Preparar registro opcional de tiempos, intentos por herramienta, capturas, visitas, ventas, tridente, sello, cofre y rescates. Segmentos por inicio/carga, aire antes de recompensa y contadores por hito. 20 comprobaciones de editor y compilación: `unity-expedition-report-build.log`.
+- [ ] 3.4b · Contrastar eventos con acciones reales y hacer el recorrido con una persona nueva; completar la ficha de tiempos, capturas, viajes y rescates. La instrumentación no completa esta prueba.
 - [ ] 3.5 · Ajustar ritmo según esa prueba y cerrar las etapas 1–3 con guardado/carga manual.
 - [ ] 4–10 · Lancha, puzles, biomas, fauna, base, exploradores y equilibrio final; pendientes.
 
@@ -85,6 +86,8 @@ Verificación: **422 comprobaciones de integración aprobadas**, incluidas 33 nu
 **Actualización al 19 de octubre:** entrega 3.2 verificada (descenso libre, coste de aire y regresiones de progreso). La etapa sigue abierta; los pasos 3.3–3.5 del resumen inicial conservan el cierre visual y humano pendiente.
 
 **Actualización al 23 de octubre:** 3.3a implementada y compilada sin ejecutar el juego. El HUD conserva proporciones, separa marcadores de interacción/avisos y mejora contraste y texto; la comprobación visual 3.3b sigue pendiente. No se adelanta el cierre humano ni el equilibrio.
+
+**Actualización al 28 de octubre:** 3.4a terminada sin abrir el juego. `--expedition-report` prepara informes locales por inicio/carga, con relojes separados, contadores por hito y regreso asistido diferenciado. Validación del modelo/archivo en editor y compilación aprobadas; 3.3b, 3.4b y 3.5 siguen abiertos. No hay mediciones humanas nuevas ni cambios de equilibrio.
 
 La guía orienta hacia peces lentos de la orilla, calcula cuánto falta para el tridente según el catálogo y el valor real de la pesca, indica cuándo vender/comprar y acompaña el primer sello, cofre y regreso. Incluye instrucciones breves, distancia de captura, recuperación con mochila llena y prioridad de ascenso por presión/aire. Cargar una partida reconstruye los objetivos sin repetir compras ni recompensas. Detalles y prueba manual: `Docs/PRIMERA_EXPEDICION.md`.
 

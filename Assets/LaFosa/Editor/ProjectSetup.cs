@@ -117,6 +117,7 @@ namespace LaFosa.Editor
         public static void Validate()
         {
             Setup();
+            ExpeditionReportChecks.Validate();
             var config = AssetDatabase.LoadAssetAtPath<GameConfig>(DataPath + "/Expedicion.asset");
             var obj = new GameObject("Checks temporales");
             FishCatalogBuilder.Validate(config);

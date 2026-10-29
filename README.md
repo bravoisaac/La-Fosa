@@ -39,6 +39,8 @@ La entrega de guía de la etapa 3 se compiló por separado en `Builds/FirstExped
 
 El cuaderno guía la **primera expedición**: pesca lenta en la orilla → vender → comprar tridente → resolver sello → recoger tesoro → regresar. Calcula cuánto falta reunir según el valor real de las especies y recuerda los controles necesarios. El marcador sigue el objetivo actual, incluso si queda detrás de ti. Aire bajo o presión excesiva priorizan el ascenso. Al cargar se reconstruye el objetivo a partir del progreso. [Recorrido, compatibilidad y revisión pendiente](Docs/PRIMERA_EXPEDICION.md).
 
+Para preparar la evaluación humana, `--expedition-report` habilita informes locales de tiempos, intentos, capturas, visitas y rescates. Cada inicio/carga crea un segmento separado; el guardado personal conserva su formato. [Campos, ubicación y límites de medición](Docs/PRIMERA_EXPEDICION.md#registro-opcional-del-recorrido-34a-28-de-octubre-de-2026).
+
 Recoge conchas en la playa, sigue las boyas hasta el punto de inmersión y explora. Empiezas sin armas: acércate a un pez bajo el agua, apúntalo y haz clic para atraparlo con las manos (alcance de 1,6 m y 0,8 s entre intentos). Las manos no disparan y no atraviesan obstáculos. Vende tu pesca para obtener el tridente y, más adelante, el arpón.
 
 El mar incluye **49 especies o grupos del documento aportado, con 49 modelos 3D propios y 132 peces**, repartidos desde la orilla hasta el abismo. Cada especie tiene su forma, colores, precio y franja de profundidad. Apunta a un pez cercano para identificarlo. Los modelos reutilizables están en `Assets/LaFosa/Models/Fish/`; consulta [la guía de fauna](Docs/FAUNA.md) y [la lámina de modelos](Docs/peces-catalogo.jpg).

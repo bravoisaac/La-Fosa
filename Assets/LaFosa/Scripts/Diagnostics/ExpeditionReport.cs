@@ -47,7 +47,9 @@ namespace LaFosa
             events.Add(new ExpeditionObservation
             {
                 kind = kind, detail = detail, oxygen = oxygen, depth = depth,
-                elapsedSeconds = elapsedSeconds, engagedSeconds = engagedSeconds, activeSeconds = activeSeconds
+                elapsedSeconds = elapsedSeconds, engagedSeconds = engagedSeconds, activeSeconds = activeSeconds,
+                attemptsByTool = (int[])attemptsByTool.Clone(), captures = captures,
+                shopVisits = shopVisits, sales = sales, rescues = rescues
             });
             return true;
         }
@@ -82,5 +84,7 @@ namespace LaFosa
         public string kind, detail;
         public double elapsedSeconds, engagedSeconds, activeSeconds;
         public float oxygen, depth;
+        public int[] attemptsByTool;
+        public int captures, shopVisits, sales, rescues;
     }
 }

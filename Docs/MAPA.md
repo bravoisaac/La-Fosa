@@ -1,14 +1,14 @@
 # Mapa dinámico
 
-## Entrega activa 3.4a: preparar medición del recorrido (23 de octubre)
+## Entrega activa 3.4a: preparar medición del recorrido (28 de octubre)
 
 - Objetivo: registrar una futura prueba humana con tiempos, intentos, capturas, compras, visitas y rescates; no ejecutar el juego ni simular resultados humanos.
 - Entrada/patrón: Unity C#, parcial de `GameSession` y modelo local serializable; activación explícita mediante `--expedition-report`, sin dependencias nuevas.
 - Conexiones: inicio/carga/menú/pausa → reloj del informe; `HarpoonGun`, `FishAgent`, `Economy`, puzle, recompensa y `DiverController` → sucesos confirmados.
-- Estado: cada Nueva partida/Continuar abre un segmento independiente con progreso inicial; separar tiempo total, tiempo sin pausa y tiempo de movimiento. No contar restauraciones como rescates.
+- Estado: cada Nueva partida/Continuar abre un segmento independiente con progreso inicial; separar tiempo total, tiempo sin pausa y tiempo con controles habilitados. No contar restauraciones como rescates. Cada evento conserva sus contadores para no mezclar salidas posteriores.
 - Archivos: nuevo modelo en Diagnostics, parcial de sesión y validación de editor; puntos de integración citados y documentación del plan/prueba.
 - Conservar: formato de guardado v1, HUD, precios, alcance, manos y mecánicas. Riesgo medio: clasificación de sucesos y ciclo de vida; el informe debe poder fallar sin afectar la partida.
-- Validación prevista: casos sintéticos del modelo/escritura en editor y compilación Windows; integración jugable y medición humana pendientes.
+- Validación terminada: 20 comprobaciones sintéticas del modelo/escritura en editor, validaciones existentes y compilación Windows correctas (`unity-expedition-report-build.log`, salida 0). Incluye fallo de reemplazo de archivo, preservación del informe anterior y reintento. 3.4a marcada; integración jugable y medición humana 3.4b pendientes junto con 3.3b visual.
 
 ## Entrega activa 3.3a: legibilidad y distribución del HUD (23 de octubre)
 
