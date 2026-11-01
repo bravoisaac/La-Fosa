@@ -57,16 +57,17 @@ namespace LaFosa
         public void Build()
         {
             Random.State previous = Random.state; Random.InitState(config.seed);
-            BuildTerrain(); BuildCoast(); BuildSeaLife(); BuildStations();
+            BuildTerrain(); BuildDeepTrench(); BuildCoast(); BuildSeaLife(); BuildStations();
             Random.state = previous;
         }
-        void BuildTerrain()
+        public static Mesh CreateTerrainMesh()
         {
             var vertices = new List<Vector3>(); var colors = new List<Color>(); var indices = new List<int>();
             const int step = 2;
             for (int x = -150; x < 150; x += step)
                 for (int z = -90; z < 210; z += step)
                 {
+                    if (DeepTrenchProfile.IsOpeningCell(x, z, step)) continue;
                     Vector3 a = new Vector3(x, FloorHeight(x, z), z);
                     Vector3 b = new Vector3(x, FloorHeight(x, z + step), z + step);
                     Vector3 c = new Vector3(x + step, FloorHeight(x + step, z), z);
@@ -75,6 +76,11 @@ namespace LaFosa
                 }
             var mesh = new Mesh { name = "Costa y fosa · caras planas", indexFormat = IndexFormat.UInt32 };
             mesh.SetVertices(vertices); mesh.SetColors(colors); mesh.SetTriangles(indices, 0); mesh.RecalculateNormals(); mesh.RecalculateBounds();
+            return mesh;
+        }
+        void BuildTerrain()
+        {
+            var mesh = CreateTerrainMesh();
             var terrain = new GameObject("Terreno · playa / plataforma / fosa"); terrain.transform.SetParent(root);
             terrain.AddComponent<MeshFilter>().sharedMesh = mesh;
             terrain.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("LaFosa/Faceted"));
@@ -87,7 +93,7 @@ namespace LaFosa
             water.SetVector("_ShoreFade", new Vector4(shoreZ, shoreZ + 20, 0, 0));
             sea.GetComponent<Renderer>().sharedMaterial = water;
         }
-        void Triangle(Vector3 a, Vector3 b, Vector3 c, List<Vector3> vertices, List<Color> colors, List<int> indices)
+        static void Triangle(Vector3 a, Vector3 b, Vector3 c, List<Vector3> vertices, List<Color> colors, List<int> indices)
         {
             float height = (a.y + b.y + c.y) / 3;
             Color color = height > -.4f ? new Color(.73f, .64f, .43f) : height > -12 ? new Color(.28f, .48f, .42f) : height > -35 ? new Color(.23f, .39f, .39f) : new Color(.13f, .24f, .31f);

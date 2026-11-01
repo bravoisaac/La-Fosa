@@ -4,6 +4,8 @@ Prototipo original en **Unity 6.3 LTS (6000.3.26f1)**. Exploración low poly en 
 
 Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md) y [plan de mejora por etapas](Docs/PLAN_MEJORAS.md). Para continuar el desarrollo, empezar por **Reanudar aquí**, al inicio del plan: contiene objetivo, pasos marcados, evidencia y pendiente inmediato. Estos documentos distinguen la visión futura de las funciones implementadas que se describen aquí.
 
+La referencia de mapa del usuario se implementa como una **fosa de 650 m**, con cavidad irregular, cámaras laterales y rutas alrededor de pilares. Cinco umbrales aumentan presión y consumo de aire sin bloquear el paso. [Sección estática del mapa](Docs/Mapa/fosa-seccion.png) · [Profundidades, equipo y límites de validación](Docs/DESCENSOS.md). La costa y los tres santuarios iniciales se conservan; la ampliación no añade todavía cinco biomas con fauna y puzles propios.
+
 ## Jugar
 
 1. En Unity Hub, selecciona **Add / Add project from disk** y esta carpeta.
@@ -12,9 +14,9 @@ Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md
 
 Si aún no existe la escena, usa **La Fosa → Preparar escena inicial**. El mundo se construye al pulsar Play; es normal que la escena en edición contenga solamente el objeto de inicio.
 
-Si está disponible la compilación, abre `Builds/Windows/La Fosa.exe` directamente.
+La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con **La Fosa → Compilar Windows** o `LaFosa.Editor.ProjectSetup.BuildWindows` sin `--expedition-preview`; el registro `LA_FOSA_BUILD_OK` muestra la ruta absoluta generada.
 
-La entrega de guía de la etapa 3 se compiló por separado en `Builds/FirstExpedition/La Fosa.exe`. Cierra el juego anterior antes de usarla: ambos ejecutables comparten la misma partida local.
+`Builds/FirstExpedition` es una salida alternativa para pruebas aisladas mediante `--expedition-preview`; compilar allí no actualiza `Builds/Windows`. Las entregas anteriores del 28 de octubre quedaron solo en esa salida, dejando la versión principal con las compuertas antiguas. Cierra el jugador antes de actualizar su carpeta. Ambos ejecutables comparten la misma partida local.
 
 ## Controles
 
@@ -73,7 +75,7 @@ Empiezas **sin dinero, sin arpón y pescando con las manos**. Los peces de la or
 |---|---:|---|
 | Tridente | $60 | Primera herramienta; tecla 2, alcance de 4 m y recarga de 0,45 s |
 | Arpón | $150 | Requiere tridente; tecla 3, alcance de 40 m y recarga de 0,65 s |
-| Bombona de O₂ ampliada | $90 | +60 segundos de reserva, acumulables con cada tesoro |
+| Bombona de O₂ ampliada | $90 | +60 unidades de aire, acumulables con cada tesoro; duración según profundidad y aceleración |
 | Aletas | $75 | +35% de velocidad de nado, también al acelerar |
 | Red de pesca | $120 | Requiere tridente; tecla 4, hasta 5 peces en un radio de 4 m, recarga de 5 s |
 | Bote de caleta | $240 | Embarcación de superficie a 12 m/s |
@@ -97,7 +99,7 @@ El bote comprado aparece a la izquierda del muelle y la moto a la derecha. Acér
 - `Interactable`: hereda esta clase para añadir puertas, herramientas, misiones o nuevos puzles. El buzo detecta automáticamente los objetos a menos de 4,5 m.
 - `StonePuzzleDefinition` define dimensiones, recorrido y mezcla; `StoneCircuitPuzzle` evalúa conexiones y corriente; `RuneStone` gira las piedras; `StonePuzzleLever` activa o reinicia; `StonePuzzleView` anima el cierre; `TreasureChest` entrega la recompensa. `SequencePuzzle` conserva el código anterior por compatibilidad, pero ya no se usa en los santuarios.
 - `FishAgent` y `HarpoonGun`: puntos de extensión para especies, comportamiento, daño y proyectiles físicos. Manos/tridente/arpón usan barrido de esfera y la red consulta peces cercanos con comprobación de visibilidad. Manos y tridente tienen un movimiento corto de alcance; el arpón muestra la línea del disparo.
-- `DiveHUD`: IMGUI con escala uniforme y lienzo centrado de 1600 × 900; el cuaderno ajusta su altura y los marcadores reservan espacio separado de interacción y avisos. Los menús cubren toda la ventana. Aviso de aire y guía coinciden por debajo de 30 s bajo el agua. La entrega 3.3a está compilada y pendiente de revisión visual en distintos formatos. Para un inventario mayor a 12 espacios, añade paginación o migra a UI Toolkit/uGUI.
+- `DiveHUD`: IMGUI con escala uniforme y lienzo centrado de 1600 × 900; el cuaderno ajusta su altura y los marcadores reservan espacio separado de interacción y avisos. Los menús cubren toda la ventana. Aviso y guía usan la reserva estimada de regreso (mínimo 30 unidades) y el límite del equipo. Muestra unidades de aire, consumo por segundo incluyendo aceleración, tiempo aproximado al ritmo actual y distancia al próximo umbral. Ese tiempo cambia al subir/bajar o acelerar; no garantiza completar el regreso. Revisión visual en distintos formatos pendiente. Para un inventario mayor a 12 espacios, añade paginación o migra a UI Toolkit/uGUI.
 
 La escena usa el renderizador integrado de Unity y entrada clásica, sin paquetes externos. Si importas los scripts en otro proyecto, habilita **Active Input Handling: Input Manager (Old)** o **Both**, y conserva los ejes Mouse X / Mouse Y. Las referencias a shaders en la configuración evitan que la compilación los elimine.
 

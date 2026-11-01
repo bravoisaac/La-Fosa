@@ -20,8 +20,8 @@ MonoBehaviour:
   entryPosition: {x: 0, y: -64, z: 75}
   requiredSafeDepth: 88
   requiredOxygen: 200
-  unlockedDepth: 110
-  unlockedOxygen: 240
+  unlockedDepth: 650
+  unlockedOxygen: 1400
   accent: {r: 0.74, g: 0.49, b: 1, a: 1}
   sequence: 0200000001000000000000000200000000000000
   stonePuzzle: {fileID: 11400000, guid: dde554ecd93e81e499aa7b167f0e6b28, type: 2}

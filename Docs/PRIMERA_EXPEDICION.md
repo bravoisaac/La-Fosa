@@ -13,6 +13,8 @@ Primera entrega del 18 de octubre de 2026. Implementa orientación contextual; e
 
 Con aire por debajo de 30 s o presión excesiva, el ascenso tiene prioridad sobre la guía normal. R sigue rescatando con inventario conservado. Un destino detrás de la cámara muestra hacia dónde girar; no desaparece.
 
+Actualización 3.2c (28 de octubre): debajo de los santuarios la fosa continúa hasta 650 m. El consumo aumenta al cruzar cinco umbrales; el HUD expresa la reserva en unidades de aire. El aviso usa al menos 30 unidades, o la estimación de regreso con 20 % de margen si es mayor. En la cavidad profunda, el marcador de regreso lleva primero al eje de ascenso. El tercer tesoro permite explorar esa escala con equipo de 650 m y 1400 unidades. La ficha humana debe medir el balance nuevo; los tiempos anteriores no lo validan.
+
 Entrega 3.3a (23 de octubre): el HUD mantiene proporciones al cambiar el formato de la ventana, amplía el texto del cuaderno y adapta su altura. El marcador tiene fondo propio y se mantiene por encima de los paneles de captura/interacción; añade indicaciones de mirada para destinos fuera de pantalla. La barra y el aviso de aire usan el mismo umbral de 30 s de la guía. Los controles y la alarma tienen fondo oscuro para poder leerse sobre la playa o el agua. Cambios compilados; comprobación visual en juego pendiente.
 
 ## Estado y compatibilidad
@@ -63,10 +65,11 @@ Registrar el recorrido en esta ficha antes de ajustar el equilibrio. Dejar los d
 | Guardar, cerrar y continuar conservó equipo y objetivo | Pendiente |
 | Ajuste propuesto y motivo observado | Pendiente |
 
-La compilación de esta entrega está en `Builds/FirstExpedition/La Fosa.exe`, separada de `Builds/Windows` porque había un juego abierto. Ambas usan la misma ranura personal; cerrar el ejecutable anterior antes de jugar en el nuevo evita que dos sesiones escriban progreso distinto. Las pruebas con `--smoke-test` usan archivos aislados.
+La entrega vigente está en `Builds/Windows/La Fosa.exe`, actualizada el 31 de octubre con 3.2d y 3.3c. `Builds/FirstExpedition` conserva una salida alternativa anterior: no usarla para validar la entrega actual. Ambas usan la misma ranura personal; cerrar el ejecutable anterior antes de jugar en el nuevo evita que dos sesiones escriban progreso distinto. Las pruebas con `--smoke-test` usan archivos aislados.
 
 - Empezar desde cero y seguir la guía: pescar hasta financiar el tridente en una salida, volver, vender y comprar. Comprobar legibilidad y que el marcador no tape el cuaderno al girarse.
 - Sumergirse, respirar y comprobar la indicación de distancia. Valorar si se localizan y alcanzan los peces sin explicaciones externas.
+- Comprobar aire en superficie, al acelerar y al cruzar un umbral: reserva en unidades, consumo en u/s y duración aproximada deben ser coherentes. El siguiente umbral cambia al cruzarlo; tras el quinto se indica último nivel. Revisar los paneles en 1280×720, 1920×1080 y formato ultrapanorámico, sin textos cortados.
 - Llegar al santuario, conectar las piedras, accionar la palanca y recoger el cofre. Anotar el tiempo y el aire restante; salir a respirar debe ser viable sin borrar giros.
 - Volver a la playa, guardar, cerrar y continuar. Deben conservarse tridente, sello y mejora; el objetivo debe ser preparar el siguiente descenso.
 - Medir viajes a la cabaña, intentos de captura, uso de rescate y dificultad para orientarse. Ajustar precios, oxígeno o distancias solo a partir de esos resultados.

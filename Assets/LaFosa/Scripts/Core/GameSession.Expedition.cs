@@ -44,6 +44,13 @@ namespace LaFosa
         Vector3 AscentWaypoint()
         {
             var position = Diver.transform.position;
+            if (Diver.Depth > DeepTrenchProfile.EntranceDepth)
+            {
+                var axis = DeepTrenchProfile.Axis;
+                if (Vector2.Distance(new Vector2(position.x, position.z), axis) > 2)
+                    return new Vector3(axis.x, position.y, axis.y);
+                return new Vector3(axis.x, Config.waterLevel + .5f, axis.y);
+            }
             return new Vector3(position.x, Config.waterLevel + .5f, position.z);
         }
 
@@ -51,17 +58,17 @@ namespace LaFosa
         {
             var position = Diver.transform.position;
             // Safety takes precedence without changing the underlying objective or progress.
-            if (Diver.Underwater && (Diver.Oxygen < 30 || Diver.Depth > Diver.SafeDepth))
+            if (Diver.NeedsAirReturn)
             {
                 string hint = Diver.Depth > Diver.SafeDepth
-                    ? "Superaste el límite: gastas aire ×" + Diver.PressureOxygenMultiplier.ToString("0.#") + ". ESPACIO para ascender. R te rescata conservando tus hallazgos."
-                    : "Queda poco aire. ESPACIO para ascender y respirar. R te rescata conservando tus hallazgos.";
+                    ? "Superaste el límite: gastas aire ×" + Diver.PressureOxygenMultiplier.ToString("0.#") + ". Sigue el marcador de regreso y asciende con ESPACIO. R te rescata."
+                    : "Reserva de regreso: sigue el marcador al conducto y asciende con ESPACIO. R te rescata conservando tus hallazgos.";
                 return new ExpeditionObjective(ExpeditionStep.Surface, "Primero, recupera aire", hint, "RUTA DE ASCENSO", AscentWaypoint());
             }
             if (firstReturnPending)
                 return new ExpeditionObjective(ExpeditionStep.Return, "Vuelve con el hallazgo", "El tesoro amplió tu aire y profundidad segura. Sube a respirar y regresa a la cabaña antes de bajar al naufragio.", "REGRESO A LA CALETA", Diver.Underwater ? AscentWaypoint() : CabinWaypoint);
             if (Complete)
-                return new ExpeditionObjective(ExpeditionStep.Complete, "Los secretos del abismo", "Expedición completada. Puedes seguir pescando y preparando equipo en la cabaña.", "CABAÑA", CabinWaypoint);
+                return new ExpeditionObjective(ExpeditionStep.Complete, "Explora la fosa profunda", "Tres tesoros recuperados. Bajo el último santuario, la fosa continúa hasta 650 m. Cinco umbrales aumentan la presión y el gasto de aire. Reserva aire para volver.", "FOSA PROFUNDA", new Vector3(0, -92, 76));
 
             // A player who found the treasure freely must never be sent back through the tutorial.
             if (Treasures == 0)

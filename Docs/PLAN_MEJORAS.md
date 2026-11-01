@@ -4,11 +4,11 @@ El objetivo es transformar el prototipo actual en un juego de expediciones por u
 
 El orden de construcción no es idéntico al orden en que el jugador comprará el equipo. Primero hay que conseguir una expedición completa que se guarde, se entienda y permita avanzar; después se amplía el mundo.
 
-## Reanudar aquí — 28 de octubre de 2026
+## Reanudar aquí — 31 de octubre de 2026
 
 **Objetivo activo:** completar la primera expedición persistente (etapas 1–3): pescar con las manos, vender, comprar tridente, resolver el primer sello, recuperar el tesoro y volver para continuar otra salida.
 
-**Última entrega terminada:** 3.2b, corrección solicitada: toda la fosa tiene paso libre y el límite de la salida es el aire. Retiradas compuertas/losas y su configuración; 11 comprobaciones de construcción/terreno en editor y compilación correctas. 3.4a (registro local del recorrido) también está terminada. **Siguiente cierre pendiente: 3.3b y 3.4b**, revisión visual e integración del registro durante un recorrido humano antes de ajustar el ritmo o avanzar a la lancha.
+**Última entrega terminada: 3.3c**, lectura del aire: HUD con duración aproximada al ritmo actual, consumo incluyendo acelerar y próximo umbral; tienda, inventario y requisitos usan unidades de aire. Compilación principal `Builds/Windows/La Fosa.exe` actualizada y validaciones de editor aprobadas (`unity-air-hud-build.log`). Conserva la fosa de 650 m y la retirada de compuertas, entregadas en Windows mediante 3.2d. **Siguiente pendiente: 3.3b y 3.4b**, comprobación humana de recorrido/HUD, sin ejecutarla mientras siga vigente la restricción. El equilibrio del aire es provisional; 3.5 requiere esas mediciones. Referencia del mapa: `Docs/DESCENSOS.md` y `Docs/Mapa/fosa-seccion.png`.
 
 **Restricción vigente del usuario:** no abrir ni usar el juego. Continuar con código, compilación y vistas estáticas de editor; no dar por completadas las pruebas visuales o jugables que todavía no se hayan realizado.
 
@@ -20,8 +20,11 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 - [x] 3.1 · Guía de pesca → venta → tridente → sello → tesoro → regreso implementada.
 - [x] 3.2 · Consumo de aire ×8 fuera del límite (×12 acelerando), aviso y rescate implementados. La entrega histórica conservaba una compuerta; 3.2b la sustituye.
 - [x] 3.2b · Toda la fosa, incluido el abismo, tiene paso libre. Retiradas paredes/escotillas de progresión; señales sin colisión y marcadores directos a santuario/superficie. 11 comprobaciones de editor y compilación: `unity-air-descent-build.log`. Movimiento en partida pendiente.
+- [x] 3.2c · Ampliación de 88 a 650 m según referencia: cavidad 3D, cinco umbrales, presión/consumo por nivel, reserva de regreso y equipo final adaptado. 71 comprobaciones de perfil/aire/MeshCollider, compilación y sección estática aprobadas (`unity-deep-map-final.log`). No ejecutado el recorrido humano.
+- [x] 3.2d · Actualizar la carpeta principal `Builds/Windows`, que todavía contenía las compuertas antiguas. Compilación correcta, 71 comprobaciones de fosa, 11 de señales y 20 de informe aprobadas; binario actualizado verificado sin abrir el juego (`unity-windows-delivery-build.log`). Ruta de salida explícita en el log y README.
 - [x] 3.3a · HUD: escala uniforme, cuaderno adaptable, marcadores separados de interacción, fondos legibles y aviso de aire coherente a 30 s. Compilación/editor correctos: `unity-hud-layout-build.log`.
 - [ ] 3.3b · Revisar visualmente HUD, señales y orientación en una ventana renderizada. No ejecutado; conserva abierto el paso 3.3.
+- [x] 3.3c · Aclarar aire y presión: unidades consistentes, tiempo estimado al ritmo actual, consumo incluyendo acelerar y distancia al próximo umbral. Vitales/HUD comparten fórmula; valores de balance conservados. Editor y compilación Windows aprobados (`unity-air-hud-build.log`); legibilidad en partida pendiente en 3.3b.
 - [x] 3.4a · Preparar registro opcional de tiempos, intentos por herramienta, capturas, visitas, ventas, tridente, sello, cofre y rescates. Segmentos por inicio/carga, aire antes de recompensa y contadores por hito. 20 comprobaciones de editor y compilación: `unity-expedition-report-build.log`.
 - [ ] 3.4b · Contrastar eventos con acciones reales y hacer el recorrido con una persona nueva; completar la ficha de tiempos, capturas, viajes y rescates. La instrumentación no completa esta prueba.
 - [ ] 3.5 · Ajustar ritmo según esa prueba y cerrar las etapas 1–3 con guardado/carga manual.
@@ -29,9 +32,11 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 
 **Cómo continuar:** leer este bloque y solo el apartado/documento del paso pendiente. Marcar `[x]` al terminar una entrega y anotar evidencia y pendiente inmediato. Una implementación o prueba automática terminada no cierra una etapa que exige juego humano. Mantener el objetivo y el criterio de cierre al resumir; no borrar las decisiones de diseño.
 
-**Evidencia histórica de 3.2:** 458 comprobaciones de integración y 12 de guardado/carga entre procesos aprobadas en la versión anterior. No validan el cambio 3.2b: este se comprobó en editor y compilación sin jugar. Ejecutable actualizado: `Builds/FirstExpedition/La Fosa.exe`. Resultados y límites: `Docs/PRUEBAS.md`. Ficha humana: `Docs/PRIMERA_EXPEDICION.md`.
+**Evidencia histórica de 3.2:** 458 comprobaciones de integración y 12 de guardado/carga entre procesos aprobadas en la versión anterior. No validan el cambio 3.2b: este se comprobó en editor y compilación sin jugar. Ejecutable principal actualizado por 3.2d: `Builds/Windows/La Fosa.exe`; no confundir las comprobaciones históricas de runtime con las de esta entrega. Resultados y límites: `Docs/PRUEBAS.md`. Ficha humana: `Docs/PRIMERA_EXPEDICION.md`.
 
 **Decisión vigente del usuario:** el bloqueo de la fosa es por aire, no por una pared. Huiros → naufragio → abismo tienen descenso/ascenso libres; exceder la profundidad segura multiplica el consumo de oxígeno. Los mecanismos conservan su orden de recompensas, pero no impiden nadar. No reintroducir barreras físicas para exigir equipo o tesoros al cruzar capas.
+
+**Referencia visual vigente:** el dibujo `fosa mapa.png` representa una fosa mucho más honda e irregular. Sus cinco líneas son umbrales de presión/consumo; no construir plataformas que cierren la sección. La ampliación 3.2c procede por petición directa del usuario y no marca terminados los futuros biomas, fauna o equilibrio de etapas posteriores.
 
 ## Etapa 0 Consolidar la dirección
 

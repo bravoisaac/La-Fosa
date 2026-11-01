@@ -21,6 +21,17 @@ MonoBehaviour:
   initialOxygen: 115
   initialSafeDepth: 34
   pressureOxygenMultiplier: 8
+  pressureBands:
+  - depth: 60
+    airMultiplier: 1.25
+  - depth: 150
+    airMultiplier: 1.6
+  - depth: 280
+    airMultiplier: 2.1
+  - depth: 420
+    airMultiplier: 2.8
+  - depth: 560
+    airMultiplier: 3.8
   inventorySlots: 12
   fish: {fileID: 11400000, guid: ed4e03ae66648d4409b34965c8116d28, type: 2}
   fishSpecies:

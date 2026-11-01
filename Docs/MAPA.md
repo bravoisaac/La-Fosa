@@ -1,5 +1,45 @@
 # Mapa dinámico
 
+## Entrega 3.6: quitar marcador y añadir pruebas Develop/Jugador
+
+- Petición directa: retirar el marcador de misiones y alternar desarrollador/jugador para probar mecánicas.
+- Entrada: Unity IMGUI `DiveHUD` y teclas de `GameSession`; parciales nuevos para panel y sesión de pruebas.
+- Conexiones: captura/restauración de progreso existente, bloqueo de guardado durante pruebas, vitales/movimiento del buzo y economía. No cambiar formato v1 ni precios.
+- Diseño: F2 inicia una copia temporal y alterna herramientas Develop / reglas de Jugador conservando el escenario de prueba. F1 abre el panel. Terminar pruebas restaura el progreso anterior en la playa; cerrar la aplicación descarta las pruebas. Guardar el progreso normal antes de entrar, y detener informes de expedición durante las pruebas.
+- Alcance: retirar rombo/destino proyectado; mantener cuaderno y señales físicas. Herramientas de aire/salud, velocidad, transporte a profundidad, dinero y equipo, con controles bloqueados en modo Jugador.
+- Riesgo medio: aislar compras, tesoros, guardados automáticos y salida al menú. Revisar entradas/salidas, compilar y comprobar aislamiento en editor; conservar partidas personales.
+
+## Entrega 3.3c: lectura del aire por profundidad (31 de octubre)
+
+- Objetivo: distinguir reserva de oxígeno y tiempo disponible; mostrar consumo actual y próximo umbral antes de descender.
+- Framework/entrada: Unity IMGUI, `DiveHUD` → `DiverController` → `GameConfig`; tienda y requisitos de santuario comparten las unidades de reserva.
+- Diagnóstico: inventario, tienda y requisitos aún presentan unidades de aire como segundos; el HUD muestra el factor de profundidad pero omite el factor de acelerar.
+- Cambio acotado: centralizar el factor de consumo usado por vitales/HUD, añadir duración aproximada y siguiente umbral, corregir textos de reserva en código y catálogo. Sin cambiar precios, capacidades, multiplicadores ni guardado.
+- Archivos: `GameConfig.cs`, `DiverController.cs`, `DiveHUD.cs`, `GameSession.cs`, `Tienda.asset`, valores iniciales de `ProjectSetup.cs` y documentación.
+- Riesgo bajo/medio: coherencia de cálculo y espacio del HUD. Mantener IMGUI y paneles existentes; compilar y validar en editor. No ejecutar el juego ni cerrar 3.3b/3.4b/3.5 sin pruebas humanas.
+- Resultado: implementado y compilado en la salida principal Windows. `unity-air-hud-build.log`: 71 comprobaciones de fosa, 11 de señales, 20 de informe, validaciones generales y salida 0. Revisión de código/espacios del HUD y `git diff --check` correctos; sin validación visual en partida.
+
+## Corrección de entrega: muro cerca de 30 m (31 de octubre)
+
+- Objetivo: entregar la eliminación de compuertas y la fosa de 650 m en la carpeta que usa el jugador.
+- Diagnóstico de build/ruta: el proceso observado usaba `Builds/Windows`, con código del 18 de octubre; las mejoras del 28 estaban en `Builds/FirstExpedition`. La barrera antigua estaba a 32 m, coherente con los 30 m indicados.
+- Entrada y conexiones: Unity → `ProjectSetup.BuildWindows` → ejecutable y datos de `Builds/Windows`; README y plan indican la entrega vigente.
+- Cambio mínimo: compilar sin `--expedition-preview`, registrar la ruta absoluta de salida y actualizar documentación. Conservar la opción de vista previa aislada.
+- Archivos candidatos/modificables: `ProjectSetup.cs`, README, mapa, plan y pruebas. No modificar geometría, equipo, guardados ni mecánicas por este problema de distribución.
+- Riesgo bajo: comprobar que el jugador está cerrado antes de compilar; validar en editor y revisar el binario generado sin ejecutar el juego. El recorrido humano sigue pendiente.
+- Resultado 3.2d: `Builds/Windows/La Fosa.exe` actualizado; `unity-windows-delivery-build.log` confirma ruta, 71 comprobaciones profundas, 11 de señales, 20 de informe, validaciones generales y salida 0. Inspección de símbolos del DLL entregado: `DiveGate` ausente y `DeepTrenchProfile` presente. No se abrió el juego ni se modificaron guardados.
+
+## Entrega activa: fosa profunda según dibujo (28 de octubre)
+
+- Referencia: `C:/Users/isaac/Desktop/fosa mapa.png`; corte vertical irregular con cinco líneas de profundidad, ramificaciones y cámara inferior amplia. Las líneas representan presión/consumo, nunca suelos ni puertas.
+- Objetivo: pasar de fondo de 88 m a 650 m; umbrales iniciales a 60/150/280/420/560 m, editables. Mantener costa y tres santuarios iniciales y extender la exploración inferior.
+- Arquitectura existente: Unity procedural; malla costera por `FloorHeight`, `WorldBuilder`, consumo en `DiverController`, HUD IMGUI, datos de equipo y guardado v1.
+- Cambio: abrir un acceso en el fondo actual y construir una cavidad 3D con paredes por anillos, cámaras laterales y pilares que dividen rutas; separar su geometría de la función superficial `FloorHeight`.
+- Conexiones: datos de franjas → consumo/presión/HUD/señales; perfil profundo → malla/colisiones/límite de rescate y vista estática de editor. Equipo final permite explorar la nueva escala sin cambiar IDs ni formato de partida.
+- Conservar: pasos anteriores, partidas, costa, manos, puzles y ausencia de paredes de progresión. Riesgo: continuidad de mallas, orientación de caras, recorrido y duración del aire.
+- Validar: perfil/umbrales/mallas/colisiones en editor, sección estática del mapa y compilación. No abrir el juego; no presentar balance provisional como validado por una persona.
+- Resultado 3.2c: 71 comprobaciones nuevas del perfil/aire/MeshCollider, 20 de informe y 11 de señales aprobadas; compilación y sección estática correctas (`unity-deep-map-final.log`, salida 0). `Docs/Mapa/fosa-seccion.png` inspeccionada. El frente de la malla se recorta solo para esta vista; la geometría jugable conserva paredes completas, paso central y ramales. Estado marcado en el plan; falta recorrido humano.
+
 ## Corrección activa: la fosa limita por aire (28 de octubre)
 
 - Objetivo del usuario: descenso libre en todas las capas; eliminar la losa/escotilla que aún cerraba el abismo. El aire disponible y el coste por profundidad determinan hasta dónde conviene avanzar.

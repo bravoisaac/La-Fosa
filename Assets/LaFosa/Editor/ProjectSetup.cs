@@ -25,7 +25,7 @@ namespace LaFosa.Editor
                 {
                     Zone("01_Huiros", "01 · Bosque de huiros", "La luz aún alcanza las ruinas.", new Vector3(0, -23.5f, 50), 12, 64, 155, new[]{0,1,2}, new Color(.38f,.91f,.74f), Item("perla", "Perla del Pacífico", "Primer tesoro. Mejora permanente de esta sesión: 64 m y 155 s de oxígeno.", 1, new Color(.8f,.96f,.88f))),
                     Zone("02_Naufragio", "02 · Ecos del naufragio", "El océano conserva sus secretos.", new Vector3(0, -51.5f, 58), 35, 100, 200, new[]{1,0,2,1}, new Color(.35f,.67f,1), Item("brujula", "Brújula sumergida", "Segundo tesoro. Mejora de equipo: 100 m y 200 s de oxígeno.", 1, new Color(.99f,.73f,.35f))),
-                    Zone("03_Abismo", "03 · Corazón del abismo", "Un resplandor en la oscuridad.", new Vector3(0, -87.5f, 70), 67, 110, 240, new[]{2,1,0,2,0}, new Color(.74f,.49f,1), Item("corazon", "Corazón del abismo", "Último tesoro del prototipo. Expedición completada.", 1, new Color(.76f,.54f,1)))
+                    Zone("03_Abismo", "03 · Corazón del abismo", "Un resplandor en la oscuridad.", new Vector3(0, -87.5f, 70), 67, 650, 1400, new[]{2,1,0,2,0}, new Color(.74f,.49f,1), Item("corazon", "Corazón del abismo", "Equipo de exploración profunda: 650 m y 1400 unidades de aire. Reserva aire para regresar.", 1, new Color(.76f,.54f,1)))
                 };
                 AssetDatabase.CreateAsset(config, DataPath + "/Expedicion.asset");
             }
@@ -44,7 +44,7 @@ namespace LaFosa.Editor
                     {
                         new ShopOffer(GearKind.Trident, "Tridente", "Primera herramienta. Tecla 2: alcance de 4 m y recarga rápida.", 60),
                         new ShopOffer(GearKind.ReinforcedHarpoon, "Arpón", "Después del tridente. Tecla 3: alcance de 40 m y recarga de 0,65 s.", 150),
-                        new ShopOffer(GearKind.OxygenTank, "Bombona de O₂ ampliada", "+60 s de reserva; se suma a las mejoras de los tesoros.", 90),
+                        new ShopOffer(GearKind.OxygenTank, "Bombona de O₂ ampliada", "+60 unidades de aire; la duración depende de la profundidad y de acelerar.", 90),
                         new ShopOffer(GearKind.Fins, "Aletas de buceo", "Nadas un 35% más rápido. Se equipan automáticamente.", 75),
                         new ShopOffer(GearKind.Net, "Red de pesca", "Después del tridente. Tecla 4: hasta 5 peces cercanos.", 120),
                         new ShopOffer(GearKind.Boat, "Bote de caleta", "Conducible a 12 m/s. Entrega al lado izquierdo del muelle.", 240),
@@ -118,6 +118,7 @@ namespace LaFosa.Editor
             ExpeditionReportChecks.Validate();
             var config = AssetDatabase.LoadAssetAtPath<GameConfig>(DataPath + "/Expedicion.asset");
             DescentChecks.Validate(config);
+            DeepTrenchChecks.Validate(config);
             var obj = new GameObject("Checks temporales");
             FishCatalogBuilder.Validate(config);
             Check(config.coastalFishBehavior.escapeSpeed > 0 && config.coastalFishBehavior.escapeSpeed < 6, "Fauna de orilla alcanzable nadando");
@@ -161,7 +162,7 @@ namespace LaFosa.Editor
             if (Array.IndexOf(args, "--expedition-preview") >= 0) destination = "Builds/FirstExpedition/La Fosa.exe";
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { ScenePath }, locationPathName = destination, target = BuildTarget.StandaloneWindows64, options = BuildOptions.None });
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Falló la compilación: " + report.summary.result);
-            Debug.Log("LA_FOSA_BUILD_OK · " + report.summary.totalSize + " bytes");
+            Debug.Log("LA_FOSA_BUILD_OK · " + report.summary.totalSize + " bytes · " + Path.GetFullPath(destination));
         }
     }
 }

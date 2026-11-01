@@ -14,7 +14,11 @@ namespace LaFosa
         public float Health { get; private set; } = 100;
         public float Depth => Mathf.Max(0, Session.Config.waterLevel - View.transform.position.y);
         public bool Underwater => Depth > .15f;
-        public float PressureOxygenMultiplier => Depth > SafeDepth ? Mathf.Max(1, Session.Config.pressureOxygenMultiplier) : 1;
+        public float PressureOxygenMultiplier => Session.Config.OxygenCost(Depth, SafeDepth);
+        public float CurrentAirConsumption => Underwater ? Session.Config.AirConsumption(Depth, SafeDepth, Input.GetKey(KeyCode.LeftShift)) : 0;
+        public int PressureLevel => Session.Config.PressureLevel(Depth);
+        public float ReturnAirReserve => Mathf.Max(30, Session.Config.ReturnAir(Depth, SafeDepth, 6 * SwimSpeedMultiplier) * 1.2f);
+        public bool NeedsAirReturn => Underwater && (Oxygen < ReturnAirReserve || Depth > SafeDepth);
         public Interactable Target { get; private set; }
         public FishAgent ObservedFish { get; private set; }
         public float sensitivity = 2;
@@ -75,8 +79,9 @@ namespace LaFosa
                 verticalSpeed -= 18 * Time.deltaTime;
                 move.y = verticalSpeed;
             }
+            if (Session.DeveloperMode && Session.DeveloperFastMove) move *= 3;
             controller.Move(move * Time.deltaTime);
-            if (transform.position.y < -120 || Mathf.Abs(transform.position.x) > 145 || transform.position.z > 200 || transform.position.z < -85)
+            if (transform.position.y < -DeepTrenchProfile.BottomDepth - 50 || Mathf.Abs(transform.position.x) > 145 || transform.position.z > 200 || transform.position.z < -85)
                 Rescue("La corriente te devuelve al campamento.", "world_boundary");
         }
         void UpdateVitals()
@@ -86,7 +91,8 @@ namespace LaFosa
         internal void AdvanceVitals(float deltaTime, bool sprint)
         {
             if (Session.Blocked || deltaTime <= 0) return;
-            float consumption = (sprint ? 1.5f : 1) * PressureOxygenMultiplier;
+            if (Session.DeveloperMode && Session.DeveloperInfiniteAir) { DeveloperRefill(); return; }
+            float consumption = Session.Config.AirConsumption(Depth, SafeDepth, sprint);
             Oxygen = Mathf.Clamp(Oxygen + (Underwater ? -consumption : 22) * deltaTime, 0, MaxOxygen);
             float damage = Oxygen <= 0 ? 16 : 0;
             Health = Mathf.Clamp(Health + (damage > 0 ? -damage : !Underwater ? 14 : 0) * deltaTime, 0, 100);
@@ -105,8 +111,8 @@ namespace LaFosa
         }
         void UpdateAtmosphere()
         {
-            float t = Mathf.Clamp01(Depth / 95);
-            float trench = WorldBuilder.TrenchBlend(View.transform.position);
+            float t = Mathf.Clamp01(Depth / (DeepTrenchProfile.BottomDepth * .6f));
+            float trench = Mathf.Max(WorldBuilder.TrenchBlend(View.transform.position), Mathf.InverseLerp(60, 100, Depth));
             if (RenderSettings.sun != null) RenderSettings.sun.intensity = Underwater ? Mathf.Lerp(.65f, Mathf.Lerp(.48f, .07f, t), trench) : 1.1f;
             lamp.intensity = Underwater ? 1.4f : 0;
             Color water = Color.Lerp(new Color(.045f, .3f, .29f), Color.Lerp(new Color(.035f, .23f, .24f), new Color(.009f, .025f, .045f), t), trench);
@@ -117,6 +123,11 @@ namespace LaFosa
             RenderSettings.fogDensity = Underwater ? Mathf.Lerp(coastalFog, Mathf.Lerp(shallowFog, deepFog, t), trench) : .0035f;
             View.backgroundColor = Underwater ? water : new Color(.52f, .75f, .83f);
             RenderSettings.ambientLight = Underwater ? Color.Lerp(new Color(.32f, .52f, .49f), Color.Lerp(new Color(.26f, .44f, .43f), new Color(.08f, .14f, .19f), t), trench) : new Color(.7f, .77f, .78f);
+        }
+        public void DeveloperRefill()
+        {
+            if (!Session.DeveloperMode) return;
+            Oxygen = MaxOxygen; Health = 100;
         }
         public void Upgrade(float depth, float oxygen)
         {

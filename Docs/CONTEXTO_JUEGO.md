@@ -51,6 +51,8 @@ La siguiente meta debe ser comprensible: conseguir más aire y mejorar el equipo
 
 La ruta principal de descenso es fácil de reconocer. A su alrededor hay cuevas, desvíos, secretos y lugares opcionales. **Decisión del usuario del 28 de octubre: el acceso físico a toda la fosa es libre; el límite es el aire disponible, no una pared.** La preparación amplía el alcance de la expedición y los puzles entregan mejoras, sin crear compuertas obligatorias entre capas.
 
+**Referencia aportada: `fosa mapa.png`.** Corte vertical con entrada estrecha, paredes irregulares, ramificaciones, cámaras y ensanchamiento inferior. Las cinco líneas numeradas señalan niveles donde sube la presión y aumenta el gasto de aire. La primera implementación amplía el fondo a 650 m, con umbrales a 60, 150, 280, 420 y 560 m; son valores iniciales de diseño, ajustables tras probar. Conserva los tres santuarios iniciales y amplía la geometría de exploración bajo ellos.
+
 Cada bioma debe tener identidad visual y sonora, fauna, recursos, un fenómeno ambiental y una prueba principal. La profundidad aumenta la extrañeza y el peligro, pero debe haber espacios de calma y referencias que permitan orientarse.
 
 Los tres santuarios actuales son una base para desarrollar estas capas. Los 88 metros del prototipo son una escala jugable provisional, no el tamaño definitivo de la fosa.

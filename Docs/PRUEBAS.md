@@ -1,5 +1,31 @@
 # Validación
 
+## Entrega 3.3c: claridad de aire y presión (31 de octubre de 2026)
+
+- [x] Vitales y HUD comparten `GameConfig.AirConsumption`: profundidad/equipo y factor de acelerar conservados. El HUD añade consumo en u/s, duración aproximada `~min:seg` al ritmo actual y distancia al siguiente umbral. En superficie muestra recuperación/reserva completa.
+- [x] Inventario, requisitos, tienda y configuración inicial expresan reservas en unidades; precios y capacidades no cambian. Paneles inferiores ampliados hacia arriba dentro de sus columnas; no se desplazan marcadores ni avisos centrales.
+- [x] Compilación principal en `Builds/Windows/La Fosa.exe` y salida 0: `unity-air-hud-build.log`. Pasan las 71 comprobaciones existentes de fosa, 11 de señales, 20 de informe y validaciones generales; `git diff --check` sin errores. Son pruebas existentes, no nuevas pruebas visuales del HUD.
+- [ ] Revisar legibilidad a distintas resoluciones, cambio de estimación al acelerar/cruzar umbrales y recuperación en superficie. No se abrió el juego ni se ejecutó Play Mode. El tiempo mostrado supone consumo constante; la reserva de regreso sigue siendo una estimación de ascenso directo.
+
+## Entrega 3.2d: corregir la versión principal de Windows (31 de octubre de 2026)
+
+- [x] Diagnóstico: el jugador observado usaba `Builds/Windows`, cuyo DLL del 18 de octubre contenía `DiveGate` y no `DeepTrenchProfile`; FirstExpedition tenía el mapa nuevo. Los 30 m reportados coinciden con la barrera antigua de 32 m.
+- [x] Compilación principal realizada con el jugador cerrado, sin `--expedition-preview`. `unity-windows-delivery-build.log` confirma `LA_FOSA_BUILD_OK` en `Builds/Windows/La Fosa.exe` y salida 0. El primer intento restringido no obtuvo licencia; el segundo completó con acceso a la licencia local.
+- [x] Repetidas en editor las 71 comprobaciones de fosa, 11 de señales, 20 de informe y validaciones generales. No se ejecutó Play Mode ni el jugador.
+- [x] DLL principal generado el 31 de octubre: símbolo `DiveGate` ausente, `DeepTrenchProfile` presente. El log incluye ahora la ruta absoluta para distinguir entregas principales de vistas previas.
+- [ ] Confirmación humana del paso cerca de 30/32 m y recorrido completo. No se atribuyen a esta entrega pruebas de movimiento en partida ni se cambian guardados.
+
+## Entrega 3.2c: fosa de 650 m según referencia (28 de octubre de 2026)
+
+- [x] **71 comprobaciones nuevas en editor**, sin Play Mode: `LA_FOSA_DEEP_TESTS_OK` en `unity-deep-map-final.log`. Cinco umbrales ordenados, salto exacto de nivel/consumo, penalización por equipo, reserva por profundidad/aletas y cobertura teórica de ida/vuelta con la recompensa final.
+- [x] Malla interior alcanza 650 m; borde superior coincide con abertura de 8 × 8 m. Rayos sobre MeshCollider comprueban paredes hacia el agua, eje central despejado entre fondo y entrada y ausencia de cierres en los umbrales profundos. Se comprueba también la malla costera real: abierta en el centro y con repisa lateral conservada. Esto no prueba el paso del CharacterController por todas las cámaras.
+- [x] Validaciones anteriores del editor: 20 comprobaciones de informe y 11 de señales, además de inventario/circuitos/progresión. Compilación Windows correcta (`LA_FOSA_BUILD_OK`) y salida 0; ejecutable `Builds/FirstExpedition/La Fosa.exe` actualizado, sin lanzarlo.
+- [x] Sección estática exportada e inspeccionada: `Docs/Mapa/fosa-seccion.png`, `LA_FOSA_DEEP_PREVIEW_OK` en el mismo log. Usa la malla real con frente recortado; ancho visual ×1,6 declarado. Se corrigió el recorte por triángulos que producía dientes en el borde de la vista y se diferenciaron los pilares para leer los ramales. No se ejecutó el juego ni se usó la imagen como evidencia de HUD en partida.
+- [x] Código revisado: coste por franja más factor ×8 fuera del equipo y ×1,5 al acelerar; HUD muestra nivel/coste y reserva aproximada; el regreso profundo dirige al eje de ascenso. Rescate fuera de mapa pasa de -120 a -700 m. Recompensa final pasa a 650 m/1400 unidades de aire y se reconstruye al cargar el mismo guardado v1; no cambian IDs ni número de puzles.
+- [ ] Movimiento real por ramales, lectura submarina de señales, actualización del HUD, carga de una partida anterior con nueva recompensa y equilibrio de la salida completa. Capacidad y consumo son valores provisionales. La extensión aporta geometría/presión, no cinco biomas poblados o nuevos puzles.
+
+Para reproducir la vista de editor: `LaFosa.Editor.DeepTrenchPreview.Export`; para validar, compilar y exportar: `DeepTrenchPreview.BuildAndExport` con `--expedition-preview`, sin `-nographics`. No entra en Play Mode. No atribuir las 458 comprobaciones históricas de runtime a esta entrega.
+
 ## Corrección 3.2b: toda la fosa limita por aire (28 de octubre de 2026)
 
 - [x] Eliminados `DiveGate`, construcción de losas/escotillas, avisos de choque y opciones `hasPhysicalGate`/`barrierWidth`. `GameBootstrap` construye guías de descenso sin colisión. No quedan referencias a esos tipos/campos en `Assets/LaFosa` ni referencias al GUID del componente retirado.

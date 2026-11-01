@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LaFosa.ItemDefinition
   id: corazon
   displayName: "Coraz\xF3n del abismo"
-  description: "\xDAltimo tesoro del prototipo. Expedici\xF3n completada."
+  description: "Equipo de exploración profunda: 650 m y 1400 unidades de aire. Reserva aire para regresar; el consumo aumenta por nivel."
   maxStack: 1
   color: {r: 0.76, g: 0.54, b: 1, a: 1}

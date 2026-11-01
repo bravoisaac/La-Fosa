@@ -26,7 +26,7 @@ MonoBehaviour:
     price: 150
   - gear: 1
     title: "Bombona de O\u2082 ampliada"
-    description: +60 s de reserva; se suma a las mejoras de los tesoros.
+    description: +60 unidades de aire; la duración depende de la profundidad y de acelerar.
     price: 90
   - gear: 2
     title: Aletas de buceo

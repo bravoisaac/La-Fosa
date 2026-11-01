@@ -13,7 +13,7 @@ namespace LaFosa
         public SurfaceVehicle Boat { get; set; }
         public SurfaceVehicle JetSki { get; set; }
         public bool Paused { get; private set; }
-        public bool Blocked => Intro || InventoryOpen || Paused || ShopOpen;
+        public bool Blocked => Intro || InventoryOpen || Paused || ShopOpen || DeveloperPanelOpen;
         public int Treasures { get; private set; }
         public event System.Action ProgressChanged;
         internal void RefreshRoutes() { ProgressChanged?.Invoke(); }
@@ -34,8 +34,8 @@ namespace LaFosa
             if (index > 0 && !IsTreasureClaimed(Config.zones[index - 1]))
                 return "Abre el sello y recoge " + Config.zones[index - 1].treasure.displayName + ".";
             if (Diver.SafeDepth < zone.requiredSafeDepth || Diver.MaxOxygen < zone.requiredOxygen)
-                return "Equipo necesario: " + zone.requiredSafeDepth + " m y " + zone.requiredOxygen + " s de aire.";
-            return "Equipo preparado: " + zone.requiredSafeDepth + " m / " + zone.requiredOxygen + " s. " + zone.returnHint;
+                return "Equipo necesario: " + zone.requiredSafeDepth + " m y " + zone.requiredOxygen + " u de aire.";
+            return "Equipo preparado: " + zone.requiredSafeDepth + " m / " + zone.requiredOxygen + " u. " + zone.returnHint;
         }
         public Vector3 NextWaypoint(out string label)
         {
@@ -76,6 +76,13 @@ namespace LaFosa
         void Update()
         {
             if (Intro) return;
+            if (Input.GetKeyDown(KeyCode.F2)) { ToggleDeveloperMode(); return; }
+            if (Input.GetKeyDown(KeyCode.F1) && DeveloperSession) { ToggleDeveloperPanel(); return; }
+            if (DeveloperPanelOpen)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape)) ToggleDeveloperPanel();
+                return;
+            }
             if (!Blocked) UpdateExpeditionReturn();
             if (Input.GetKeyDown(KeyCode.Tab) && !Paused) ToggleInventory();
             if (Input.GetKeyDown(KeyCode.Escape))

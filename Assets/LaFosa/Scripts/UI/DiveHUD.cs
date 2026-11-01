@@ -50,21 +50,37 @@ namespace LaFosa
             Text("BOLSILLO   $" + session.Economy.Money, 50, pocketY + 12, 275, 30, 22, Gold);
             Text("PESCA PARA VENDER   $" + session.Economy.SaleValue + "\nTesoros: " + session.Treasures + " / " + session.Config.zones.Length, 50, pocketY + 48, 270, 40, 14, Muted);
 
-            Panel(30, 720, 345, 150);
-            Text("O₂", 50, 733, 50, 35, 25, Mint);
-            Text(Mathf.CeilToInt(diver.Oxygen) + " / " + Mathf.CeilToInt(diver.MaxOxygen) + " s", 225, 742, 130, 25, 16, Color.white, TextAnchor.MiddleRight);
-            bool needsAir = diver.Underwater && (diver.Oxygen < 30 || diver.Depth > diver.SafeDepth);
-            Bar(50, 779, 305, 7, diver.Oxygen / diver.MaxOxygen, needsAir ? Gold : Mint);
+            Panel(30, 680, 345, 190);
+            Text("O₂", 50, 693, 50, 35, 25, Mint);
+            Text(Mathf.CeilToInt(diver.Oxygen) + " / " + Mathf.CeilToInt(diver.MaxOxygen) + " u", 215, 702, 140, 25, 16, Color.white, TextAnchor.MiddleRight);
+            bool needsAir = diver.NeedsAirReturn;
+            Bar(50, 739, 305, 7, diver.Oxygen / diver.MaxOxygen, needsAir ? Gold : Mint);
+            float airRate = diver.CurrentAirConsumption;
+            int seconds = airRate > 0 ? Mathf.FloorToInt(diver.Oxygen / airRate) : 0;
+            string duration = airRate > 0
+                ? "~" + (seconds / 60) + ":" + (seconds % 60).ToString("00") + " AL RITMO ACTUAL · " + airRate.ToString("0.##") + " u/s"
+                : diver.Oxygen < diver.MaxOxygen ? "SUPERFICIE · RECUPERANDO AIRE" : "SUPERFICIE · RESERVA COMPLETA";
+            Text(duration, 50, 759, 305, 38, 13, needsAir ? Gold : Mint);
             Text("SALUD  " + Mathf.CeilToInt(diver.Health) + "%", 50, 807, 160, 24, 13, Muted);
             Text("MOCHILA  " + diver.Inventory.Stacks.Count + "/" + diver.Inventory.capacity, 210, 807, 145, 24, 13, Muted, TextAnchor.MiddleRight);
-            Text("TAB  inventario", 50, 839, 260, 20, 12, Mint);
-            Panel(1240, 720, 330, 150);
-            Text(diver.Depth.ToString("0.0") + " m", 1260, 730, 280, 48, 38, Color.white, TextAnchor.MiddleRight);
-            Text("LÍMITE DEL EQUIPO   " + diver.SafeDepth + " m", 1260, 787, 280, 24, 13, diver.Depth > diver.SafeDepth ? Gold : Muted, TextAnchor.MiddleRight);
+            Text("REGRESO ~" + Mathf.CeilToInt(diver.ReturnAirReserve) + " u · TAB mochila", 50, 839, 305, 20, 12, Mint);
+            Panel(1240, 680, 330, 190);
+            Text(diver.Depth.ToString("0.0") + " m", 1260, 690, 280, 48, 38, Color.white, TextAnchor.MiddleRight);
+            Text("LÍMITE DEL EQUIPO   " + diver.SafeDepth + " m", 1260, 747, 280, 24, 13, diver.Depth > diver.SafeDepth ? Gold : Muted, TextAnchor.MiddleRight);
+            Text("PRESIÓN N" + diver.PressureLevel + " · SIN ACELERAR ×" + diver.PressureOxygenMultiplier.ToString("0.##"), 1260, 773, 280, 20, 12, Mint, TextAnchor.MiddleRight);
+            string nextPressure = "ÚLTIMO NIVEL DE PRESIÓN";
+            if (session.Config.pressureBands != null)
+                foreach (var band in session.Config.pressureBands)
+                    if (band.depth > diver.Depth)
+                    {
+                        nextPressure = "PRÓXIMO UMBRAL  " + band.depth.ToString("0") + " m · FALTAN " + Mathf.CeilToInt(band.depth - diver.Depth) + " m";
+                        break;
+                    }
+            Text(nextPressure, 1260, 797, 280, 30, 12, Muted, TextAnchor.MiddleRight);
             Text(harpoon.ToolName + (harpoon.ReadyIn > 0 ? " · RECARGANDO" : " · LISTO"), 1260, 833, 280, 24, 13, Mint, TextAnchor.MiddleRight);
             if (!session.Blocked)
             {
-                if (objective.Step != ExpeditionStep.Complete)
+                if (objective.Step != ExpeditionStep.Complete || diver.Depth < DeepTrenchProfile.EntranceDepth)
                 {
                     Vector3 destination = objective.Destination;
                     Vector3 point = diver.View.WorldToViewportPoint(destination);
@@ -100,7 +116,7 @@ namespace LaFosa
                 {
                     Panel(460, 620, 680, 74);
                     Text(diver.Depth > diver.SafeDepth ? "PROFUNDIDAD EXCESIVA · AIRE ×" + diver.PressureOxygenMultiplier.ToString("0.#") : "OXÍGENO BAJO · RECUPERA AIRE", 480, 630, 640, 26, 20, Gold, TextAnchor.MiddleCenter);
-                    Text("ESPACIO para ascender · R para regresar con tus hallazgos", 480, 660, 640, 24, 15, Color.white, TextAnchor.MiddleCenter);
+                    Text("Sigue el marcador · ESPACIO asciende · R te rescata", 480, 660, 640, 24, 15, Color.white, TextAnchor.MiddleCenter);
                 }
                 if (diver.Target == null && diver.ObservedFish != null && diver.ObservedFish.Available)
                 {
@@ -177,7 +193,7 @@ namespace LaFosa
                 else Text("—", x, y + 32, 210, 35, 20, Muted, TextAnchor.MiddleCenter);
             }
             if (Button("VOLVER AL MAR  [TAB]", 920, 690, 310, 40)) session.ToggleInventory();
-            Text("Equipo: " + session.Diver.SafeDepth + " m  /  " + session.Diver.MaxOxygen + " s de O₂", 350, 696, 520, 30, 17, Mint);
+            Text("Equipo: " + session.Diver.SafeDepth + " m  /  " + session.Diver.MaxOxygen + " u de O₂", 350, 696, 520, 30, 17, Mint);
         }
         void Pause()
         {

@@ -92,6 +92,7 @@ namespace LaFosa
         }
         public bool ReturnToMenu()
         {
+            if (DeveloperSession) EndDeveloperSession();
             if (!SaveNow()) return false;
             FinishExpeditionReport("menu");
             Intro = true; Paused = false; InventoryOpen = false; ShopOpen = false;
@@ -144,6 +145,12 @@ namespace LaFosa
         public void MarkSaveDirty() { if (!restoring && !Intro) saveDirty = true; }
         public bool SaveNow()
         {
+            if (DeveloperSession)
+            {
+                SaveStatus = "PRUEBA TEMPORAL · los cambios no se guardan.";
+                saveDirty = false; nextPeriodicSave = Time.unscaledTime + 20;
+                return true;
+            }
             if (Intro || restoring || saveStore == null) return false;
             bool saved = saveStore.TrySave(CaptureSave(), out var message);
             SaveStatus = message; SaveFailed = !saved; saveDirty = false; nextPeriodicSave = Time.unscaledTime + 20;

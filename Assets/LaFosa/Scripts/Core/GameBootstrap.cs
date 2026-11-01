@@ -24,7 +24,7 @@ namespace LaFosa
             var player = new GameObject("Buzo"); player.transform.SetParent(transform); player.transform.position = config.spawn;
             var controller = player.AddComponent<CharacterController>(); controller.height = 1.8f; controller.radius = .32f; controller.center = Vector3.up * .9f; controller.stepOffset = .35f;
             var cameraObject = new GameObject("Cámara del buzo"); cameraObject.tag = "MainCamera"; cameraObject.transform.SetParent(player.transform, false); cameraObject.transform.localPosition = Vector3.up * 1.55f;
-            var camera = cameraObject.AddComponent<Camera>(); camera.nearClipPlane = .06f; camera.farClipPlane = 450; camera.fieldOfView = 76; camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = new Color(.52f, .75f, .83f);
+            var camera = cameraObject.AddComponent<Camera>(); camera.nearClipPlane = .06f; camera.farClipPlane = 800; camera.fieldOfView = 76; camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = new Color(.52f, .75f, .83f);
             cameraObject.AddComponent<AudioListener>();
             var diver = player.AddComponent<DiverController>(); diver.Initialize(Session, camera); Session.Diver = diver;
             foreach (var fish in world.GetComponentsInChildren<FishAgent>())
