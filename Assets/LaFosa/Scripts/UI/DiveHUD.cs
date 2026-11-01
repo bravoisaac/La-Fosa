@@ -60,6 +60,7 @@ namespace LaFosa
             string duration = airRate > 0
                 ? "~" + (seconds / 60) + ":" + (seconds % 60).ToString("00") + " AL RITMO ACTUAL · " + airRate.ToString("0.##") + " u/s"
                 : diver.Oxygen < diver.MaxOxygen ? "SUPERFICIE · RECUPERANDO AIRE" : "SUPERFICIE · RESERVA COMPLETA";
+            if (session.DeveloperMode && session.DeveloperInfiniteAir) duration = "DEVELOP · AIRE Y SALUD FIJOS";
             Text(duration, 50, 759, 305, 38, 13, needsAir ? Gold : Mint);
             Text("SALUD  " + Mathf.CeilToInt(diver.Health) + "%", 50, 807, 160, 24, 13, Muted);
             Text("MOCHILA  " + diver.Inventory.Stacks.Count + "/" + diver.Inventory.capacity, 210, 807, 145, 24, 13, Muted, TextAnchor.MiddleRight);
@@ -80,27 +81,6 @@ namespace LaFosa
             Text(harpoon.ToolName + (harpoon.ReadyIn > 0 ? " · RECARGANDO" : " · LISTO"), 1260, 833, 280, 24, 13, Mint, TextAnchor.MiddleRight);
             if (!session.Blocked)
             {
-                if (objective.Step != ExpeditionStep.Complete || diver.Depth < DeepTrenchProfile.EntranceDepth)
-                {
-                    Vector3 destination = objective.Destination;
-                    Vector3 point = diver.View.WorldToViewportPoint(destination);
-                    // Convert the camera's full-window viewport into the centered HUD canvas.
-                    float projectedX = (point.x * Screen.width - offset.x) / scale;
-                    float projectedY = ((1 - point.y) * Screen.height - offset.y) / scale;
-                    bool behind = point.z <= 0;
-                    Vector3 local = diver.View.transform.InverseTransformPoint(destination);
-                    // Reserve the upper central band: never cover the notebook, reticle,
-                    // fish/interaction panel (y=500) or air warning (y=620).
-                    float markerX = behind ? (local.x < 0 ? 522 : 1078) : Mathf.Clamp(projectedX, 522, 1078);
-                    float markerY = behind ? 330 : Mathf.Clamp(projectedY, 265, 350);
-                    string direction = behind || point.x < 0 || point.x > 1
-                        ? (local.x < 0 ? "← GIRA A LA IZQUIERDA\n" : "GIRA A LA DERECHA →\n")
-                        : point.y > 1 ? "↑ SUBE LA MIRADA\n" : point.y < 0 ? "↓ BAJA LA MIRADA\n" : "";
-                    RectColor(markerX - 22, markerY - 20, 44, 38, Ink);
-                    Text("◇", markerX - 20, markerY - 20, 40, 36, 27, Gold, TextAnchor.MiddleCenter);
-                    Panel(markerX - 152, markerY + 20, 304, 60);
-                    Text(direction + objective.Marker + " · " + Mathf.RoundToInt(Vector3.Distance(diver.transform.position, destination)) + " m", markerX - 142, markerY + 24, 284, 52, 14, Gold, TextAnchor.MiddleCenter);
-                }
                 RectColor(798, 440, 4, 4, Color.white);
                 if (diver.Riding != null)
                 {
@@ -116,7 +96,7 @@ namespace LaFosa
                 {
                     Panel(460, 620, 680, 74);
                     Text(diver.Depth > diver.SafeDepth ? "PROFUNDIDAD EXCESIVA · AIRE ×" + diver.PressureOxygenMultiplier.ToString("0.#") : "OXÍGENO BAJO · RECUPERA AIRE", 480, 630, 640, 26, 20, Gold, TextAnchor.MiddleCenter);
-                    Text("Sigue el marcador · ESPACIO asciende · R te rescata", 480, 660, 640, 24, 15, Color.white, TextAnchor.MiddleCenter);
+                    Text("Busca el conducto central · ESPACIO asciende · R te rescata", 480, 660, 640, 24, 15, Color.white, TextAnchor.MiddleCenter);
                 }
                 if (diver.Target == null && diver.ObservedFish != null && diver.ObservedFish.Available)
                 {
@@ -131,7 +111,7 @@ namespace LaFosa
                 {
                     Panel(395, 810, 810, 65);
                     Text("1 MANOS   2 TRIDENTE   3 ARPÓN   4 RED", 410, 819, 780, 22, 14, Mint, TextAnchor.MiddleCenter);
-                    Text("CLIC pescar   E interactuar   TAB mochila   R rescate", 410, 846, 780, 22, 14, Muted, TextAnchor.MiddleCenter);
+                    Text("CLIC pescar   E interactuar   TAB mochila   R rescate   F2 Develop", 410, 846, 780, 22, 14, Muted, TextAnchor.MiddleCenter);
                 }
             }
             if (Time.unscaledTime < session.MessageUntil)
@@ -141,10 +121,12 @@ namespace LaFosa
             }
             if (session.SaveFailed && !session.Intro)
                 Text(session.SaveStatus, 410, 180, 780, 55, 16, Gold, TextAnchor.MiddleCenter);
+            if (session.DeveloperSession) DeveloperBadge();
             if (session.Intro) Intro();
             else if (session.ShopOpen) Shop();
             else if (session.InventoryOpen) Inventory();
             else if (session.Paused) Pause();
+            if (session.DeveloperPanelOpen) DeveloperPanel();
         }
         void Intro()
         {
@@ -206,6 +188,9 @@ namespace LaFosa
             if (Button(showControls ? "OCULTAR CONTROLES" : "MOSTRAR CONTROLES", 580, 506, 440, 52)) showControls = !showControls;
             if (Button("GUARDAR Y VOLVER AL MENÚ", 580, 574, 440, 42)) session.ReturnToMenu();
             Text(session.SaveStatus, 580, 626, 440, 44, 13, session.SaveFailed ? Gold : Muted);
+            Panel(535, 695, 530, 75);
+            if (Button(session.DeveloperSession ? "HERRAMIENTAS DE PRUEBA [F1]" : "ENTRAR EN DEVELOP [F2]", 550, 708, 500, 48))
+            { if (session.DeveloperSession) session.ToggleDeveloperPanel(); else session.ToggleDeveloperMode(); }
         }
         void DimWorld(Color color)
         {

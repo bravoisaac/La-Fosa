@@ -2,6 +2,8 @@
 
 Primera entrega del 18 de octubre de 2026. Implementa orientación contextual; el cierre de la etapa exige todavía juego humano y revisión del HUD.
 
+**Cambio vigente 3.6 (31 de octubre):** retirado el marcador proyectado a petición del usuario. Las referencias al rombo/flechas de destino en el historial siguiente describen versiones anteriores; hoy la orientación se apoya en cuaderno y señales físicas. F2 inicia/alterna Develop y Jugador en una prueba temporal; F1 abre herramientas. Al terminar pruebas se restaura el progreso normal en la playa. No medir el recorrido humano con equipo o dinero de Develop: terminar la prueba antes de evaluar el equilibrio normal.
+
 ## Recorrido
 
 1. En Nueva partida, el cuaderno explica ratón, WASD, bajar con C y subir a respirar con ESPACIO. El marcador apunta a la pesca de orilla y, bajo el agua cerca de esa zona, al pez costero disponible más cercano. Una señal junto a las primeras boyas recuerda los controles.

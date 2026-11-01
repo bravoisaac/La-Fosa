@@ -61,8 +61,8 @@ namespace LaFosa
             if (Diver.NeedsAirReturn)
             {
                 string hint = Diver.Depth > Diver.SafeDepth
-                    ? "Superaste el límite: gastas aire ×" + Diver.PressureOxygenMultiplier.ToString("0.#") + ". Sigue el marcador de regreso y asciende con ESPACIO. R te rescata."
-                    : "Reserva de regreso: sigue el marcador al conducto y asciende con ESPACIO. R te rescata conservando tus hallazgos.";
+                    ? "Superaste el límite: gastas aire ×" + Diver.PressureOxygenMultiplier.ToString("0.#") + ". Busca el conducto central y asciende con ESPACIO. R te rescata."
+                    : "Reserva de regreso: vuelve al conducto central y asciende con ESPACIO. R te rescata conservando tus hallazgos.";
                 return new ExpeditionObjective(ExpeditionStep.Surface, "Primero, recupera aire", hint, "RUTA DE ASCENSO", AscentWaypoint());
             }
             if (firstReturnPending)

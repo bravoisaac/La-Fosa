@@ -36,10 +36,18 @@ La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con
 | Inventario | Tab |
 | Pausa | Esc |
 | Rescate a la playa | R |
+| Alternar Develop / Jugador de prueba | F2, después de iniciar o continuar partida |
+| Panel de herramientas durante pruebas | F1 |
+
+## Modo Develop
+
+Durante una partida, **F2** guarda primero tu progreso normal y abre una sesión temporal de pruebas. También se puede entrar desde pausa. **F1** abre/cierra el panel: aire y salud fijos, velocidad ×3 con colisiones, recarga, $1000 de prueba, herramientas/equipo para 650 m y transporte a playa o distintas profundidades.
+
+**F2** alterna Develop y Jugador manteniendo la posición, el equipo y los cambios de la prueba. En Jugador se desactivan los privilegios: vuelve el consumo de aire, el daño y la velocidad normal. La etiqueta superior recuerda que la sesión sigue **sin guardar**. Para recuperar tu partida, pulsa **Terminar pruebas** en el panel: se restauran dinero, inventario, puzles, tesoros, equipo y vehículos anteriores y vuelves a la playa. Volver al menú también termina las pruebas. Cerrar el juego descarta los cambios temporales; no se escriben sobre la partida ni su respaldo. Los informes de expedición se interrumpen durante las pruebas.
 
 ## Bucle de juego
 
-El cuaderno guía la **primera expedición**: pesca lenta en la orilla → vender → comprar tridente → resolver sello → recoger tesoro → regresar. Calcula cuánto falta reunir según el valor real de las especies y recuerda los controles necesarios. El marcador sigue el objetivo actual, incluso si queda detrás de ti. Aire bajo o presión excesiva priorizan el ascenso. Al cargar se reconstruye el objetivo a partir del progreso. [Recorrido, compatibilidad y revisión pendiente](Docs/PRIMERA_EXPEDICION.md).
+El cuaderno guía la **primera expedición**: pesca lenta en la orilla → vender → comprar tridente → resolver sello → recoger tesoro → regresar. Calcula cuánto falta reunir según el valor real de las especies y recuerda los controles necesarios. Por petición del usuario se retiró el marcador de misión proyectado (rombo, distancia y flechas de destino); se mantienen cuaderno, retícula y señales del mundo. Aire bajo o presión excesiva priorizan el ascenso. Al cargar se reconstruye el objetivo a partir del progreso. [Recorrido, compatibilidad y revisión pendiente](Docs/PRIMERA_EXPEDICION.md).
 
 Para preparar la evaluación humana, `--expedition-report` habilita informes locales de tiempos, intentos, capturas, visitas y rescates. Cada inicio/carga crea un segmento separado; el guardado personal conserva su formato. [Campos, ubicación y límites de medición](Docs/PRIMERA_EXPEDICION.md#registro-opcional-del-recorrido-34a-28-de-octubre-de-2026).
 
@@ -55,7 +63,7 @@ Los giros equivocados no borran tus avances. La piedra **REINICIAR** restaura so
 
 Los tesoros mejoran automáticamente la reserva de aire y la profundidad segura. Abrir un cofre repone oxígeno y salud. Superar la profundidad segura consume aire ×8 (×12 al acelerar), sin daño directo de presión mientras quede oxígeno. La falta de aire causa daño. La superficie repone aire y salud; si agotas la salud, regresas a la playa conservando tus objetos. R permite regresar en cualquier momento.
 
-**Toda la fosa tiene descenso libre: el límite de la salida es el aire disponible.** Naufragio y abismo no tienen paredes ni escotillas que exijan mejoras para pasar. Puedes bajar con el equipo inicial, pero fuera de su profundidad segura gastarás aire rápidamente. Los puzles conservan el orden de sus recompensas; comprar aire no los resuelve. El marcador dirige al santuario y el regreso apunta a superficie. Las señales recuerdan reservar aire y no tienen colisión. Consulta [rutas y requisitos de descenso](Docs/DESCENSOS.md).
+**Toda la fosa tiene descenso libre: el límite de la salida es el aire disponible.** Naufragio y abismo no tienen paredes ni escotillas que exijan mejoras para pasar. Puedes bajar con el equipo inicial, pero fuera de su profundidad segura gastarás aire rápidamente. Los puzles conservan el orden de sus recompensas; comprar aire no los resuelve. Las señales recuerdan reservar aire y no tienen colisión. Desde las cámaras profundas, busca el conducto central para subir. Consulta [rutas y requisitos de descenso](Docs/DESCENSOS.md).
 
 La mochila tiene 12 espacios y pilas limitadas. Un inventario lleno no consume tesoros ni capturas. Puedes descartar pilas desde Tab. Las mejoras adquiridas permanecen aunque descartes su tesoro. Inventario y pausa detienen la simulación.
 
@@ -99,7 +107,7 @@ El bote comprado aparece a la izquierda del muelle y la moto a la derecha. Acér
 - `Interactable`: hereda esta clase para añadir puertas, herramientas, misiones o nuevos puzles. El buzo detecta automáticamente los objetos a menos de 4,5 m.
 - `StonePuzzleDefinition` define dimensiones, recorrido y mezcla; `StoneCircuitPuzzle` evalúa conexiones y corriente; `RuneStone` gira las piedras; `StonePuzzleLever` activa o reinicia; `StonePuzzleView` anima el cierre; `TreasureChest` entrega la recompensa. `SequencePuzzle` conserva el código anterior por compatibilidad, pero ya no se usa en los santuarios.
 - `FishAgent` y `HarpoonGun`: puntos de extensión para especies, comportamiento, daño y proyectiles físicos. Manos/tridente/arpón usan barrido de esfera y la red consulta peces cercanos con comprobación de visibilidad. Manos y tridente tienen un movimiento corto de alcance; el arpón muestra la línea del disparo.
-- `DiveHUD`: IMGUI con escala uniforme y lienzo centrado de 1600 × 900; el cuaderno ajusta su altura y los marcadores reservan espacio separado de interacción y avisos. Los menús cubren toda la ventana. Aviso y guía usan la reserva estimada de regreso (mínimo 30 unidades) y el límite del equipo. Muestra unidades de aire, consumo por segundo incluyendo aceleración, tiempo aproximado al ritmo actual y distancia al próximo umbral. Ese tiempo cambia al subir/bajar o acelerar; no garantiza completar el regreso. Revisión visual en distintos formatos pendiente. Para un inventario mayor a 12 espacios, añade paginación o migra a UI Toolkit/uGUI.
+- `DiveHUD`: IMGUI con escala uniforme y lienzo centrado de 1600 × 900; el cuaderno ajusta su altura y los paneles separan interacción y avisos; el marcador de misión fue retirado. Los menús cubren toda la ventana. Aviso y guía usan la reserva estimada de regreso (mínimo 30 unidades) y el límite del equipo. Muestra unidades de aire, consumo por segundo incluyendo aceleración, tiempo aproximado al ritmo actual y distancia al próximo umbral. Ese tiempo cambia al subir/bajar o acelerar; no garantiza completar el regreso. Revisión visual en distintos formatos pendiente. Para un inventario mayor a 12 espacios, añade paginación o migra a UI Toolkit/uGUI.
 
 La escena usa el renderizador integrado de Unity y entrada clásica, sin paquetes externos. Si importas los scripts en otro proyecto, habilita **Active Input Handling: Input Manager (Old)** o **Both**, y conserva los ejes Mouse X / Mouse Y. Las referencias a shaders en la configuración evitan que la compilación los elimine.
 

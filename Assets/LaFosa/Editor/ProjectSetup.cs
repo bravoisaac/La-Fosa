@@ -119,6 +119,7 @@ namespace LaFosa.Editor
             var config = AssetDatabase.LoadAssetAtPath<GameConfig>(DataPath + "/Expedicion.asset");
             DescentChecks.Validate(config);
             DeepTrenchChecks.Validate(config);
+            DeveloperModeChecks.Validate(config);
             var obj = new GameObject("Checks temporales");
             FishCatalogBuilder.Validate(config);
             Check(config.coastalFishBehavior.escapeSpeed > 0 && config.coastalFishBehavior.escapeSpeed < 6, "Fauna de orilla alcanzable nadando");

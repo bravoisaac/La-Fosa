@@ -8,6 +8,7 @@
 - Diseño: F2 inicia una copia temporal y alterna herramientas Develop / reglas de Jugador conservando el escenario de prueba. F1 abre el panel. Terminar pruebas restaura el progreso anterior en la playa; cerrar la aplicación descarta las pruebas. Guardar el progreso normal antes de entrar, y detener informes de expedición durante las pruebas.
 - Alcance: retirar rombo/destino proyectado; mantener cuaderno y señales físicas. Herramientas de aire/salud, velocidad, transporte a profundidad, dinero y equipo, con controles bloqueados en modo Jugador.
 - Riesgo medio: aislar compras, tesoros, guardados automáticos y salida al menú. Revisar entradas/salidas, compilar y comprobar aislamiento en editor; conservar partidas personales.
+- Resultado: 19 comprobaciones nuevas con componentes reales y archivos temporales: transición, consumo en Jugador, bloqueo de herramientas, compra, puzle/tesoro, conservación de principal/respaldo, salida/menú y fallo de guardado antes de entrar. Compilación principal y validaciones anteriores aprobadas (`unity-developer-windows-build.log`, salida 0). Sin Play Mode; revisión visual pendiente.
 
 ## Entrega 3.3c: lectura del aire por profundidad (31 de octubre)
 

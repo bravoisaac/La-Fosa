@@ -1,5 +1,12 @@
 # Validación
 
+## Entrega 3.6: Develop/Jugador y retirada del marcador (31 de octubre de 2026)
+
+- [x] Retirado el bloque que proyectaba el rombo, distancia y flechas del destino en `DiveHUD`. Conservados cuaderno, retícula y señales físicas; avisos de regreso ya no remiten al marcador retirado.
+- [x] `DeveloperModeChecks`: **19 comprobaciones nuevas de editor**, sin Play Mode, con componentes reales y un guardado en carpeta temporal única. Cubren entrada, preparar equipo/dinero/profundidad, aire fijo, retorno al consumo normal en Jugador, denegación de herramientas en Jugador, compra de bote, resolución/recompensa de tesoro, no escritura de principal/respaldo incluso al cerrar, restauración de equipo/inventario/puzle/tesoro, retorno a playa, salida al menú, carga posterior y rechazo de Develop si falla el guardado inicial.
+- [x] `unity-developer-windows-build.log`: `LA_FOSA_DEVELOPER_TESTS_OK`, 71 comprobaciones profundas, 11 de señales, 20 de informe, validaciones generales, `LA_FOSA_BUILD_OK` con ruta principal Windows y salida 0. La primera compilación aislada usó FirstExpedition mientras quedaba una ventana abierta; la entrega final sí actualiza Windows tras su cierre normal.
+- [ ] Revisión humana de F1/F2, panel en distintas resoluciones, orientación sin marcador y sensación del desplazamiento ×3. Los tests llaman a componentes sin simular teclas ni renderizar la partida; no cierran 3.3b/3.4b.
+
 ## Entrega 3.3c: claridad de aire y presión (31 de octubre de 2026)
 
 - [x] Vitales y HUD comparten `GameConfig.AirConsumption`: profundidad/equipo y factor de acelerar conservados. El HUD añade consumo en u/s, duración aproximada `~min:seg` al ritmo actual y distancia al siguiente umbral. En superficie muestra recuperación/reserva completa.

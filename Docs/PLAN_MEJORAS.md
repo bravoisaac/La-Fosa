@@ -8,9 +8,9 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 
 **Objetivo activo:** completar la primera expedición persistente (etapas 1–3): pescar con las manos, vender, comprar tridente, resolver el primer sello, recuperar el tesoro y volver para continuar otra salida.
 
-**Última entrega terminada: 3.3c**, lectura del aire: HUD con duración aproximada al ritmo actual, consumo incluyendo acelerar y próximo umbral; tienda, inventario y requisitos usan unidades de aire. Compilación principal `Builds/Windows/La Fosa.exe` actualizada y validaciones de editor aprobadas (`unity-air-hud-build.log`). Conserva la fosa de 650 m y la retirada de compuertas, entregadas en Windows mediante 3.2d. **Siguiente pendiente: 3.3b y 3.4b**, comprobación humana de recorrido/HUD, sin ejecutarla mientras siga vigente la restricción. El equilibrio del aire es provisional; 3.5 requiere esas mediciones. Referencia del mapa: `Docs/DESCENSOS.md` y `Docs/Mapa/fosa-seccion.png`.
+**Última entrega terminada: 3.6**, petición directa: marcador de misión retirado y modo Develop/Jugador temporal. F2 alterna modos; F1 abre herramientas. Compras, tesoros y pruebas no sobrescriben el progreso normal; terminar pruebas lo restaura en la playa. 19 comprobaciones nuevas de aislamiento/transiciones y compilación principal `Builds/Windows/La Fosa.exe` correctas (`unity-developer-windows-build.log`). Conserva mapa de 650 m y mejoras de aire. **Siguiente pendiente: 3.3b y 3.4b**, revisión humana del HUD, orientación sin marcador y recorrido. El equilibrio 3.5 requiere esas mediciones; no se cierra por añadir herramientas de prueba.
 
-**Restricción vigente del usuario:** no abrir ni usar el juego. Continuar con código, compilación y vistas estáticas de editor; no dar por completadas las pruebas visuales o jugables que todavía no se hayan realizado.
+**Uso del juego:** el usuario autorizó abrirlo a petición y después pidió cerrarlo para actualizar. No interpretar esas aperturas como pruebas jugables realizadas. Esta entrega se validó en editor sin Play Mode; revisión humana pendiente.
 
 - [x] Manos · Geometría, pulgar articulado, gesto de 0,48 s y compilación terminados; vistas de editor en `Docs/Manos`. Detalles en `Docs/MAPA.md` y `Docs/PRUEBAS.md`; sensación en partida pendiente.
 
@@ -28,6 +28,7 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 - [x] 3.4a · Preparar registro opcional de tiempos, intentos por herramienta, capturas, visitas, ventas, tridente, sello, cofre y rescates. Segmentos por inicio/carga, aire antes de recompensa y contadores por hito. 20 comprobaciones de editor y compilación: `unity-expedition-report-build.log`.
 - [ ] 3.4b · Contrastar eventos con acciones reales y hacer el recorrido con una persona nueva; completar la ficha de tiempos, capturas, viajes y rescates. La instrumentación no completa esta prueba.
 - [ ] 3.5 · Ajustar ritmo según esa prueba y cerrar las etapas 1–3 con guardado/carga manual.
+- [x] 3.6 · Petición directa: retirar marcador proyectado y añadir Develop/Jugador (F2), herramientas (F1) y sesión temporal sin guardar. 19 comprobaciones nuevas de transición/guardado, validaciones existentes y compilación Windows aprobadas. Panel y manejo en partida pendientes de revisión humana.
 - [ ] 4–10 · Lancha, puzles, biomas, fauna, base, exploradores y equilibrio final; pendientes.
 
 **Cómo continuar:** leer este bloque y solo el apartado/documento del paso pendiente. Marcar `[x]` al terminar una entrega y anotar evidencia y pendiente inmediato. Una implementación o prueba automática terminada no cierra una etapa que exige juego humano. Mantener el objetivo y el criterio de cierre al resumir; no borrar las decisiones de diseño.
