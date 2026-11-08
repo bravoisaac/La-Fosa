@@ -43,7 +43,7 @@ namespace LaFosa
             var sign = Label("DON LUCHO · ALMACÉN DE MAR", new Vector3(-12.5f, 6.05f, -19.45f), .18f, new Color(.98f, .83f, .48f));
             sign.GetComponent<Billboard>().enabled = false;
             sign.transform.rotation = Quaternion.Euler(0, 180, 0);
-            Label("[ E ]  VENDER PESCA / COMPRAR EQUIPO", new Vector3(-12, 4.7f, -18.8f), .09f, Color.white);
+            Label("[ E ]  VENDER / COMPRAR / FABRICAR", new Vector3(-12, 4.7f, -18.8f), .09f, Color.white);
             Shape("Estante posterior", PrimitiveType.Cube, new Vector3(1, 1.5f, -2.5f), new Vector3(5, .16f, .75f), paleWood, true, cabin.transform);
             for (int i = 0; i < 4; i++)
             {

@@ -18,15 +18,17 @@ MonoBehaviour:
   offers:
   - gear: 4
     title: Tridente
-    description: "Primera herramienta. Tecla 2: alcance de 4 m y recarga rápida."
+    description: "Primera herramienta. Tecla 2: alcance de 4 m y recarga r\xE1pida."
     price: 60
   - gear: 0
-    title: "Arpón"
-    description: "Después del tridente. Tecla 3: alcance de 40 m y recarga de 0,65 s."
+    title: "Arp\xF3n"
+    description: "Despu\xE9s del tridente. Tecla 3: alcance de 40 m y recarga de
+      0,65 s."
     price: 150
   - gear: 1
     title: "Bombona de O\u2082 ampliada"
-    description: +60 unidades de aire; la duración depende de la profundidad y de acelerar.
+    description: "+60 unidades de aire; la duraci\xF3n depende de la profundidad
+      y de acelerar."
     price: 90
   - gear: 2
     title: Aletas de buceo
@@ -34,7 +36,7 @@ MonoBehaviour:
     price: 75
   - gear: 3
     title: Red de pesca
-    description: "Después del tridente. Tecla 4: hasta 5 peces cercanos."
+    description: "Despu\xE9s del tridente. Tecla 4: hasta 5 peces cercanos."
     price: 120
   - gear: 5
     title: Lancha de caleta
@@ -44,3 +46,7 @@ MonoBehaviour:
     title: Moto de agua
     description: Conducible a 22 m/s. Entrega al lado derecho del muelle.
     price: 360
+  - gear: 7
+    title: Pico submarino
+    description: "E junto a un dep\xF3sito: extrae minerales para fabricar equipo."
+    price: 45

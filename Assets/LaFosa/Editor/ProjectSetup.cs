@@ -31,7 +31,7 @@ namespace LaFosa.Editor
             }
             FishCatalogBuilder.Ensure(config);
             FishBehaviorSetup.Ensure(config);
-            StonePuzzleSetup.Ensure(config);
+            StonePuzzleSetup.Ensure(config); // Legacy v1 definitions only; no puzzles are built in the world.
             config.includedShaders = new[] { Shader.Find("Standard"), Shader.Find("Sprites/Default"), Shader.Find("LaFosa/Faceted"), Shader.Find("LaFosa/Water"), Shader.Find("LaFosa/WorldText"), Shader.Find("LaFosa/Fish") };
             foreach (var shader in config.includedShaders) if (shader == null) throw new Exception("Falta un shader requerido.");
             if (config.shop == null)
@@ -54,6 +54,7 @@ namespace LaFosa.Editor
                 }
                 config.shop = catalog;
             }
+            EconomyProgressionSetup.Ensure(config);
             EditorUtility.SetDirty(config);
             PlayerSettings.companyName = "Caleta Bruma"; PlayerSettings.productName = "La Fosa";
             PlayerSettings.defaultScreenWidth = 1600; PlayerSettings.defaultScreenHeight = 900;
@@ -135,8 +136,7 @@ namespace LaFosa.Editor
                 inventory.RemoveAt(0); Check(inventory.TryAdd(config.zones[0].treasure), "Recoger tesoro tras liberar espacio");
                 foreach (var zone in config.zones)
                 {
-                    StonePuzzleSetup.Validate(obj, zone);
-                    Check(zone.stationPosition.y > WorldBuilder.FloorHeight(zone.stationPosition.x, zone.stationPosition.z), "Santuario sobre el terreno");
+                    Check(zone.stationPosition.y > WorldBuilder.FloorHeight(zone.stationPosition.x, zone.stationPosition.z), "Referencia mineral sobre el terreno");
                 }
                 Check(-config.zones[0].stationPosition.y < config.initialSafeDepth, "Primera zona alcanzable");
                 Check(config.pressureOxygenMultiplier > 1 && !float.IsInfinity(config.pressureOxygenMultiplier), "Consumo peligroso de oxígeno válido");
@@ -148,7 +148,7 @@ namespace LaFosa.Editor
                     Check(zone.entryPosition.y < previous.stationPosition.y - 4 && zone.entryPosition.y > zone.stationPosition.y + 4, "Entrada entre los dos santuarios");
                     Check(zone.requiredSafeDepth >= -zone.stationPosition.y, "Equipo preparado para el mecanismo de la zona");
                 }
-                Debug.Log("LA_FOSA_TESTS_OK · Inventario, capacidad atómica, puzles y progresión.");
+                Debug.Log("LA_FOSA_TESTS_OK · Inventario, capacidad atómica y equipo de progresión.");
             }
             finally { UnityEngine.Object.DestroyImmediate(obj); }
         }

@@ -9,11 +9,12 @@ namespace LaFosa
     [Serializable]
     public sealed class ExpeditionReport
     {
-        public int version = 1;
+        public int version = 2;
         public string id = Guid.NewGuid().ToString("N");
         public string startedUtc = DateTime.UtcNow.ToString("o");
         public string mode, build, unity, status = "recording";
         public int width, height, worldSeed, initialTreasures, initialFish, initialMoney;
+        public int initialEquipmentUpgrades;
         public bool initialTrident, initialSeal;
         public double elapsedSeconds, engagedSeconds, activeSeconds;
         public int[] attemptsByTool = new int[4];

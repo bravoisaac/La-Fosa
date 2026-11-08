@@ -19,8 +19,8 @@ namespace LaFosa
             {
                 mode = mode, build = Application.buildGUID, unity = Application.unityVersion,
                 width = Screen.width, height = Screen.height, worldSeed = Config.seed,
-                initialTreasures = Treasures, initialFish = Diver.Inventory.FishCount, initialMoney = Economy.Money,
-                initialTrident = Economy.Has(GearKind.Trident), initialSeal = Array.Find(puzzles, p => p.zone == Config.zones[0]).Solved
+                initialTreasures = 0, initialEquipmentUpgrades = CraftedUpgrades, initialFish = Diver.Inventory.FishCount, initialMoney = Economy.Money,
+                initialTrident = Economy.Has(GearKind.Trident), initialSeal = false
             };
             reportClock = Time.realtimeSinceStartupAsDouble;
             nextReportWrite = reportClock + 15;
@@ -48,15 +48,7 @@ namespace LaFosa
         {
             if (expeditionReport == null) return;
             SyncReportClock();
-            if (!Blocked && !expeditionReport.initialSeal &&
-                Vector3.Distance(Diver.View.transform.position, Config.zones[0].stationPosition + Vector3.up * 3) <= 5)
-                RecordExpeditionEvent("shrine", "first_zone_within_5m", true);
             if (reportClock >= nextReportWrite) WriteExpeditionReport();
-        }
-        void ReportPuzzleChange()
-        {
-            if (!restoring && expeditionReport != null && !expeditionReport.initialSeal && Array.Find(puzzles, p => p.zone == Config.zones[0]).Solved)
-                RecordExpeditionEvent("seal", Config.zones[0].id, true);
         }
         internal void RecordCaptureAttempt(int tool)
         {
@@ -78,7 +70,7 @@ namespace LaFosa
         }
         void ReportExpeditionReturn()
         {
-            RecordExpeditionEvent(reportReturnRescued ? "return_rescued" : "return", "first_treasure_to_beach", true);
+            RecordExpeditionEvent(reportReturnRescued ? "return_rescued" : "return", "mineral_to_beach", true);
         }
         void WriteExpeditionReport()
         {

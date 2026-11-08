@@ -23,11 +23,11 @@ namespace LaFosa
             if (Button(session.DeveloperFastMove ? "VELOCIDAD ×3: SÍ" : "VELOCIDAD ×3: NO", 805, 320, 430, 44)) session.ToggleDeveloperSpeed();
             if (Button("RECARGAR AIRE Y SALUD", 355, 378, 430, 44)) session.Diver.DeveloperRefill();
             if (Button("AÑADIR $1000 DE PRUEBA", 805, 378, 430, 44)) session.DeveloperAddMoney();
-            Text("Inicio y santuario reinician la prueba. Equipo conserva el progreso.", 355, 431, 880, 20, 12, Muted);
+            Text("Inicio y minería reinician la prueba. Equipo conserva el progreso.", 355, 431, 880, 20, 12, Muted);
             if (Button("INICIO SIN EQUIPO", 355, 454, 280, 36)) session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition);
-            if (Button("PRIMER SANTUARIO", 655, 454, 280, 36)) session.DeveloperPrepareScenario(DeveloperScenario.FirstSanctuary);
+            if (Button("PRIMERA MINERÍA", 655, 454, 280, 36)) session.DeveloperPrepareScenario(DeveloperScenario.FirstMining);
             if (Button("EQUIPO PARA 650 m", 955, 454, 280, 36)) session.DeveloperEquip();
-            Text("IR A UNA ZONA · conserva colisiones y puzles", 355, 497, 880, 24, 15, Mint);
+            Text("IR A UNA ZONA · conserva colisiones y recetas", 355, 497, 880, 24, 15, Mint);
             float[] depths = { 0, 24, 52, 87, 150, 280, 420, 560, 620 };
             for (int i = 0; i < depths.Length; i++)
             {

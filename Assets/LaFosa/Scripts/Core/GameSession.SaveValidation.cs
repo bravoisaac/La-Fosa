@@ -9,9 +9,9 @@ namespace LaFosa
     {
         internal bool ValidateSave(SaveData data)
         {
-            if (data == null || data.version != 1 || data.worldSeed != Config.seed || data.money < 0 ||
+            if (data == null || (data.version != 1 && data.version != 2) || data.worldSeed != Config.seed || data.money < 0 ||
                 data.inventory == null || data.inventory.Length > Config.inventorySlots ||
-                data.puzzles == null || data.puzzles.Length != puzzles.Length ||
+                data.puzzles == null ||
                 data.vehicles == null || data.vehicles.Length != 2) return false;
             var zones = new HashSet<string>(Config.zones.Select(z => z.id));
             var gearIds = new HashSet<string>(Config.shop.offers.Select(o => o.gear.ToString()));
@@ -25,12 +25,15 @@ namespace LaFosa
                 (data.selectedTool == 3 && !data.gear.Contains(nameof(GearKind.Net)))) return false;
             foreach (var stack in data.inventory)
                 if (stack == null || string.IsNullOrEmpty(stack.id) || !items.TryGetValue(stack.id, out var item) || stack.count < 1 || stack.count > Mathf.Max(1, item.maxStack)) return false;
+            if (data.version == 1)
+            {
+                if (data.puzzles.Length != Config.zones.Length) return false;
             if (data.puzzles.Any(p => p == null) || !ValidIds(data.puzzles.Select(p => p.id).ToArray(), zones)) return false;
             for (int i = 0; i < Config.zones.Length; i++)
             {
                 var zone = Config.zones[i];
                 var puzzle = data.puzzles.FirstOrDefault(p => p.id == zone.id);
-                if (puzzle == null || puzzle.turns == null || puzzle.turns.Length != zone.stonePuzzle.Count ||
+                if (puzzle == null || zone.stonePuzzle == null || puzzle.turns == null || puzzle.turns.Length != zone.stonePuzzle.Count ||
                     puzzle.turns.Any(t => t < 0 || t > 3) || puzzle.moves < 0) return false;
                 bool claimed = data.treasures.Contains(zone.id);
                 if (claimed && (!puzzle.solved || !data.discoveredZones.Contains(zone.id))) return false;
@@ -38,6 +41,17 @@ namespace LaFosa
                 if (puzzle.solved && !CircuitComplete(zone.stonePuzzle, puzzle.turns)) return false;
                 long treasureCount = data.inventory.Where(s => s.id == zone.treasure.id).Sum(s => (long)s.count);
                 if (treasureCount > (claimed ? 1 : 0)) return false;
+            }
+
+            }
+            else
+            {
+                if (data.puzzles.Length != 0 || data.treasures.Length != 0 || !ValidIds(data.equipmentUpgrades, zones) || data.minerals == null) return false;
+                for (int i = 1; i < Config.zones.Length; i++)
+                    if (data.equipmentUpgrades.Contains(Config.zones[i].id) && !data.equipmentUpgrades.Contains(Config.zones[i - 1].id)) return false;
+                var mineralIds = new HashSet<string>(mineralDeposits.Select(p => p.id));
+                if (data.minerals.Any(m => m == null || m.readyAtUtcTicks < 0 || m.readyAtUtcTicks > DateTime.MaxValue.Ticks) ||
+                    !ValidIds(data.minerals.Select(m => m.id).ToArray(), mineralIds)) return false;
             }
             if (data.vehicles.Any(v => v == null) || !ValidIds(data.vehicles.Select(v => v.id).ToArray(), new HashSet<string> { nameof(GearKind.Boat), nameof(GearKind.JetSki) })) return false;
             foreach (var vehicle in data.vehicles)

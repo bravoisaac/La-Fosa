@@ -11,8 +11,7 @@ namespace LaFosa
         readonly HashSet<string> claimedZones = new HashSet<string>();
         readonly HashSet<string> discoveredZones = new HashSet<string>();
         readonly Dictionary<string, ItemDefinition> items = new Dictionary<string, ItemDefinition>();
-        StoneCircuitPuzzle[] puzzles;
-        TreasureChest[] chests;
+        MineralDeposit[] mineralDeposits;
         Pickup[] pickups;
         SavedVehicle[] initialVehicles;
         SaveStore saveStore;
@@ -25,23 +24,23 @@ namespace LaFosa
         public bool SaveFailed { get; private set; }
         public int DiscoveredZoneCount => discoveredZones.Count;
         public bool IsTreasureClaimed(DiveZoneDefinition zone) => claimedZones.Contains(zone.id);
+        public bool HasUpgrade(DiveZoneDefinition zone) => zone != null && claimedZones.Contains(zone.id);
         internal SaveStore Store => saveStore;
 
         public void InitializePersistence()
         {
-            puzzles = GetComponentsInChildren<StoneCircuitPuzzle>(true);
+            mineralDeposits = GetComponentsInChildren<MineralDeposit>(true);
             guideFish = GetComponentsInChildren<FishAgent>(true);
-            chests = GetComponentsInChildren<TreasureChest>(true);
             pickups = GetComponentsInChildren<Pickup>(true);
             AddItem(Config.fish); AddItem(Config.shell);
             foreach (var fish in Config.fishSpecies) AddItem(fish.item);
             foreach (var zone in Config.zones) AddItem(zone.treasure);
+            foreach (var mineral in Config.minerals) AddItem(mineral);
             if (Config.zones.Any(z => string.IsNullOrWhiteSpace(z.id)) || Config.zones.Select(z => z.id).Distinct().Count() != Config.zones.Length)
                 throw new InvalidOperationException("Cada zona necesita un ID estable y único.");
-            if (puzzles.Length != Config.zones.Length || chests.Length != Config.zones.Length ||
-                puzzles.Select(p => p.zone.id).Distinct().Count() != puzzles.Length ||
+            if (mineralDeposits.Any(p => string.IsNullOrWhiteSpace(p.id)) || mineralDeposits.Select(p => p.id).Distinct().Count() != mineralDeposits.Length ||
                 pickups.Any(p => string.IsNullOrWhiteSpace(p.id)) || pickups.Select(p => p.id).Distinct().Count() != pickups.Length)
-                throw new InvalidOperationException("IDs de mecanismos o recogibles incompletos o duplicados.");
+                throw new InvalidOperationException("IDs de minerales o recogibles incompletos o duplicados.");
             initialVehicles = CaptureVehicles();
             string path = Path.Combine(Application.persistentDataPath, "expedition.json");
             var args = Environment.GetCommandLineArgs();
@@ -53,8 +52,6 @@ namespace LaFosa
             saveStore = new SaveStore(path, ValidateSave);
             RefreshSaveAvailability();
             Diver.Inventory.Changed += MarkSaveDirty;
-            foreach (var puzzle in puzzles) puzzle.Changed += MarkSaveDirty;
-            foreach (var puzzle in puzzles) puzzle.Changed += ReportPuzzleChange;
         }
         void AddItem(ItemDefinition item)
         {
@@ -74,14 +71,14 @@ namespace LaFosa
             if (!saveStore.TrySave(fresh, out var message, true)) { SaveStatus = message; SaveFailed = true; return false; }
             ApplySave(fresh); Intro = false; CanContinue = true; SaveFailed = false; SaveStatus = message; ApplyPause();
             StartExpeditionReport("new");
-            Notify("Nueva expedición. Sigue la guía de la izquierda: pesca en la orilla y reúne $" + TridentPrice + " para el tridente.");
+            Notify("Pesca en la orilla, vende en la caleta y compra un pico para extraer minerales y fabricar equipo.");
             return true;
         }
         SaveData CreateFreshSave() => new SaveData
         {
-            version = 1, worldSeed = Config.seed, inventory = new SavedStack[0], gear = new string[0],
+            version = 2, worldSeed = Config.seed, inventory = new SavedStack[0], gear = new string[0],
             treasures = new string[0], discoveredZones = new string[0], collectedPickups = new string[0],
-            puzzles = puzzles.Select(p => new SavedPuzzle { id = p.zone.id, turns = (int[])p.Definition.startingTurns.Clone() }).ToArray(),
+            puzzles = new SavedPuzzle[0], equipmentUpgrades = new string[0], minerals = new SavedMineral[0],
             vehicles = initialVehicles.Select(v => new SavedVehicle { id = v.id, position = v.position, yaw = v.yaw }).ToArray()
         };
         public bool ContinueGame()
@@ -106,17 +103,16 @@ namespace LaFosa
             try
             {
                 if (Diver.Riding != null) Diver.LeaveVehicle(Config.spawn);
-                claimedZones.Clear(); claimedZones.UnionWith(data.treasures); Treasures = claimedZones.Count;
+                claimedZones.Clear(); claimedZones.UnionWith(data.version == 1 ? data.treasures : data.equipmentUpgrades); Treasures = claimedZones.Count;
                 firstReturnPending = false; // Loading already returns the expedition safely to the coast.
                 discoveredZones.Clear(); discoveredZones.UnionWith(data.discoveredZones);
                 Economy.Restore(data.money, data.gear);
                 Diver.Inventory.Restore(data.inventory.Select(s => new InventoryStack(items[s.id], s.count)).ToArray());
-                foreach (var puzzle in puzzles)
+                foreach (var deposit in mineralDeposits)
                 {
-                    var saved = data.puzzles.First(p => p.id == puzzle.zone.id);
-                    puzzle.Restore(saved.turns, saved.moves, saved.solved);
+                    var saved = data.minerals?.FirstOrDefault(p => p.id == deposit.id);
+                    deposit.Restore(saved == null ? 0 : saved.readyAtUtcTicks);
                 }
-                foreach (var chest in chests) chest.Restore(IsTreasureClaimed(chest.puzzle.zone));
                 foreach (var pickup in pickups) pickup.gameObject.SetActive(!data.collectedPickups.Contains(pickup.id));
                 foreach (var vehicle in new[] { Boat, JetSki })
                 {
@@ -135,12 +131,12 @@ namespace LaFosa
             { id = v.kind.ToString(), position = v.transform.position, yaw = v.transform.eulerAngles.y, moored = v.IsMoored }).ToArray();
         internal SaveData CaptureSave() => new SaveData
         {
-            version = 1, worldSeed = Config.seed, money = Economy.Money, selectedTool = Diver.GetComponent<HarpoonGun>().SelectedTool,
+            version = 2, worldSeed = Config.seed, money = Economy.Money, selectedTool = Diver.GetComponent<HarpoonGun>().SelectedTool,
             inventory = Diver.Inventory.Stacks.Select(s => new SavedStack { id = s.item.id, count = s.count }).ToArray(),
             gear = Enum.GetValues(typeof(GearKind)).Cast<GearKind>().Where(Economy.Has).Select(g => g.ToString()).ToArray(),
-            treasures = claimedZones.OrderBy(id => id).ToArray(), discoveredZones = discoveredZones.OrderBy(id => id).ToArray(),
+            treasures = new string[0], equipmentUpgrades = claimedZones.OrderBy(id => id).ToArray(), discoveredZones = discoveredZones.OrderBy(id => id).ToArray(),
             collectedPickups = pickups.Where(p => !p.gameObject.activeSelf).Select(p => p.id).ToArray(),
-            puzzles = puzzles.Select(p => new SavedPuzzle { id = p.zone.id, turns = Enumerable.Range(0, p.Definition.Count).Select(p.Turns).ToArray(), moves = p.Moves, solved = p.Solved }).ToArray(),
+            puzzles = new SavedPuzzle[0], minerals = mineralDeposits.Select(p => new SavedMineral { id = p.id, readyAtUtcTicks = p.ReadyAtUtcTicks }).ToArray(),
             vehicles = CaptureVehicles()
         };
         public void MarkSaveDirty() { if (!restoring && !Intro) saveDirty = true; }

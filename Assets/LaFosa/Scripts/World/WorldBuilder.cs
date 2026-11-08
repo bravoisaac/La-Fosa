@@ -57,7 +57,7 @@ namespace LaFosa
         public void Build()
         {
             Random.State previous = Random.state; Random.InitState(config.seed);
-            BuildTerrain(); BuildDeepTrench(); BuildCoast(); BuildSeaLife(); BuildStations();
+            BuildTerrain(); BuildDeepTrench(); BuildCoast(); BuildSeaLife(); BuildMinerals();
             Random.state = previous;
         }
         public static Mesh CreateTerrainMesh()
@@ -188,29 +188,6 @@ namespace LaFosa
                 float floor = FloorHeight(x, z);
                 var color = i % 2 == 0 ? new Color(.2f, .85f, .77f) : new Color(.61f, .41f, .86f);
                 Rock("Cristal bioluminiscente", new Vector3(x, floor + .6f, z), new Vector3(.35f, Random.Range(.6f, 1.7f), .4f), Mat("Cristal" + i % 2, color, true), false);
-            }
-        }
-        void BuildStations()
-        {
-            var wreckWood = Mat("Madera sumergida", new Color(.2f, .28f, .25f));
-            for (int beam = 0; beam < 5; beam++)
-            {
-                var rib = Shape("Cuaderna del naufragio", PrimitiveType.Cube, new Vector3(5.4f, -50.8f, 59 + beam * 1.1f), new Vector3(.3f, 2.4f, .25f), wreckWood);
-                rib.transform.Rotate(0, 0, -24);
-            }
-            Shape("Quilla del naufragio", PrimitiveType.Cube, new Vector3(4.7f, -51.5f, 61), new Vector3(.5f, .3f, 6.5f), wreckWood);
-            foreach (var zone in config.zones)
-            {
-                var station = new GameObject(zone.displayName); station.transform.SetParent(root); station.transform.position = zone.stationPosition;
-                var puzzle = station.AddComponent<StoneCircuitPuzzle>(); puzzle.Initialize(zone);
-                var platform = Mat("Basalto", new Color(.16f, .23f, .26f));
-                Shape("Santuario", PrimitiveType.Cylinder, new Vector3(0, -.3f, 0), new Vector3(6.8f, .3f, 4.2f), platform, true, station.transform);
-                var chest = Shape("Tesoro sellado", PrimitiveType.Cube, new Vector3(0, .55f, 0), new Vector3(1.5f, 1, 1), Mat("Cofre", new Color(.31f, .29f, .2f)), true, station.transform);
-                var lid = Shape("Tapa", PrimitiveType.Cube, new Vector3(0, .55f, 0), new Vector3(1.05f, .2f, 1.1f), Mat("Oro", new Color(.9f, .66f, .26f)), false, chest.transform);
-                var treasure = chest.AddComponent<TreasureChest>(); treasure.puzzle = puzzle; treasure.lid = lid.transform;
-                BuildStonePuzzle(puzzle);
-                var beacon = new GameObject("Luz del santuario"); beacon.transform.SetParent(station.transform, false); beacon.transform.localPosition = Vector3.up * 3;
-                var light = beacon.AddComponent<Light>(); light.type = LightType.Point; light.color = zone.accent; light.intensity = 1.3f; light.range = 14;
             }
         }
         public GameObject BuildHarpoon(Transform camera)

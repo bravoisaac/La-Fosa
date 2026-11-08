@@ -48,7 +48,7 @@ namespace LaFosa
             float pocketY = notebookBottom + 18;
             Panel(30, pocketY, 315, 94);
             Text("BOLSILLO   $" + session.Economy.Money, 50, pocketY + 12, 275, 30, 22, Gold);
-            Text("PESCA PARA VENDER   $" + session.Economy.SaleValue + "\nTesoros: " + session.Treasures + " / " + session.Config.zones.Length, 50, pocketY + 48, 270, 40, 14, Muted);
+            Text("PESCA PARA VENDER   $" + session.Economy.SaleValue + "\nMejoras: " + session.CraftedUpgrades + " / " + session.Config.zones.Length, 50, pocketY + 48, 270, 40, 14, Muted);
 
             Panel(30, 680, 345, 190);
             Text("O₂", 50, 693, 50, 35, 25, Mint);
@@ -136,8 +136,8 @@ namespace LaFosa
             Panel(390, 165, 820, 650);
             Text("UNA EXPEDICIÓN AL PACÍFICO", 450, 208, 700, 25, 14, Mint);
             Text("Bajo la calma,\nun mundo por descubrir.", 450, 257, 700, 120, 42, Color.white);
-            Text("Explora una caleta chilena y desciende por una fosa ficticia. Tres santuarios, tres tesoros y la oscuridad del océano te esperan.", 450, 398, 685, 65, 20, Muted);
-            Text("01  Atrapa peces lentos en la orilla y reúne $" + session.TridentPrice + ".\n02  Vende en la cabaña y compra tu primer tridente.\n03  Sigue la guía al santuario y regresa con su tesoro.", 450, 482, 690, 100, 18, Color.white);
+            Text("Explora una caleta chilena y desciende por una fosa ficticia. Pesca, extrae minerales y fabrica equipo para llegar al fondo de la fosa.", 450, 398, 685, 65, 20, Muted);
+            Text("01  Atrapa peces en la orilla y vende en la caleta.\n02  Compra un pico ($" + session.MiningPickPrice + ") y extrae cobre, hierro y cristal.\n03  Combina minerales y dinero en FABRICAR para mejorar tu equipo.", 450, 482, 690, 100, 18, Color.white);
             if (confirmNewGame)
             {
                 Text("Se reemplazará la partida guardada y su respaldo. ¿Empezar desde cero?", 450, 597, 690, 48, 18, Gold);

@@ -78,6 +78,37 @@ namespace LaFosa
             return true;
         }
 
+        public bool HasIngredients(CraftIngredient[] ingredients)
+        {
+            if (ingredients == null || ingredients.Length == 0) return false;
+            var needed = new Dictionary<ItemDefinition, int>();
+            foreach (var ingredient in ingredients)
+            {
+                if (ingredient == null || ingredient.item == null || ingredient.amount <= 0) return false;
+                needed.TryGetValue(ingredient.item, out int amount);
+                if (ingredient.amount > int.MaxValue - amount) return false;
+                needed[ingredient.item] = amount + ingredient.amount;
+            }
+            foreach (var pair in needed) if (Count(pair.Key) < pair.Value) return false;
+            return true;
+        }
+        public bool TryConsume(CraftIngredient[] ingredients)
+        {
+            if (!HasIngredients(ingredients)) return false;
+            foreach (var ingredient in ingredients)
+            {
+                int amount = ingredient.amount;
+                for (int i = stacks.Count - 1; i >= 0 && amount > 0; i--)
+                {
+                    if (stacks[i].item != ingredient.item) continue;
+                    int removed = Mathf.Min(amount, stacks[i].count);
+                    stacks[i].count -= removed; amount -= removed;
+                    if (stacks[i].count == 0) stacks.RemoveAt(i);
+                }
+            }
+            Changed?.Invoke(); return true;
+        }
+
         public void RemoveAt(int index)
         {
             if (index < 0 || index >= stacks.Count) return;

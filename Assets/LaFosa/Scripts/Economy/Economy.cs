@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LaFosa
 {
-    public sealed class Economy : MonoBehaviour
+    public sealed partial class Economy : MonoBehaviour
     {
         public int Money { get; private set; }
         public string Feedback { get; private set; } = "Trae tu pesca: cada especie tiene su propio valor.";

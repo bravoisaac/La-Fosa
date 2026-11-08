@@ -5,6 +5,7 @@ namespace LaFosa
     public sealed partial class DiveHUD
     {
         Vector2 shopScroll;
+        bool showCrafting;
         void Shop()
         {
             var economy = session.Economy;
@@ -24,10 +25,17 @@ namespace LaFosa
             GUI.enabled = economy.FishCount > 0;
             if (Button("VENDER TODOS LOS PECES", 204, 493, 282, 48)) economy.SellFish();
             GUI.enabled = true;
-            Text("Las conchas y los tesoros se quedan en tu mochila. El equipo comprado no ocupa espacios.", 204, 566, 280, 75, 16, Muted);
-            Text("1 manos · 2 tridente · 3 arpón · 4 red\nPrimera herramienta: tridente ($" + session.TridentPrice + ").", 204, 660, 280, 50, 13, Mint);
+            Text("Los minerales y las conchas se quedan en la mochila. En FABRICAR combinas minerales y dinero para mejorar tu equipo.", 204, 556, 280, 95, 16, Muted);
+            Text("Pico submarino: $" + session.MiningPickPrice + "\nE junto a las vetas para extraer mineral.", 204, 660, 280, 50, 13, Mint);
 
-            Text("EQUÍPATE PARA LA PRÓXIMA SALIDA", 550, 216, 820, 28, 13, Muted);
+            if (Button(showCrafting ? "TIENDA" : "TIENDA · ABIERTA", 550, 205, 410, 35)) { showCrafting = false; shopScroll = Vector2.zero; }
+            if (Button(showCrafting ? "FABRICAR · ABIERTO" : "FABRICAR", 980, 205, 435, 35)) { showCrafting = true; shopScroll = Vector2.zero; }
+            if (showCrafting)
+            {
+                DrawCrafting();
+                Text(economy.Feedback, 180, 752, 1230, 42, 18, Mint);
+                return;
+            }
             var offers = catalog.offers ?? new ShopOffer[0];
             shopScroll = GUI.BeginScrollView(new Rect(550, 250, 865, 475), shopScroll, new Rect(0, 0, 840, Mathf.Max(475, offers.Length * 67)));
             for (int i = 0; i < offers.Length; i++)
@@ -45,6 +53,28 @@ namespace LaFosa
             }
             GUI.EndScrollView();
             Text(economy.Feedback, 180, 752, 1230, 42, 18, Mint);
+        }
+        void DrawCrafting()
+        {
+            var recipes = session.Config.recipes;
+            shopScroll = GUI.BeginScrollView(new Rect(550, 250, 865, 475), shopScroll, new Rect(0, 0, 840, Mathf.Max(475, recipes.Length * 150)));
+            for (int i = 0; i < recipes.Length; i++)
+            {
+                var recipe = recipes[i]; float y = i * 150;
+                RectColor(0, y, 840, 140, new Color(.065f, .14f, .16f));
+                Text(recipe.title + " · $" + recipe.price, 16, y + 8, 600, 28, 20, Color.white);
+                Text(recipe.upgrade.unlockedDepth + " m · " + recipe.upgrade.unlockedOxygen + " u de aire", 16, y + 40, 600, 22, 15, Mint);
+                string materials = "";
+                foreach (var ingredient in recipe.ingredients)
+                    materials += (materials.Length == 0 ? "" : " · ") + ingredient.item.displayName + " " + session.Diver.Inventory.Count(ingredient.item) + "/" + ingredient.amount;
+                Text(materials, 16, y + 69, 600, 26, 15, Gold);
+                string requirement = session.Economy.CraftRequirement(recipe);
+                Text(requirement.Length == 0 ? "Materiales y dinero preparados" : requirement, 16, y + 105, 600, 24, 14, Muted);
+                GUI.enabled = requirement.Length == 0;
+                if (Button(session.HasUpgrade(recipe.upgrade) ? "FABRICADO" : "FABRICAR", 645, y + 45, 180, 48)) session.Economy.Craft(recipe);
+                GUI.enabled = true;
+            }
+            GUI.EndScrollView();
         }
     }
 }

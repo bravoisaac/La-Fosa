@@ -1,9 +1,10 @@
+using System.Linq;
 using UnityEngine;
 
 namespace LaFosa
 {
-    public enum ExpeditionStep { Fishing, Sell, BuyTrident, Puzzle, ActivateSeal, ClaimTreasure, Return, Descend, Complete, Surface, FreeSpace }
-
+    // Earlier values retained for compatibility with diagnostic tooling; puzzle steps are no longer used.
+    public enum ExpeditionStep { Fishing, Sell, BuyTrident, Puzzle, ActivateSeal, ClaimTreasure, Return, Descend, Complete, Surface, FreeSpace, BuyPick, Mine, Craft }
     public readonly struct ExpeditionObjective
     {
         public readonly ExpeditionStep Step;
@@ -12,111 +13,51 @@ namespace LaFosa
         public ExpeditionObjective(ExpeditionStep step, string title, string hint, string marker, Vector3 destination)
         { Step = step; Title = title; Hint = hint; Marker = marker; Destination = destination; }
     }
-
     public sealed partial class GameSession
     {
         public static readonly Vector3 CabinWaypoint = new Vector3(-12, 4.3f, -18.8f);
         public Vector3 FishingWaypoint => new Vector3(0, Config.waterLevel - 1.8f, 14);
         bool firstReturnPending;
         FishAgent[] guideFish;
-
-        public int TridentPrice
-        {
-            get
-            {
-                if (Config.shop != null && Config.shop.offers != null)
-                    foreach (var offer in Config.shop.offers)
-                        if (offer != null && offer.gear == GearKind.Trident) return offer.price;
-                return 0;
-            }
-        }
-
+        public int TridentPrice => Config.shop.offers.First(o => o.gear == GearKind.Trident).price;
+        public int MiningPickPrice => Config.shop.offers.First(o => o.gear == GearKind.MiningPick).price;
+        internal void MarkMineralTrip() { firstReturnPending = true; }
         void UpdateExpeditionReturn()
         {
             if (firstReturnPending && !Diver.Underwater && Vector3.Distance(Diver.transform.position, Config.spawn) < 12)
             {
-                ReportExpeditionReturn();
-                firstReturnPending = false;
-                Notify("Primera expedición recuperada. Tu equipo permite bajar más profundo; prepara otra salida en la cabaña.");
+                ReportExpeditionReturn(); firstReturnPending = false;
+                Notify("Minerales recuperados. Revisa FABRICAR en el taller de la caleta.");
             }
         }
-
-        Vector3 AscentWaypoint()
-        {
-            var position = Diver.transform.position;
-            if (Diver.Depth > DeepTrenchProfile.EntranceDepth)
-            {
-                var axis = DeepTrenchProfile.Axis;
-                if (Vector2.Distance(new Vector2(position.x, position.z), axis) > 2)
-                    return new Vector3(axis.x, position.y, axis.y);
-                return new Vector3(axis.x, Config.waterLevel + .5f, axis.y);
-            }
-            return new Vector3(position.x, Config.waterLevel + .5f, position.z);
-        }
-
         public ExpeditionObjective ExpeditionObjective()
         {
-            var position = Diver.transform.position;
-            // Safety takes precedence without changing the underlying objective or progress.
             if (Diver.NeedsAirReturn)
-            {
-                string hint = Diver.Depth > Diver.SafeDepth
-                    ? "Superaste el límite: gastas aire ×" + Diver.PressureOxygenMultiplier.ToString("0.#") + ". Busca el conducto central y asciende con ESPACIO. R te rescata."
-                    : "Reserva de regreso: vuelve al conducto central y asciende con ESPACIO. R te rescata conservando tus hallazgos.";
-                return new ExpeditionObjective(ExpeditionStep.Surface, "Primero, recupera aire", hint, "RUTA DE ASCENSO", AscentWaypoint());
-            }
-            if (firstReturnPending)
-                return new ExpeditionObjective(ExpeditionStep.Return, "Vuelve con el hallazgo", "El tesoro amplió tu aire y profundidad segura. Sube a respirar y regresa a la cabaña antes de bajar al naufragio.", "REGRESO A LA CALETA", Diver.Underwater ? AscentWaypoint() : CabinWaypoint);
+                return new ExpeditionObjective(ExpeditionStep.Surface, "Recupera aire", "Busca el conducto central y asciende con ESPACIO. Reserva aire para volver; R te rescata conservando la mochila.", "", Vector3.zero);
             if (Complete)
-                return new ExpeditionObjective(ExpeditionStep.Complete, "Explora la fosa profunda", "Tres tesoros recuperados. Bajo el último santuario, la fosa continúa hasta 650 m. Cinco umbrales aumentan la presión y el gasto de aire. Reserva aire para volver.", "FOSA PROFUNDA", new Vector3(0, -92, 76));
-
-            // A player who found the treasure freely must never be sent back through the tutorial.
-            if (Treasures == 0)
+                return new ExpeditionObjective(ExpeditionStep.Complete, "Explora la fosa profunda", "Equipo abisal fabricado. Explora hasta 650 m, pesca y recoge cristal del fondo. Vigila presión y reserva de regreso.", "", Vector3.zero);
+            bool hasPick = Economy.Has(GearKind.MiningPick);
+            var recipe = Config.recipes[CraftedUpgrades];
+            int price = hasPick ? recipe.price : MiningPickPrice;
+            if (hasPick && !Diver.Inventory.HasIngredients(recipe.ingredients))
             {
-                var first = Config.zones[0];
-                StoneCircuitPuzzle puzzle = null;
-                if (puzzles != null) foreach (var candidate in puzzles) if (candidate.zone == first) { puzzle = candidate; break; }
-                if (puzzle != null && puzzle.Solved)
-                {
-                    if (Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity && Diver.Inventory.Count(first.treasure) == 0)
-                        return new ExpeditionObjective(ExpeditionStep.FreeSpace, "Haz espacio al tesoro", "TAB abre la mochila. Vende pesca o descarta una pila. El cofre espera y el sello permanece abierto.", "COFRE DEL SANTUARIO", first.stationPosition + Vector3.up * 3);
-                    return new ExpeditionObjective(ExpeditionStep.ClaimTreasure, "Recoge tu primera mejora", "Apunta al cofre y pulsa E. Recupera aire y salud y mejora tu equipo para soportar la profundidad del naufragio.", "COFRE DEL SANTUARIO", first.stationPosition + Vector3.up * 3);
-                }
-                if (!Economy.Has(GearKind.Trident) && TridentPrice > 0)
-                {
-                    if (Economy.Money >= TridentPrice)
-                        return new ExpeditionObjective(ExpeditionStep.BuyTrident, "Compra el tridente", "Ya tienes $" + TridentPrice + ". E en el mostrador. Tecla 2: alcanza peces a 4 m; las manos llegan a 1,6 m.", "CABAÑA DE DON LUCHO", CabinWaypoint);
-                    long total = Economy.Money + Economy.SaleValue;
-                    if (Economy.FishCount > 0 && (total >= TridentPrice || Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity))
-                        return new ExpeditionObjective(ExpeditionStep.Sell, "Vende tu primera pesca", "Llevas $" + Economy.SaleValue + " en peces. E en el mostrador y VENDER. Tridente: $" + TridentPrice + ".", "CABAÑA DE DON LUCHO", CabinWaypoint);
-                    if (Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity)
-                        return new ExpeditionObjective(ExpeditionStep.FreeSpace, "Haz espacio para pescar", "TAB abre la mochila. Descarta una pila si solo llevas conchas o hallazgos; los peces se venden en la cabaña.", "PESCA DE ORILLA", FishingWaypoint);
-                    Vector3 target = FishingWaypoint;
-                    if (Diver.Underwater && Vector3.Distance(position, FishingWaypoint) < 22 && guideFish != null)
-                    {
-                        float closest = float.MaxValue;
-                        foreach (var fish in guideFish)
-                            if (fish != null && fish.Available && fish.species != null && fish.species.habitatBand == 0)
-                            {
-                                float distance = (fish.transform.position - position).sqrMagnitude;
-                                if (distance < closest) { closest = distance; target = fish.transform.position; }
-                            }
-                    }
-                    string hint = Diver.Underwater
-                        ? "Apunta y haz CLIC a menos de 1,6 m. ESPACIO sube a respirar; C baja. Faltan $" + (TridentPrice - total) + " en pesca."
-                        : "Ratón para mirar, WASD hasta la orilla. C baja; ESPACIO sube a respirar. Reúne $" + (TridentPrice - total) + " en peces lentos.";
-                    return new ExpeditionObjective(ExpeditionStep.Fishing, "Tu primera pesca", hint, "PECES DE ORILLA", target);
-                }
-                bool ready = puzzle != null && puzzle.Ready;
-                return new ExpeditionObjective(ready ? ExpeditionStep.ActivateSeal : ExpeditionStep.Puzzle,
-                    ready ? "Abre el primer sello" : "Explora el primer santuario",
-                    ready ? "Los canales están conectados. Apunta a ABRIR SELLO y pulsa E; después recoge el cofre."
-                          : "Tridente: tecla 2, alcance 4 m. Sigue las boyas. E gira piedras; conecta ENTRADA con SELLO sin extremos abiertos.",
-                    "SANTUARIO DE HUIROS", first.stationPosition + Vector3.up * 3);
+                if (Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity)
+                    return new ExpeditionObjective(ExpeditionStep.FreeSpace, "Prepara espacio para mineral", "Vende pesca en la caleta o descarta una pila desde TAB. El pico extrae tres unidades por depósito.", "", CabinWaypoint);
+                string materials = string.Join(" · ", recipe.ingredients.Select(i => i.item.displayName + " " + Diver.Inventory.Count(i.item) + "/" + i.amount));
+                return new ExpeditionObjective(ExpeditionStep.Mine, "Minerales para " + recipe.title,
+                    materials + ". Cobre a 24 m, hierro a 52 m y cristal a 88 m. Acércate a las vetas brillantes y pulsa E. Después fabrica en la caleta ($" + recipe.price + ").", "", recipe.upgrade.stationPosition);
             }
-            var destination = NextWaypoint(out var label);
-            return new ExpeditionObjective(ExpeditionStep.Descend, "Prepara el siguiente descenso",
-                "Descenso libre: tu aire limita la salida. Mejora el equipo y reserva aire para volver. El arpón (tecla 3) alcanza 40 m.", label, destination);
+            if (Economy.Money >= price)
+                return new ExpeditionObjective(hasPick ? ExpeditionStep.Craft : ExpeditionStep.BuyPick,
+                    hasPick ? "Fabrica tu siguiente equipo" : "Compra el pico submarino",
+                    hasPick ? "Tienes dinero y minerales. E en Don Lucho → FABRICAR → " + recipe.title + ". La mejora se equipa automáticamente."
+                    : "E en Don Lucho → TIENDA → Pico submarino ($" + MiningPickPrice + "). El tridente es opcional para pescar a mayor distancia.", "", CabinWaypoint);
+            if (Economy.FishCount > 0 && (Economy.Money + Economy.SaleValue >= price || Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity))
+                return new ExpeditionObjective(ExpeditionStep.Sell, "Vende tu pesca", "Llevas $" + Economy.SaleValue + " en peces. E en Don Lucho y VENDER. Los minerales se reservan para fabricar.", "", CabinWaypoint);
+            if (Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity)
+                return new ExpeditionObjective(ExpeditionStep.FreeSpace, "Haz espacio para pescar", "TAB abre la mochila. Conserva minerales para la receta; vende peces o descarta una pila.", "", CabinWaypoint);
+            return new ExpeditionObjective(ExpeditionStep.Fishing, "Pesca para financiar tu equipo",
+                "CLIC junto a peces de la orilla: manos a 1,6 m. Faltan $" + Mathf.Max(0, price - Economy.Money - (int)Economy.SaleValue) + " en pesca para " + (hasPick ? recipe.title : "el pico") + ". Vende en la caleta; ESPACIO sube a respirar.", "", FishingWaypoint);
         }
     }
 }

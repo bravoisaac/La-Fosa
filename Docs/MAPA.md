@@ -1,5 +1,14 @@
 # Mapa dinámico
 
+## Cambio de dirección: economía, minería y fabricación (8 de noviembre)
+
+- Petición explícita: quitar puzles y progresar pescando, consiguiendo minerales del fondo y fabricando equipo. Sustituye el diseño anterior de sellos/tesoros y la etapa futura de nuevos puzles.
+- Ruta: pesca → venta en la caleta → compra de pico submarino → cobre/hierro/cristal → fabricación de tres mejoras de buceo con dinero y materiales. Precios iniciales provisionales.
+- Entrada/conexiones: catálogo/recetas editables → economía/inventario → taller en la tienda; generador de minerales → interacción E → inventario y agotamiento persistente; progreso → equipo, guía, HUD y Develop.
+- Retirar del mundo santuarios, cofres y tableros. Conservar definiciones antiguas solo para leer/validar partidas v1, convirtiendo mejoras ya obtenidas sin volver a exigirlas. Guardado v2 con mejoras fabricadas y enfriamiento de depósitos; mantener dinero, inventario y vehículos.
+- Riesgos: cobros/materiales atómicos, repetición de fabricación, regeneración de minerales sin explotación por recarga, compatibilidad de guardados y aislamiento Develop. Reemplazar validaciones activas de puzles por pruebas de economía/minería/fabricación y migración; no atribuir pruebas históricas al diseño nuevo.
+- Alcance: implementación completa del nuevo bucle y compilación principal Windows. No abrir ni jugar automáticamente; balance/recorrido humano pendientes.
+
 ## Entrega 4.1 / 4.2a: lancha y amarre sobre la fosa (8 de noviembre)
 
 - Objetivo: primera entrega técnica de la etapa 4 para preparar salidas desde la lancha. La evaluación humana de etapas 1–3 sigue abierta; no dar por cerrado ese hito.

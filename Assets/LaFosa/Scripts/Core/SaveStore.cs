@@ -15,6 +15,7 @@ namespace LaFosa
         public bool solved;
     }
     [Serializable] public sealed class SavedVehicle { public string id; public Vector3 position; public float yaw; public bool moored; }
+    [Serializable] public sealed class SavedMineral { public string id; public long readyAtUtcTicks; }
     [Serializable] public sealed class SaveData
     {
         public int version;
@@ -28,6 +29,8 @@ namespace LaFosa
         public string[] collectedPickups;
         public SavedPuzzle[] puzzles;
         public SavedVehicle[] vehicles;
+        public string[] equipmentUpgrades;
+        public SavedMineral[] minerals;
     }
 
     // The envelope detects truncated/edited data before any live state is changed.

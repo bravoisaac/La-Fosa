@@ -15,6 +15,7 @@ namespace LaFosa
         public bool Paused { get; private set; }
         public bool Blocked => Intro || InventoryOpen || Paused || ShopOpen || DeveloperPanelOpen;
         public int Treasures { get; private set; }
+        public int CraftedUpgrades => Treasures;
         public event System.Action ProgressChanged;
         internal void RefreshRoutes() { ProgressChanged?.Invoke(); }
         public string Message { get; private set; }
@@ -22,7 +23,7 @@ namespace LaFosa
         public bool Complete => Treasures >= Config.zones.Length;
         public bool IsZoneUnlocked(DiveZoneDefinition zone)
         {
-            // Puzzle/reward progression only. Swimming is limited by air consumption.
+            // Equipment progression only. Swimming is limited by air consumption.
             int index = System.Array.IndexOf(Config.zones, zone);
             return index >= 0 && (index == 0 || IsTreasureClaimed(Config.zones[index - 1])) &&
                 Diver != null && Diver.SafeDepth >= zone.requiredSafeDepth && Diver.MaxOxygen >= zone.requiredOxygen;
@@ -32,7 +33,7 @@ namespace LaFosa
             int index = System.Array.IndexOf(Config.zones, zone);
             if (index < 0) return "Ruta no disponible.";
             if (index > 0 && !IsTreasureClaimed(Config.zones[index - 1]))
-                return "Abre el sello y recoge " + Config.zones[index - 1].treasure.displayName + ".";
+                return "Fabrica la mejora anterior en la caleta.";
             if (Diver.SafeDepth < zone.requiredSafeDepth || Diver.MaxOxygen < zone.requiredOxygen)
                 return "Equipo necesario: " + zone.requiredSafeDepth + " m y " + zone.requiredOxygen + " u de aire.";
             return "Equipo preparado: " + zone.requiredSafeDepth + " m / " + zone.requiredOxygen + " u. " + zone.returnHint;
@@ -41,7 +42,7 @@ namespace LaFosa
         {
             int index = Mathf.Min(Treasures, Config.zones.Length - 1);
             var zone = Config.zones[index];
-            label = "SANTUARIO";
+            label = "ZONA DE MINERALES";
             return zone.stationPosition + Vector3.up * 3;
         }
         public void Initialize(GameConfig config)
@@ -64,15 +65,13 @@ namespace LaFosa
         public void Reward(DiveZoneDefinition zone)
         {
             if (!claimedZones.Add(zone.id)) return;
-            if (zone == Config.zones[0]) RecordExpeditionEvent("treasure", zone.id, true);
             discoveredZones.Add(zone.id);
             Treasures++;
-            if (Treasures == 1) firstReturnPending = true;
             Diver.Upgrade(zone.unlockedDepth, zone.unlockedOxygen);
             ProgressChanged?.Invoke();
-            Notify(Complete ? "¡Expedición completa! Has recuperado los tres tesoros del Pacífico." : "Tesoro recuperado. Equipo mejorado: ya puedes descender más.");
-            SaveNow();
+            Notify(Complete ? "Equipo abisal fabricado. Prepara la exploración de la fosa profunda." : "Equipo fabricado: ya puedes descender más.");
         }
+        internal void CompleteCraft(DiveZoneDefinition zone) { Reward(zone); }
         void Update()
         {
             if (Intro) return;

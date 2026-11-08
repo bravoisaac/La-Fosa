@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LaFosa
 {
-    public enum GearKind { ReinforcedHarpoon, OxygenTank, Fins, Net, Trident, Boat, JetSki }
+    public enum GearKind { ReinforcedHarpoon, OxygenTank, Fins, Net, Trident, Boat, JetSki, MiningPick }
 
     [Serializable]
     public sealed class ShopOffer

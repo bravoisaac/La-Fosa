@@ -56,6 +56,8 @@ namespace LaFosa
         public FishBehaviorProfile offshoreFishBehavior;
         public ItemDefinition shell;
         public ShopCatalog shop;
+        public ItemDefinition[] minerals;
+        public CraftingRecipe[] recipes;
         public DiveZoneDefinition[] zones;
         [HideInInspector] public Shader[] includedShaders;
     }

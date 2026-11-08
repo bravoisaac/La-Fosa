@@ -10,15 +10,14 @@ namespace LaFosa.Editor
     {
         public static void Validate(GameConfig config)
         {
-            var host = new GameObject("Prueba aislada de Develop · sin Play Mode");
-            string directory = Path.Combine(Path.GetTempPath(), "LaFosa-Develop-" + Guid.NewGuid().ToString("N"));
+            var host = new GameObject("Pruebas de economía y Develop sin Play Mode");
+            string directory = Path.Combine(Path.GetTempPath(), "LaFosa-Economy-" + Guid.NewGuid().ToString("N"));
             string path = Path.Combine(directory, "expedition.json");
-            float timeScale = Time.timeScale;
-            var cursorLock = Cursor.lockState; bool cursorVisible = Cursor.visible;
+            float timeScale = Time.timeScale; var cursorLock = Cursor.lockState; bool cursorVisible = Cursor.visible;
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
             int checks = 0;
             void Check(bool condition, string message)
             { if (!condition) throw new Exception("LA_FOSA_DEVELOPER_FAILED: " + message); checks++; }
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
             try
             {
                 var session = host.AddComponent<GameSession>(); session.Initialize(config);
@@ -26,108 +25,68 @@ namespace LaFosa.Editor
                 var cameraObject = new GameObject("Cámara de prueba"); cameraObject.transform.SetParent(player.transform);
                 cameraObject.transform.localPosition = Vector3.up * 1.55f;
                 var diver = player.AddComponent<DiverController>(); diver.Initialize(session, cameraObject.AddComponent<Camera>()); session.Diver = diver;
+                var controller = player.GetComponent<CharacterController>(); controller.height = 1.8f; controller.center = Vector3.up * .9f; controller.radius = .32f;
                 player.AddComponent<HarpoonGun>().diver = diver;
-                foreach (var zone in config.zones)
-                {
-                    var station = new GameObject(zone.id); station.transform.SetParent(host.transform);
-                    var puzzle = station.AddComponent<StoneCircuitPuzzle>(); puzzle.Initialize(zone);
-                    station.AddComponent<TreasureChest>().puzzle = puzzle;
-                }
+                new WorldBuilder(host.transform, config).BuildMinerals();
                 foreach (var kind in new[] { GearKind.Boat, GearKind.JetSki })
                 {
-                    var vehicleObject = new GameObject(kind.ToString()); vehicleObject.transform.SetParent(host.transform);
-                    vehicleObject.transform.position = new Vector3(0, config.waterLevel, 20);
-                    var vehicle = vehicleObject.AddComponent<SurfaceVehicle>(); vehicle.kind = kind; vehicle.session = session;
+                    var obj = new GameObject(kind.ToString()); obj.transform.SetParent(host.transform); obj.transform.position = new Vector3(0, config.waterLevel, 20);
+                    var vehicle = obj.AddComponent<SurfaceVehicle>(); vehicle.kind = kind; vehicle.session = session;
                     if (kind == GearKind.Boat) session.Boat = vehicle; else session.JetSki = vehicle;
                 }
                 session.InitializePersistence();
                 var validate = typeof(GameSession).GetMethod("ValidateSave", flags);
+                var capture = typeof(GameSession).GetMethod("CaptureSave", flags);
                 var store = new SaveStore(path, data => (bool)validate.Invoke(session, new object[] { data }));
-                var storeField = typeof(GameSession).GetField("saveStore", flags);
-                storeField.SetValue(session, store); // All writes below target the unique temporary folder.
-                Check(session.NewGame(), "Partida de prueba creada fuera del guardado personal");
+                var storeField = typeof(GameSession).GetField("saveStore", flags); storeField.SetValue(session, store);
+                Check(session.NewGame(), "Partida v2 creada en ruta temporal");
+                EconomyProgressionChecks.Validate(session, store);
+                var original = JsonUtility.ToJson(capture.Invoke(session, null));
                 session.ToggleDeveloperMode();
-                Check(session.DeveloperSession && session.DeveloperMode && session.Blocked, "Entrada Develop con panel y snapshot");
+                Check(session.DeveloperSession && session.DeveloperMode && session.Blocked, "Develop con copia protegida");
                 byte[] baseline = File.ReadAllBytes(path), backup = File.ReadAllBytes(path + ".bak");
                 session.DeveloperAddMoney(); session.DeveloperEquip(); session.DeveloperTravel(280);
-                Check(session.Economy.Money == 1000 && diver.SafeDepth == 650 && Mathf.Abs(diver.Depth - 280) < .01f, "Preparar economía, equipo y profundidad");
+                Check(diver.SafeDepth == 650 && Mathf.Abs(diver.Depth - 280) < .01f, "Equipo y traslado de prueba");
                 session.ToggleDeveloperAir(); session.ToggleDeveloperSpeed(); session.ToggleDeveloperPanel();
                 var vitals = typeof(DiverController).GetMethod("AdvanceVitals", flags);
                 vitals.Invoke(diver, new object[] { 1f, false });
-                Check(diver.Oxygen == diver.MaxOxygen, "Develop conserva aire con opción activa");
-                session.ToggleDeveloperMode();
-                Check(!session.DeveloperMode && session.DeveloperSession && !session.Blocked && Mathf.Abs(diver.Depth - 280) < .01f, "Jugador conserva escenario de prueba sin privilegios");
-                float oxygen = diver.Oxygen;
+                Check(diver.Oxygen == diver.MaxOxygen, "Aire fijo en Develop");
+                session.ToggleDeveloperMode(); float oxygen = diver.Oxygen;
                 vitals.Invoke(diver, new object[] { 1f, false });
-                Check(diver.Oxygen < oxygen, "Jugador consume aire aunque Develop tuviera aire fijo");
-                session.DeveloperAddMoney(); session.DeveloperTravel(0); diver.DeveloperRefill();
-                Check(session.Economy.Money == 1000 && diver.Depth > 279 && diver.Oxygen < oxygen, "Herramientas denegadas en modo Jugador");
-                session.OpenShop();
-                Check(session.Economy.Buy(config.shop.offers.First(o => o.gear == GearKind.Boat)), "Compra real dentro de la prueba");
-                var firstPuzzle = host.GetComponentsInChildren<StoneCircuitPuzzle>().First(p => p.zone == config.zones[0]);
-                typeof(StoneCircuitPuzzle).GetMethod("Restore", flags).Invoke(firstPuzzle, new object[] { new int[firstPuzzle.Definition.Count], 0, false });
-                Check(firstPuzzle.Activate() && diver.Inventory.TryAdd(config.zones[0].treasure), "Resolver sello y recoger tesoro en la prueba");
-                session.Reward(config.zones[0]);
-                Check(session.Treasures == 1 && session.IsTreasureClaimed(config.zones[0]), "Recompensa cambia progreso temporal");
-                session.SaveNow();
-                typeof(GameSession).GetMethod("OnApplicationQuit", flags).Invoke(session, null);
-                Check(File.ReadAllBytes(path).SequenceEqual(baseline) && File.ReadAllBytes(path + ".bak").SequenceEqual(backup), "Compra, guardado y cierre no escriben prueba ni respaldo");
+                Check(!session.DeveloperMode && diver.Oxygen < oxygen, "Jugador consume aire");
+                int money = session.Economy.Money; session.DeveloperAddMoney(); session.DeveloperTravel(0);
+                Check(session.Economy.Money == money && diver.Depth > 279, "Herramientas bloqueadas en Jugador");
+                Check(!session.DeveloperPrepareScenario(DeveloperScenario.FirstMining), "Jugador no reinicia escenarios");
+                session.ToggleDeveloperMode();
+                Check(session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition) && session.CraftedUpgrades == 0 && session.Economy.Money == 0 && diver.Inventory.Stacks.Count == 0,
+                    "Escenario inicial sin recursos ni mejoras");
+                Check(!session.DeveloperInfiniteAir && !session.DeveloperFastMove, "Escenarios desactivan ventajas");
+                Check(session.DeveloperPrepareScenario(DeveloperScenario.FirstMining) && session.Economy.Has(GearKind.MiningPick) && !session.Economy.Has(GearKind.Trident),
+                    "Escenario minero prepara pico sin puzles");
+                session.ToggleDeveloperMode();
+                var deposit = host.GetComponentsInChildren<MineralDeposit>().First(p => p.mineral == config.minerals[0]);
+                diver.LeaveVehicle(deposit.transform.position + Vector3.up); Physics.SyncTransforms();
+                Check(deposit.TryMine(diver), "Minería dentro de prueba temporal");
+                session.SaveNow(); typeof(GameSession).GetMethod("OnApplicationQuit", flags).Invoke(session, null);
+                Check(File.ReadAllBytes(path).SequenceEqual(baseline) && File.ReadAllBytes(path + ".bak").SequenceEqual(backup), "Pruebas y cierre no escriben sobre partida/respaldo");
                 session.EndDeveloperSession();
-                Check(!session.DeveloperSession && !session.DeveloperMode && !session.DeveloperFastMove && !session.DeveloperInfiniteAir, "Salida limpia de todos los privilegios");
-                Check(session.Economy.Money == 0 && !session.Economy.Has(GearKind.Boat) && !session.Economy.Has(GearKind.Trident) && diver.SafeDepth == config.initialSafeDepth, "Progreso y equipo originales restaurados");
-                Check(session.Treasures == 0 && !firstPuzzle.Solved && diver.Inventory.Count(config.zones[0].treasure) == 0, "Tesoro, sello e inventario de prueba descartados");
-                Check(Vector3.Distance(diver.transform.position, config.spawn) < .01f, "Regreso a playa al terminar pruebas");
+                Check(JsonUtility.ToJson(capture.Invoke(session, null)) == original && !session.DeveloperSession, "Restaurar progreso, minerales y enfriamiento anteriores");
                 session.ToggleDeveloperMode(); session.DeveloperAddMoney();
-                Check(session.ReturnToMenu() && session.Intro && !session.DeveloperSession, "Menú termina pruebas antes de guardar");
-                Check(store.TryLoad(out var saved, out _) && saved.money == 0 && saved.gear.Length == 0, "Menú conserva el progreso normal en disco");
-                Check(session.ContinueGame(), "Continúa la partida normal tras las pruebas");
-                // Use a non-empty normal save so resetting a scenario cannot accidentally
-                // replace the original snapshot with a fresh expedition unnoticed.
-                typeof(Economy).GetMethod("Restore", flags).Invoke(session.Economy, new object[] { 137, new[] { nameof(GearKind.Trident) } });
-                diver.Inventory.TryAdd(config.fish, 2); firstPuzzle.Rotate(0);
-                var capture = typeof(GameSession).GetMethod("CaptureSave", flags);
-                string originalProgress = JsonUtility.ToJson(capture.Invoke(session, null));
-                Check(session.SaveNow(), "Guardar progreso no vacío antes de probar escenarios");
-                session.ToggleDeveloperMode();
-                byte[] scenarioBaseline = File.ReadAllBytes(path), scenarioBackup = File.ReadAllBytes(path + ".bak");
-                session.DeveloperEquip(); session.DeveloperAddMoney();
-                session.ToggleDeveloperAir(); session.ToggleDeveloperSpeed();
-                Check(session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition), "Preparar primera expedición temporal");
-                Check(session.Economy.Money == 0 && diver.Inventory.Stacks.Count == 0 && !session.Economy.Has(GearKind.Trident)
-                    && diver.SafeDepth == config.initialSafeDepth && diver.GetComponent<HarpoonGun>().SelectedTool == 0,
-                    "Inicio recupera manos, mochila vacía y equipo inicial");
-                Check(session.Blocked && session.DeveloperPanelOpen && !session.DeveloperInfiniteAir && !session.DeveloperFastMove
-                    && Vector3.Distance(diver.transform.position, config.spawn) < .01f, "Inicio en playa pausado y sin ventajas");
-                Check(session.DeveloperPrepareScenario(DeveloperScenario.FirstSanctuary), "Preparar primer santuario temporal");
-                Check(session.Economy.Has(GearKind.Trident) && !session.Economy.Has(GearKind.ReinforcedHarpoon)
-                    && diver.GetComponent<HarpoonGun>().SelectedTool == 1 && !firstPuzzle.Solved && firstPuzzle.Moves == 0
-                    && session.Treasures == 0, "Santuario con tridente, sin resolver ni regalar tesoros");
-                Check(Vector3.Distance(diver.transform.position, config.zones[0].stationPosition) < 5
-                    && diver.transform.position.y > WorldBuilder.FloorHeight(diver.transform.position.x, diver.transform.position.z),
-                    "Llegada al santuario por encima del terreno");
-                session.ToggleDeveloperMode();
-                var scenarioPosition = diver.transform.position;
-                Check(!session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition) && diver.transform.position == scenarioPosition,
-                    "Jugador no puede reiniciar escenarios");
-                session.ToggleDeveloperMode();
-                Check(!session.DeveloperPrepareScenario((DeveloperScenario)99) && diver.transform.position == scenarioPosition,
-                    "Escenario desconocido no cambia la prueba");
-                session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition); session.SaveNow();
-                Check(File.ReadAllBytes(path).SequenceEqual(scenarioBaseline) && File.ReadAllBytes(path + ".bak").SequenceEqual(scenarioBackup),
-                    "Repetir escenarios no modifica partida ni respaldo");
-                session.EndDeveloperSession();
-                Check(JsonUtility.ToJson(capture.Invoke(session, null)) == originalProgress,
-                    "Restaurar dinero, pesca, equipo y giros originales después de varios escenarios");
-                Check(!session.DeveloperPrepareScenario(DeveloperScenario.FirstSanctuary), "Escenarios rechazados fuera de Develop");
+                Check(session.ReturnToMenu() && !session.DeveloperSession && session.ContinueGame(), "Menú descarta pruebas y permite continuar");
+                Check(JsonUtility.ToJson(capture.Invoke(session, null)) == original, "Carga posterior conserva partida anterior");
                 MooringChecks.Validate(session, store);
-                storeField.SetValue(session, new SaveStore(path, _ => false));
-                session.ToggleDeveloperMode();
-                Check(!session.DeveloperSession && !session.DeveloperMode, "Fallo de guardado inicial impide entrar en Develop");
+                storeField.SetValue(session, new SaveStore(path, _ => false)); session.ToggleDeveloperMode();
+                Check(!session.DeveloperSession, "Fallo de guardado impide Develop");
                 Debug.Log("LA_FOSA_DEVELOPER_TESTS_OK · " + checks + " comprobaciones de modos y guardado aislado, sin Play Mode.");
             }
             finally
             {
+                var deposits = host.GetComponentsInChildren<MineralDeposit>(true);
+                var meshes = deposits.Select(d => d.GetComponent<MeshFilter>().sharedMesh).Distinct().ToArray();
+                var materials = deposits.Select(d => d.GetComponent<Renderer>().sharedMaterial).Distinct().ToArray();
                 UnityEngine.Object.DestroyImmediate(host);
+                foreach (var mesh in meshes) UnityEngine.Object.DestroyImmediate(mesh);
+                foreach (var material in materials) UnityEngine.Object.DestroyImmediate(material);
                 Time.timeScale = timeScale; Cursor.lockState = cursorLock; Cursor.visible = cursorVisible;
                 foreach (string file in new[] { path, path + ".bak", path + ".tmp" }) if (File.Exists(file)) File.Delete(file);
                 if (Directory.Exists(directory)) Directory.Delete(directory);

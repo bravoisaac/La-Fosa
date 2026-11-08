@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LaFosa
 {
-    public enum DeveloperScenario { FirstExpedition, FirstSanctuary }
+    public enum DeveloperScenario { FirstExpedition, FirstMining, FirstSanctuary = FirstMining }
 
     public sealed partial class GameSession
     {
@@ -54,13 +54,13 @@ namespace LaFosa
         public bool DeveloperPrepareScenario(DeveloperScenario scenario)
         {
             if (!DeveloperSession || !DeveloperMode || Intro) return false;
-            if (scenario != DeveloperScenario.FirstExpedition && scenario != DeveloperScenario.FirstSanctuary) return false;
+            if (scenario != DeveloperScenario.FirstExpedition && scenario != DeveloperScenario.FirstMining) return false;
             var fresh = CreateFreshSave();
-            bool sanctuary = scenario == DeveloperScenario.FirstSanctuary;
+            bool sanctuary = scenario == DeveloperScenario.FirstMining;
             if (sanctuary)
             {
-                fresh.gear = new[] { nameof(GearKind.Trident) };
-                fresh.selectedTool = 1;
+                fresh.gear = new[] { nameof(GearKind.MiningPick) };
+                fresh.selectedTool = 0;
             }
             // Apply only to the temporary session. Never replace developerSnapshot or save to disk.
             ApplySave(fresh);
@@ -75,7 +75,7 @@ namespace LaFosa
             DeveloperPanelOpen = true;
             SaveStatus = "PRUEBA TEMPORAL · escenario reiniciado sin guardar.";
             ApplyPause();
-            Notify(sanctuary ? "Primer santuario: tridente listo y sello sin resolver. F2 para probar como jugador."
+            Notify(sanctuary ? "Primera minería: pico listo junto al cobre. F2 para probar como jugador."
                 : "Inicio: manos, mochila vacía y sin dinero. F2 para probar como jugador.");
             return true;
         }
@@ -89,11 +89,11 @@ namespace LaFosa
         public void DeveloperEquip()
         {
             if (!DeveloperMode) return;
-            var extra = new[] { GearKind.Trident, GearKind.ReinforcedHarpoon, GearKind.Net, GearKind.Fins, GearKind.OxygenTank };
+            var extra = new[] { GearKind.Trident, GearKind.ReinforcedHarpoon, GearKind.Net, GearKind.Fins, GearKind.OxygenTank, GearKind.MiningPick };
             Economy.Restore(Economy.Money, CaptureSave().gear.Concat(extra.Select(g => g.ToString())).Distinct().ToArray());
             Diver.Upgrade(DeepTrenchProfile.BottomDepth, 1400);
             Diver.ApplyOxygenTank(Config.shop.oxygenBonus);
-            RefreshRoutes(); Notify("Equipo de prueba preparado; los puzles conservan su progreso.");
+            RefreshRoutes(); Notify("Equipo de prueba preparado; las recetas conservan su progreso.");
         }
         public void DeveloperTravel(float depth)
         {

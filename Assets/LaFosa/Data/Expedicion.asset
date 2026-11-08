@@ -88,6 +88,33 @@ MonoBehaviour:
   offshoreFishBehavior: {fileID: 11400000, guid: 9bdf66223a7fa9740b64b9d1fb9cccba, type: 2}
   shell: {fileID: 11400000, guid: cde434697fb2dd040a417e76bb478528, type: 2}
   shop: {fileID: 11400000, guid: d8dec4f584ad9de409949366cbea73a1, type: 2}
+  minerals:
+  - {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+  - {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+  - {fileID: 11400000, guid: fe450edd3d2f3034f8711f26eb143328, type: 2}
+  recipes:
+  - title: Traje reforzado
+    upgrade: {fileID: 11400000, guid: a05fc36d05d684e47883d73176a801e2, type: 2}
+    price: 120
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 8
+  - title: Equipo presurizado
+    upgrade: {fileID: 11400000, guid: d4a602b78c8fddc47bed0ae411a5eb76, type: 2}
+    price: 300
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 6
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 12
+  - title: Traje abisal
+    upgrade: {fileID: 11400000, guid: cff961d127000254a90b6cbf1b5755b2, type: 2}
+    price: 650
+    ingredients:
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 8
+    - item: {fileID: 11400000, guid: fe450edd3d2f3034f8711f26eb143328, type: 2}
+      amount: 16
   zones:
   - {fileID: 11400000, guid: a05fc36d05d684e47883d73176a801e2, type: 2}
   - {fileID: 11400000, guid: d4a602b78c8fddc47bed0ae411a5eb76, type: 2}

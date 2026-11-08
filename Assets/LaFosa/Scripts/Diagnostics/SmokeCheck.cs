@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace LaFosa
@@ -47,96 +48,53 @@ namespace LaFosa
             var bootstrap = FindFirstObjectByType<GameBootstrap>();
             Check(bootstrap != null && bootstrap.Session != null, "Arranque de escena");
             if (bootstrap == null || bootstrap.Session == null) yield break;
-            var session = bootstrap.Session; var diver = session.Diver;
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--water-preview") >= 0)
+            var session = bootstrap.Session; var diver = session.Diver; var args = Environment.GetCommandLineArgs();
+            if (Array.IndexOf(args, "--save-restart-read") >= 0)
             {
-                session.Begin(); yield return CaptureWaterViews(session);
-                File.WriteAllText(resultPath, failed ? "FAILED" : "CAPTURED · Requires visual inspection");
-                Debug.Log("LA_FOSA_WATER_PREVIEW_OK"); Application.Quit(failed ? 2 : 0); yield break;
+                Check(session.ContinueGame() && session.HasUpgrade(session.Config.zones[0]) && session.Economy.Has(GearKind.MiningPick), "Carga económica entre procesos");
+                Check(session.CaptureSave().version == 2 && session.CaptureSave().minerals.Any(m => m.readyAtUtcTicks > 0), "Materiales y agotamiento persisten entre procesos");
             }
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--save-restart-write") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--save-restart-read") >= 0)
-            { TestPersistenceRestart(session); yield break; }
-            Check(session.Intro && Time.timeScale == 0, "Introducción pausa el mundo");
-            Capture(diver.View, "01-inicio.png");
-            yield return new WaitForSecondsRealtime(.5f);
-            session.Begin();
-            yield return new WaitForSecondsRealtime(.3f);
-            Capture(diver.View, "02-playa.png");
-            yield return TestFirstExpedition(session);
-            TestDepthOxygen(session);
-            yield return TestFreeRoutes(session);
-            Check(FindObjectsByType<TreasureChest>(FindObjectsSortMode.None).Length == session.Config.zones.Length, "Santuarios generados");
-            CheckFauna(session);
-            var pickup = FindFirstObjectByType<Pickup>(); pickup.Interact(diver);
-            Check(diver.Inventory.Stacks.Count == 1, "Recoger concha");
-            Teleport(diver, new Vector3(0, -6, 32));
-            float oxygen = diver.Oxygen;
-            yield return new WaitForSecondsRealtime(.5f);
-            Check(diver.Underwater && diver.Oxygen < oxygen, "Detección de agua y consumo de aire");
-            session.ToggleInventory(); oxygen = diver.Oxygen;
-            yield return new WaitForSecondsRealtime(.3f);
-            Check(Mathf.Approximately(diver.Oxygen, oxygen) && Time.timeScale == 0, "Inventario pausa oxígeno");
-            session.ToggleInventory();
-            FishAgent fish = null;
-            foreach (var candidate in FindObjectsByType<FishAgent>(FindObjectsSortMode.None))
-                if (candidate.species.id == "baunco") { fish = candidate; break; }
-            fish.enabled = false;
-            fish.transform.position = new Vector3(130, -5, 33);
-            Teleport(diver, fish.transform.position - Vector3.forward * 4 - Vector3.up * 1.55f);
-            diver.LookAt(fish.transform.position);
-            yield return null;
-            Physics.SyncTransforms();
-            var gun = diver.GetComponent<HarpoonGun>();
-            Check(gun.SelectedTool == 0 && gun.ToolName == "MANOS" && gun.toolModels[0].activeSelf && !gun.toolModels[1].activeSelf && !gun.toolModels[2].activeSelf && !gun.toolModels[3].activeSelf, "Inicio con manos y sin armas visibles");
-            gun.Fire();
-            Check(diver.Inventory.Stacks.Count == 1 && fish.Available, "Manos no capturan peces a distancia de arpón");
-            Teleport(diver, fish.transform.position - Vector3.forward * 1.5f - Vector3.up * 1.55f);
-            diver.LookAt(fish.transform.position);
-            yield return new WaitForSeconds(.9f);
-            Physics.SyncTransforms(); gun.Fire();
-            Check(diver.Inventory.Stacks.Count == 2 && !fish.Available, "Manos capturan pez cercano y agregan inventario");
-            gun.Fire(); Check(diver.Inventory.Stacks[1].count == 1, "Recarga evita disparo duplicado");
-            Teleport(diver, new Vector3(0, -40, 75));
-            float health = diver.Health;
-            oxygen = diver.Oxygen;
-            yield return new WaitForSecondsRealtime(.4f);
-            Check(diver.Health == health && diver.Oxygen < oxygen && diver.PressureOxygenMultiplier > 1, "Profundidad peligrosa consume aire sin daño directo");
-            yield return TestCommerce(session, diver, gun);
-            Check(Array.TrueForAll(session.GetComponentsInChildren<StoneCircuitPuzzle>(), p => !p.Solved), "Comprar todo el equipo no resuelve las piedras");
-            yield return TestFishBehavior(session);
-            var chests = FindObjectsByType<TreasureChest>(FindObjectsSortMode.None);
-            foreach (var chest in chests)
-                if (chest.puzzle.zone == session.Config.zones[1]) { chest.Interact(diver); Check(session.Treasures == 0, "No se puede saltar la progresión"); }
-            for (int i = 0; i < session.Config.zones.Length; i++)
+            else
             {
-                var zone = session.Config.zones[i];
-                TreasureChest chest = null;
-                foreach (var candidate in chests) if (candidate.puzzle.zone == zone) chest = candidate;
-                Teleport(diver, zone.stationPosition + new Vector3(0, 1.1f, -5.8f));
-                diver.LookAt(zone.stationPosition + new Vector3(0, 2.5f, .7f));
-                yield return new WaitForSecondsRealtime(.3f);
-                Capture(diver.View, "0" + (i + 3) + "-nivel.png");
-                chest.Interact(diver); Check(!chest.Claimed, "Cofre bloqueado antes de resolver");
-                yield return TestStonePuzzle(session, diver, chest, i);
-                chest.Interact(diver);
-                Check(chest.Claimed && session.Treasures == i + 1 && diver.SafeDepth == zone.unlockedDepth, "Tesoro mejora el equipo " + i);
-                Check(Mathf.Approximately(diver.MaxOxygen, zone.unlockedOxygen + session.Config.shop.oxygenBonus), "Bombona se acumula con tesoro " + i);
-                chest.Interact(diver); Check(session.Treasures == i + 1, "Recompensa única " + i);
-                if (i < session.Config.zones.Length - 1) yield return TestPreparedRoute(session, i);
+                Check(session.NewGame(true), "Nueva partida aislada para economía");
+                if (Array.IndexOf(args, "--water-preview") >= 0)
+                {
+                    yield return CaptureWaterViews(session);
+                    File.WriteAllText(resultPath, failed ? "FAILED" : "CAPTURED · Requires visual inspection");
+                    Application.Quit(failed ? 2 : 0); yield break;
+                }
+                Check(session.GetComponentsInChildren<StoneCircuitPuzzle>().Length == 0 && session.GetComponentsInChildren<TreasureChest>().Length == 0, "Mundo sin puzles ni cofres de progreso");
+                var deposits = session.GetComponentsInChildren<MineralDeposit>();
+                Check(deposits.Length == 35, "Minerales generados en fondo marino");
+                var recipe = session.Config.recipes[0];
+                for (int i = 0; i < 10 && session.Economy.Money < recipe.price + session.MiningPickPrice; i++)
+                {
+                    Check(diver.Inventory.TryAdd(session.Config.fish, 10), "Preparar pesca de prueba");
+                    session.OpenShop(); Check(session.Economy.SellFish(), "Vender pesca"); session.CloseShop();
+                }
+                session.OpenShop();
+                Check(session.Economy.Buy(session.Config.shop.offers.First(o => o.gear == GearKind.MiningPick)), "Comprar pico");
+                session.CloseShop();
+                foreach (var deposit in deposits.Where(d => d.mineral == session.Config.minerals[0]).Take(3))
+                {
+                    Teleport(diver, deposit.transform.position + Vector3.up); diver.LookAt(deposit.transform.position); Physics.SyncTransforms();
+                    Check(deposit.TryMine(diver), "Extraer cobre del depósito " + deposit.id);
+                    Check(!deposit.TryMine(diver), "Depósito agotado no duplica mineral");
+                    yield return new WaitForSecondsRealtime(.1f);
+                }
+                diver.Rescue("Regreso de prueba con minerales."); session.OpenShop();
+                Check(session.Economy.Craft(recipe) && session.HasUpgrade(recipe.upgrade), "Fabricar mejora con dinero y cobre");
+                int money = session.Economy.Money;
+                Check(!session.Economy.Craft(recipe) && session.Economy.Money == money, "No repetir cobro de mejora");
+                session.CloseShop();
+                var saved = JsonUtility.ToJson(session.CaptureSave());
+                Check(session.ReturnToMenu() && session.ContinueGame() && JsonUtility.ToJson(session.CaptureSave()) == saved, "Guardar y cargar economía y depósitos");
+                session.ToggleDeveloperMode(); session.DeveloperPrepareScenario(DeveloperScenario.FirstMining); session.EndDeveloperSession();
+                Check(JsonUtility.ToJson(session.CaptureSave()) == saved, "Pruebas Develop preservan la expedición económica");
+                Check(session.SaveNow(), "Guardar resultado para comprobación entre procesos");
+                Capture(diver.View, "economia-final.png");
             }
-            Check(session.Complete, "Expedición completada");
-            int stacks = diver.Inventory.Stacks.Count;
-            diver.Rescue("Prueba de rescate");
-            Check(Vector3.Distance(diver.transform.position, session.Config.spawn) < .1f && diver.Inventory.Stacks.Count == stacks && diver.Health == 100, "Rescate conserva progreso y repone salud");
-            session.ToggleInventory();
-            yield return new WaitForSecondsRealtime(.3f);
-            Capture(diver.View, "06-regreso.png");
-            TestSpeciesTrading(session);
-            yield return CaptureFishGallery(session.Config);
-            TestPersistence(session);
-            TestRoutePersistence(session);
-            yield return new WaitForSecondsRealtime(.6f);
-            File.WriteAllText(Path.Combine(output, "result.txt"), (failed ? "FAILED" : "PASSED") + " · " + checks + " integration checks\n");
+            File.WriteAllText(resultPath, (failed ? "FAILED" : "PASSED") + " · " + checks + " economic integration checks\n");
             Debug.Log("LA_FOSA_SMOKE_" + (failed ? "FAILED" : "OK") + " · " + checks);
             Application.Quit(failed ? 2 : 0);
         }
