@@ -4,11 +4,11 @@ El objetivo es transformar el prototipo actual en un juego de expediciones por u
 
 El orden de construcción no es idéntico al orden en que el jugador comprará el equipo. Primero hay que conseguir una expedición completa que se guarde, se entienda y permita avanzar; después se amplía el mundo.
 
-## Reanudar aquí — 31 de octubre de 2026
+## Reanudar aquí — 8 de noviembre de 2026
 
 **Objetivo activo:** completar la primera expedición persistente (etapas 1–3): pescar con las manos, vender, comprar tridente, resolver el primer sello, recuperar el tesoro y volver para continuar otra salida.
 
-**Última entrega terminada: 3.6**, petición directa: marcador de misión retirado y modo Develop/Jugador temporal. F2 alterna modos; F1 abre herramientas. Compras, tesoros y pruebas no sobrescriben el progreso normal; terminar pruebas lo restaura en la playa. 19 comprobaciones nuevas de aislamiento/transiciones y compilación principal `Builds/Windows/La Fosa.exe` correctas (`unity-developer-windows-build.log`). Conserva mapa de 650 m y mejoras de aire. **Siguiente pendiente: 3.3b y 3.4b**, revisión humana del HUD, orientación sin marcador y recorrido. El equilibrio 3.5 requiere esas mediciones; no se cierra por añadir herramientas de prueba.
+**Última entrega terminada: 4.1 y 4.2a**, primera preparación técnica de la lancha: nombre uniforme, boya de amarre sobre la fosa, G para amarrar/soltar, comprobación de acercamiento/giro y estado persistente compatible con partidas v1 anteriores. 18 comprobaciones nuevas de editor, validaciones existentes y compilación principal Windows correctas (`unity-mooring-final-build.log`). **Siguiente implementación: 4.2b**, almacenamiento de la lancha con transferencias sin duplicaciones y carga persistente. **Revisión humana pendiente: 3.3b, 3.4b y recorrido de lancha**; el avance técnico no cierra esos criterios ni el equilibrio 3.5.
 
 **Uso del juego:** el usuario autorizó abrirlo a petición y después pidió cerrarlo para actualizar. No interpretar esas aperturas como pruebas jugables realizadas. Esta entrega se validó en editor sin Play Mode; revisión humana pendiente.
 
@@ -29,7 +29,11 @@ El orden de construcción no es idéntico al orden en que el jugador comprará e
 - [ ] 3.4b · Contrastar eventos con acciones reales y hacer el recorrido con una persona nueva; completar la ficha de tiempos, capturas, viajes y rescates. La instrumentación no completa esta prueba.
 - [ ] 3.5 · Ajustar ritmo según esa prueba y cerrar las etapas 1–3 con guardado/carga manual.
 - [x] 3.6 · Petición directa: retirar marcador proyectado y añadir Develop/Jugador (F2), herramientas (F1) y sesión temporal sin guardar. 19 comprobaciones nuevas de transición/guardado, validaciones existentes y compilación Windows aprobadas. Panel y manejo en partida pendientes de revisión humana.
-- [ ] 4–10 · Lancha, puzles, biomas, fauna, base, exploradores y equilibrio final; pendientes.
+- [x] 3.6b · Escenarios de primera expedición y primer santuario en Develop. Reinicio temporal repetible, ventajas apagadas, sin sobrescribir partida ni respaldo; regreso al progreso original comprobado con dinero/pesca/equipo/giros. 31 comprobaciones de Develop y compilación principal aprobadas (`unity-developer-scenarios-build.log`). Presentación y recorrido humano pendientes.
+- [x] 4.1 · Bote reutilizado con nombre Lancha de caleta en tienda, mundo y HUD; ID/precio conservados.
+- [x] 4.2a · Amarre con boya sobre la fosa, tecla G, colisiones y persistencia. 18 comprobaciones nuevas y compilación principal aprobadas (`unity-mooring-final-build.log`). Recorrido humano pendiente.
+- [ ] 4.2b–4.4 · Bodega y transferencias, preparación de salida y recuperación de lancha abandonada; pendientes.
+- [ ] 5–10 · Puzles, biomas, fauna, base, exploradores y equilibrio final; pendientes.
 
 **Cómo continuar:** leer este bloque y solo el apartado/documento del paso pendiente. Marcar `[x]` al terminar una entrega y anotar evidencia y pendiente inmediato. Una implementación o prueba automática terminada no cierra una etapa que exige juego humano. Mantener el objetivo y el criterio de cierre al resumir; no borrar las decisiones de diseño.
 
@@ -120,8 +124,11 @@ Se conservan los precios, oxígeno, capacidad y alcance actuales para no confund
 
 **Objetivo:** que la compra de la embarcación cambie la forma de explorar.
 
-- [ ] 1. Reutilizar el bote conducible como primera lancha, con un nombre consistente en tienda y juego.
-- [ ] 2. Añadir amarre cerca de la entrada de la fosa y una zona de almacenamiento.
+**Estado al 8 de noviembre:** primera entrega técnica implementada; no sustituye la evaluación humana pendiente de las etapas 1–3. El amarre conserva libre el eje de descenso y no añade paredes de progresión.
+
+- [x] 1. Reutilizar el bote conducible como primera lancha, con un nombre consistente en tienda y juego.
+- [x] 2a. Añadir amarre señalizado sobre la fosa: G desde lancha próxima, bloqueo de movimiento amarrada y desembarco/reembarco. Guardar/restaurar amarre y aceptar partidas antiguas desamarradas.
+- [ ] 2b. Añadir zona de almacenamiento con transferencias entre mochila y bodega, límites claros y carga persistente sin duplicaciones.
 - [ ] 3. Permitir preparar la salida y reponer aire en un lugar definido de la embarcación.
 - [ ] 4. Guardar posición, propiedad y carga, y asegurar el regreso si el jugador abandona la lancha.
 

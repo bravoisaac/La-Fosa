@@ -41,9 +41,14 @@ namespace LaFosa
             }
             if (data.vehicles.Any(v => v == null) || !ValidIds(data.vehicles.Select(v => v.id).ToArray(), new HashSet<string> { nameof(GearKind.Boat), nameof(GearKind.JetSki) })) return false;
             foreach (var vehicle in data.vehicles)
+            {
                 if (!Finite(vehicle.position.x) || !Finite(vehicle.position.y) || !Finite(vehicle.position.z) || !Finite(vehicle.yaw) ||
                     Mathf.Abs(vehicle.position.x) > 100 || vehicle.position.z < 10 || vehicle.position.z > 175 ||
                     Mathf.Abs(vehicle.position.y - Config.waterLevel) > .01f || vehicle.yaw < 0 || vehicle.yaw > 360) return false;
+                if (vehicle.moored && (vehicle.id != nameof(GearKind.Boat) || !data.gear.Contains(nameof(GearKind.Boat)) ||
+                    Vector3.Distance(vehicle.position, SurfaceVehicle.TrenchMooringPosition(Config.waterLevel)) > .05f ||
+                    Mathf.Abs(Mathf.DeltaAngle(vehicle.yaw, 0)) > .1f)) return false;
+            }
             return true;
         }
         static bool Finite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);

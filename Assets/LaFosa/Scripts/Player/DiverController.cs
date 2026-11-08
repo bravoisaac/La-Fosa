@@ -61,7 +61,11 @@ namespace LaFosa
         {
             float x = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
             float z = (Input.GetKey(KeyCode.W) ? 1 : 0) - (Input.GetKey(KeyCode.S) ? 1 : 0);
-            if (Riding != null) { Riding.Drive(z, x, Time.deltaTime); return; }
+            if (Riding != null)
+            {
+                if (Input.GetKeyDown(KeyCode.G)) Riding.ToggleMooring();
+                Riding.Drive(z, x, Time.deltaTime); return;
+            }
             bool swimming = transform.position.y < Session.Config.waterLevel - .6f;
             Vector3 move;
             if (swimming)

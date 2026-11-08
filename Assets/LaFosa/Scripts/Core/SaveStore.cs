@@ -14,7 +14,7 @@ namespace LaFosa
         public int moves;
         public bool solved;
     }
-    [Serializable] public sealed class SavedVehicle { public string id; public Vector3 position; public float yaw; }
+    [Serializable] public sealed class SavedVehicle { public string id; public Vector3 position; public float yaw; public bool moored; }
     [Serializable] public sealed class SaveData
     {
         public int version;

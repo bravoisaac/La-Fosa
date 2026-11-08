@@ -1,5 +1,20 @@
 # Validación
 
+## Entrega 4.1 / 4.2a: lancha y amarre (8 de noviembre de 2026)
+
+- [x] Nombre Lancha de caleta en catálogo, modelo y HUD, manteniendo ID Boat y precio $240. Boya/señal en la superficie a un lado del conducto central; no genera colisión que cierre el descenso.
+- [x] **18 comprobaciones nuevas de editor** (`MooringChecks`): necesidad de pasajero, radio de aproximación, obstáculos intermedios y durante giro en el mismo punto, movimiento bloqueado al amarrar, desembarco, guardado/lectura/restauración de estado, reembarco y vuelta a navegar; valor false al faltar el campo en vehículo antiguo y rechazo de amarre inválido, sin propiedad o en moto.
+- [x] Guardado temporal aislado de partidas personales. Reutiliza la sesión de pruebas de Develop; 31 comprobaciones de Develop y validaciones anteriores (fosa 71, informe 20, señales 11 y generales) aprobadas.
+- [x] Compilación principal `Builds/Windows/La Fosa.exe` y salida 0 en `unity-mooring-final-build.log`; `git diff --check` correcto. La primera pasada detectó durante revisión la necesidad de muestrear también la rotación sin desplazamiento: quedó corregida y cubierta en la pasada final.
+- [ ] Verificación humana de navegación hasta la boya, lectura de G, salida/retorno buceando y uso en una partida anterior. No se abrió el juego ni Play Mode. Bodega, suministros y recuperación de lancha abandonada siguen pendientes.
+
+## Entrega 3.6b: escenarios repetibles de Develop (8 de noviembre de 2026)
+
+- [x] Nueva partida y escenarios comparten la creación del estado inicial. Solo Nueva partida escribe ese estado en disco; Develop lo aplica en memoria conservando el snapshot anterior a las pruebas.
+- [x] **31 comprobaciones de Develop, 12 nuevas**: inicio con manos y sin recursos, santuario con tridente y sin tesoro, reinicio de giros/equipo, llegada sobre el terreno, panel pausado, ventajas desactivadas, rechazo en Jugador y de escenarios inválidos, repetición sin escribir partida/respaldo y recuperación exacta de una partida previa con dinero, pesca, equipo y giros.
+- [x] Validaciones existentes de informe (20), señales (11), fosa (71) y mecánicas generales aprobadas. Compilación principal `Builds/Windows/La Fosa.exe` correcta y salida 0; evidencia: `unity-developer-scenarios-build.log`. `git diff --check` sin errores.
+- [ ] Revisar botones, aparición junto al santuario y recorrido con teclado/ratón. Las comprobaciones de editor no ejecutaron Play Mode ni reiniciaron la simulación completa de fauna; no constituyen una evaluación humana del balance.
+
 ## Entrega 3.6: Develop/Jugador y retirada del marcador (31 de octubre de 2026)
 
 - [x] Retirado el bloque que proyectaba el rombo, distancia y flechas del destino en `DiveHUD`. Conservados cuaderno, retícula y señales físicas; avisos de regreso ya no remiten al marcador retirado.

@@ -81,6 +81,45 @@ namespace LaFosa.Editor
                 Check(session.ReturnToMenu() && session.Intro && !session.DeveloperSession, "Menú termina pruebas antes de guardar");
                 Check(store.TryLoad(out var saved, out _) && saved.money == 0 && saved.gear.Length == 0, "Menú conserva el progreso normal en disco");
                 Check(session.ContinueGame(), "Continúa la partida normal tras las pruebas");
+                // Use a non-empty normal save so resetting a scenario cannot accidentally
+                // replace the original snapshot with a fresh expedition unnoticed.
+                typeof(Economy).GetMethod("Restore", flags).Invoke(session.Economy, new object[] { 137, new[] { nameof(GearKind.Trident) } });
+                diver.Inventory.TryAdd(config.fish, 2); firstPuzzle.Rotate(0);
+                var capture = typeof(GameSession).GetMethod("CaptureSave", flags);
+                string originalProgress = JsonUtility.ToJson(capture.Invoke(session, null));
+                Check(session.SaveNow(), "Guardar progreso no vacío antes de probar escenarios");
+                session.ToggleDeveloperMode();
+                byte[] scenarioBaseline = File.ReadAllBytes(path), scenarioBackup = File.ReadAllBytes(path + ".bak");
+                session.DeveloperEquip(); session.DeveloperAddMoney();
+                session.ToggleDeveloperAir(); session.ToggleDeveloperSpeed();
+                Check(session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition), "Preparar primera expedición temporal");
+                Check(session.Economy.Money == 0 && diver.Inventory.Stacks.Count == 0 && !session.Economy.Has(GearKind.Trident)
+                    && diver.SafeDepth == config.initialSafeDepth && diver.GetComponent<HarpoonGun>().SelectedTool == 0,
+                    "Inicio recupera manos, mochila vacía y equipo inicial");
+                Check(session.Blocked && session.DeveloperPanelOpen && !session.DeveloperInfiniteAir && !session.DeveloperFastMove
+                    && Vector3.Distance(diver.transform.position, config.spawn) < .01f, "Inicio en playa pausado y sin ventajas");
+                Check(session.DeveloperPrepareScenario(DeveloperScenario.FirstSanctuary), "Preparar primer santuario temporal");
+                Check(session.Economy.Has(GearKind.Trident) && !session.Economy.Has(GearKind.ReinforcedHarpoon)
+                    && diver.GetComponent<HarpoonGun>().SelectedTool == 1 && !firstPuzzle.Solved && firstPuzzle.Moves == 0
+                    && session.Treasures == 0, "Santuario con tridente, sin resolver ni regalar tesoros");
+                Check(Vector3.Distance(diver.transform.position, config.zones[0].stationPosition) < 5
+                    && diver.transform.position.y > WorldBuilder.FloorHeight(diver.transform.position.x, diver.transform.position.z),
+                    "Llegada al santuario por encima del terreno");
+                session.ToggleDeveloperMode();
+                var scenarioPosition = diver.transform.position;
+                Check(!session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition) && diver.transform.position == scenarioPosition,
+                    "Jugador no puede reiniciar escenarios");
+                session.ToggleDeveloperMode();
+                Check(!session.DeveloperPrepareScenario((DeveloperScenario)99) && diver.transform.position == scenarioPosition,
+                    "Escenario desconocido no cambia la prueba");
+                session.DeveloperPrepareScenario(DeveloperScenario.FirstExpedition); session.SaveNow();
+                Check(File.ReadAllBytes(path).SequenceEqual(scenarioBaseline) && File.ReadAllBytes(path + ".bak").SequenceEqual(scenarioBackup),
+                    "Repetir escenarios no modifica partida ni respaldo");
+                session.EndDeveloperSession();
+                Check(JsonUtility.ToJson(capture.Invoke(session, null)) == originalProgress,
+                    "Restaurar dinero, pesca, equipo y giros originales después de varios escenarios");
+                Check(!session.DeveloperPrepareScenario(DeveloperScenario.FirstSanctuary), "Escenarios rechazados fuera de Develop");
+                MooringChecks.Validate(session, store);
                 storeField.SetValue(session, new SaveStore(path, _ => false));
                 session.ToggleDeveloperMode();
                 Check(!session.DeveloperSession && !session.DeveloperMode, "Fallo de guardado inicial impide entrar en Develop");

@@ -63,11 +63,19 @@ namespace LaFosa
             session.Boat = BuildVehicle(session, GearKind.Boat, new Vector3(4.8f, config.waterLevel, 17));
             session.JetSki = BuildVehicle(session, GearKind.JetSki, new Vector3(13.2f, config.waterLevel, 17));
             Label("EMBARCACIONES\nRecoge aquí tus compras", new Vector3(9, 3.8f, 17), .12f, Color.white);
+            var mooring = new GameObject("Amarre de la fosa"); mooring.transform.SetParent(root);
+            mooring.transform.position = SurfaceVehicle.TrenchMooringPosition(config.waterLevel) + Vector3.right * 4;
+            var orange = Mat("Boya de amarre naranja", new Color(1, .52f, .12f));
+            var pale = Mat("Señal de amarre", new Color(.86f, .95f, .86f), true);
+            Shape("Flotador", PrimitiveType.Sphere, new Vector3(0, .25f, 0), new Vector3(1.2f, .6f, 1.2f), orange, false, mooring.transform);
+            Shape("Mástil", PrimitiveType.Cylinder, new Vector3(0, 1.3f, 0), new Vector3(.1f, 1, .1f), pale, false, mooring.transform);
+            Shape("Bandera", PrimitiveType.Cube, new Vector3(.4f, 2.1f, 0), new Vector3(.8f, .45f, .04f), orange, false, mooring.transform);
+            Label("AMARRE DE LA FOSA\nAcerca tu lancha · G amarrar / soltar", mooring.transform.position + Vector3.up * 3, .12f, Color.white);
         }
         SurfaceVehicle BuildVehicle(GameSession session, GearKind kind, Vector3 dock)
         {
             bool boat = kind == GearKind.Boat;
-            var obj = new GameObject(boat ? "Bote de caleta" : "Moto de agua"); obj.transform.SetParent(root); obj.transform.position = dock;
+            var obj = new GameObject(boat ? "Lancha de caleta" : "Moto de agua"); obj.transform.SetParent(root); obj.transform.position = dock;
             var hull = Mat(boat ? "Casco azul" : "Casco naranja", boat ? new Color(.1f, .36f, .5f) : new Color(.95f, .38f, .09f));
             var white = Mat("Cubierta clara", new Color(.87f, .86f, .7f));
             var rubber = Mat("Asiento náutico", new Color(.07f, .1f, .13f));

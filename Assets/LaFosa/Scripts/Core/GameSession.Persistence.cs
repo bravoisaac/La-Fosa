@@ -70,19 +70,20 @@ namespace LaFosa
         {
             if (!Intro || saveStore == null) return false;
             if (HasSaveFiles && !confirmOverwrite) { SaveStatus = "Confirma Nueva partida para reemplazar la expedición y su respaldo."; return false; }
-            var fresh = new SaveData
-            {
-                version = 1, worldSeed = Config.seed, inventory = new SavedStack[0], gear = new string[0],
-                treasures = new string[0], discoveredZones = new string[0], collectedPickups = new string[0],
-                puzzles = puzzles.Select(p => new SavedPuzzle { id = p.zone.id, turns = (int[])p.Definition.startingTurns.Clone() }).ToArray(),
-                vehicles = initialVehicles
-            };
+            var fresh = CreateFreshSave();
             if (!saveStore.TrySave(fresh, out var message, true)) { SaveStatus = message; SaveFailed = true; return false; }
             ApplySave(fresh); Intro = false; CanContinue = true; SaveFailed = false; SaveStatus = message; ApplyPause();
             StartExpeditionReport("new");
             Notify("Nueva expedición. Sigue la guía de la izquierda: pesca en la orilla y reúne $" + TridentPrice + " para el tridente.");
             return true;
         }
+        SaveData CreateFreshSave() => new SaveData
+        {
+            version = 1, worldSeed = Config.seed, inventory = new SavedStack[0], gear = new string[0],
+            treasures = new string[0], discoveredZones = new string[0], collectedPickups = new string[0],
+            puzzles = puzzles.Select(p => new SavedPuzzle { id = p.zone.id, turns = (int[])p.Definition.startingTurns.Clone() }).ToArray(),
+            vehicles = initialVehicles.Select(v => new SavedVehicle { id = v.id, position = v.position, yaw = v.yaw }).ToArray()
+        };
         public bool ContinueGame()
         {
             if (!Intro || saveStore == null) return false;
@@ -120,7 +121,7 @@ namespace LaFosa
                 foreach (var vehicle in new[] { Boat, JetSki })
                 {
                     var saved = data.vehicles.First(v => v.id == vehicle.kind.ToString());
-                    vehicle.Restore(Economy.Has(vehicle.kind), saved.position, saved.yaw);
+                    vehicle.Restore(Economy.Has(vehicle.kind), saved.position, saved.yaw, saved.moored);
                 }
                 Diver.RestoreEquipment(); Diver.GetComponent<HarpoonGun>().SelectTool(data.selectedTool);
                 ProgressChanged?.Invoke();
@@ -131,7 +132,7 @@ namespace LaFosa
             finally { restoring = false; saveDirty = false; }
         }
         SavedVehicle[] CaptureVehicles() => new[] { Boat, JetSki }.Select(v => new SavedVehicle
-            { id = v.kind.ToString(), position = v.transform.position, yaw = v.transform.eulerAngles.y }).ToArray();
+            { id = v.kind.ToString(), position = v.transform.position, yaw = v.transform.eulerAngles.y, moored = v.IsMoored }).ToArray();
         internal SaveData CaptureSave() => new SaveData
         {
             version = 1, worldSeed = Config.seed, money = Economy.Money, selectedTool = Diver.GetComponent<HarpoonGun>().SelectedTool,

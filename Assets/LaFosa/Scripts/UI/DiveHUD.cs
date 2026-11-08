@@ -84,8 +84,10 @@ namespace LaFosa
                 RectColor(798, 440, 4, 4, Color.white);
                 if (diver.Riding != null)
                 {
-                    Panel(540, 720, 520, 50);
+                    Panel(540, 705, 520, 90);
                     Text(diver.Riding.DisplayName + " · WASD conducir · E desembarcar", 550, 731, 500, 28, 16, Mint, TextAnchor.MiddleCenter);
+                    if (diver.Riding.kind == GearKind.Boat)
+                        Text(diver.Riding.MooringHint, 550, 765, 500, 24, 14, Gold, TextAnchor.MiddleCenter);
                 }
                 if (diver.Target != null)
                 {

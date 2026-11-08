@@ -7,12 +7,14 @@ Etapa 1 del plan. Una partida local por usuario del sistema. El menú permite **
 - Saldo, pilas de inventario, compras únicas y herramienta seleccionada.
 - Tesoros reclamados y mejoras de aire/profundidad, aunque se haya descartado el objeto.
 - Giros, cantidad de movimientos y apertura de cada mecanismo; tapa de cada cofre.
-- Acceso a las compuertas de descenso, derivado de esos mecanismos y tesoros sin añadir estado duplicado al formato v1.
+- Requisitos de los mecanismos derivados de tesoros/equipo. Las antiguas compuertas de descenso fueron retiradas: el paso por la fosa es libre.
 - Zonas descubiertas: se registran al acercarse a menos de 18 m del santuario, o al recuperar su tesoro.
 - Las nueve conchas de la costa: las recogidas no se vuelven a entregar al cargar.
-- Propiedad, posición y orientación del bote y de la moto de agua.
+- Propiedad, posición y orientación de la lancha y de la moto de agua; estado de amarre de la lancha.
 
 Al continuar, el buzo vuelve a la playa con salud y aire completos. No se conserva su posición bajo el agua, un pasajero embarcado, la cámara, la recarga de herramientas ni el estado temporal de la fauna. Los peces se regeneran; ya eran un recurso renovable. No existe almacenamiento/carga de embarcaciones: corresponde a la etapa 4.
+
+Desde 4.2a, `SavedVehicle.moored` es un campo opcional del formato v1: si falta, se interpreta como false. Solo una lancha comprada puede estar amarrada, en el punto de la fosa y con su orientación de amarre; la validación rechaza otros estados. Amarrar/soltar marca cambios para guardar al final del frame. Las pruebas Develop conservan/restauran este campo en su snapshot, y los escenarios iniciales empiezan desamarrados.
 
 ## Cuándo se guarda
 

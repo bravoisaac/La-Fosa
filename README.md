@@ -31,7 +31,8 @@ La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con
 | Atrapar con las manos / usar herramienta | Clic izquierdo |
 | Manos / tridente / arpón / red | 1 / 2 / 3 / 4 |
 | Abrir tienda / subir o bajar de vehículo | E |
-| Conducir bote o moto | W/S avanzar-retroceder, A/D girar |
+| Conducir lancha o moto | W/S avanzar-retroceder, A/D girar |
+| Amarrar / soltar la lancha junto a la boya de la fosa | G, desde el puesto de conducción |
 | Linterna | F |
 | Inventario | Tab |
 | Pausa | Esc |
@@ -42,6 +43,8 @@ La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con
 ## Modo Develop
 
 Durante una partida, **F2** guarda primero tu progreso normal y abre una sesión temporal de pruebas. También se puede entrar desde pausa. **F1** abre/cierra el panel: aire y salud fijos, velocidad ×3 con colisiones, recarga, $1000 de prueba, herramientas/equipo para 650 m y transporte a playa o distintas profundidades.
+
+Para repetir mecánicas, **Inicio sin equipo** reinicia la prueba en la playa con manos, sin dinero y mochila vacía. **Primer santuario** prepara el tridente junto al primer sello, todavía sin resolver. Ambos restauran puzles, tesoros y recursos al inicio de la prueba, apagan aire fijo/velocidad extra y mantienen abierto el panel; pulsa F2 para probar como Jugador. Reemplazan los cambios de la prueba actual, conservando tu partida normal. **Equipo para 650 m** mejora el equipo temporal sin reiniciar el progreso. Los escenarios no reinician toda la simulación de fauna.
 
 **F2** alterna Develop y Jugador manteniendo la posición, el equipo y los cambios de la prueba. En Jugador se desactivan los privilegios: vuelve el consumo de aire, el daño y la velocidad normal. La etiqueta superior recuerda que la sesión sigue **sin guardar**. Para recuperar tu partida, pulsa **Terminar pruebas** en el panel: se restauran dinero, inventario, puzles, tesoros, equipo y vehículos anteriores y vuelves a la playa. Volver al menú también termina las pruebas. Cerrar el juego descarta los cambios temporales; no se escriben sobre la partida ni su respaldo. Los informes de expedición se interrumpen durante las pruebas.
 
@@ -86,12 +89,14 @@ Empiezas **sin dinero, sin arpón y pescando con las manos**. Los peces de la or
 | Bombona de O₂ ampliada | $90 | +60 unidades de aire, acumulables con cada tesoro; duración según profundidad y aceleración |
 | Aletas | $75 | +35% de velocidad de nado, también al acelerar |
 | Red de pesca | $120 | Requiere tridente; tecla 4, hasta 5 peces en un radio de 4 m, recarga de 5 s |
-| Bote de caleta | $240 | Embarcación de superficie a 12 m/s |
+| Lancha de caleta | $240 | Navega a 12 m/s; amarre sobre la fosa con G |
 | Moto de agua | $360 | Embarcación de superficie a 22 m/s |
 
 Las mejoras se compran una sola vez y no consumen espacios de mochila. Puedes volver a las manos con la tecla 1. La bombona amplía permanentemente la capacidad de la partida; no es un consumible. La red es reutilizable, funciona buceando o desde una embarcación y respeta los obstáculos. Las manos, el arpón y el tridente requieren estar bajo el agua. Cambiar de herramienta no elimina la recarga pendiente.
 
-El bote comprado aparece a la izquierda del muelle y la moto a la derecha. Acércate, mira la embarcación y pulsa **E**. Usa **W/S** para avanzar/retroceder, **A/D** para girar y el ratón para mirar. **E** te deja nadando a un costado; el vehículo queda donde lo abandonaste. **R** rescata al buzo y conserva la propiedad. La conducción usa colisiones y límites de costa; no incluye una simulación de oleaje o combustible.
+La lancha comprada aparece a la izquierda del muelle y la moto a la derecha. Acércate, mira la embarcación y pulsa **E**. Usa **W/S** para avanzar/retroceder, **A/D** para girar y el ratón para mirar. **E** te deja nadando a un costado; el vehículo queda donde lo abandonaste. **R** rescata al buzo y conserva la propiedad. La conducción usa colisiones y límites de costa; no incluye una simulación de oleaje o combustible.
+
+La boya naranja sobre la fosa señala el **amarre de la lancha**, a un lado del conducto central. Desde el puesto de conducción, acércate a menos de 8 m del punto de amarre y pulsa **G**. El HUD avisa cuándo está disponible. Si el acercamiento o giro están obstruidos, la lancha permanece donde está. Amarrada queda inmóvil; puedes desembarcar con E, bucear, volver a subir y soltar con G. Posición y amarre se conservan al guardar/cargar; una partida anterior carga las embarcaciones desamarradas. La moto no usa este amarre. La bodega y la recuperación de una lancha abandonada siguen pendientes.
 
 ## Ampliar
 

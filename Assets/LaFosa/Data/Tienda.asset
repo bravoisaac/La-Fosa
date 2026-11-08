@@ -37,8 +37,8 @@ MonoBehaviour:
     description: "Después del tridente. Tecla 4: hasta 5 peces cercanos."
     price: 120
   - gear: 5
-    title: Bote de caleta
-    description: Conducible a 12 m/s. Entrega al lado izquierdo del muelle.
+    title: Lancha de caleta
+    description: Navega a 12 m/s. G para amarrar junto a la boya sobre la fosa.
     price: 240
   - gear: 6
     title: Moto de agua

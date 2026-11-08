@@ -6,6 +6,8 @@ Primera entrega del 18 de octubre de 2026. Implementa orientación contextual; e
 
 ## Recorrido
 
+Para repetir una parte del recorrido desde Develop, abrir F1 y elegir **Inicio sin equipo** o **Primer santuario**, después F2 para usar las reglas de Jugador. Los escenarios reinician el progreso temporal y desactivan ventajas; al terminar pruebas se recupera la partida anterior. No mezclar tiempos de diferentes escenarios en la ficha de una expedición completa ni presentar el salto al santuario como recorrido realizado desde la playa.
+
 1. En Nueva partida, el cuaderno explica ratón, WASD, bajar con C y subir a respirar con ESPACIO. El marcador apunta a la pesca de orilla y, bajo el agua cerca de esa zona, al pez costero disponible más cercano. Una señal junto a las primeras boyas recuerda los controles.
 2. La guía calcula el dinero que falta sumando saldo y valor real de la pesca. No promete un número fijo de peces. Al apuntar a un pez se muestra distancia al centro del pez y alcance de la herramienta; la captura real sigue usando su volumen físico y respetando obstáculos.
 3. Cuando la pesca permite comprar el tridente, o la mochila de pesca está llena, el destino cambia a la cabaña. Vender y comprar actualizan el objetivo. Una mochila llena de conchas ofrece descartar una pila mediante TAB.

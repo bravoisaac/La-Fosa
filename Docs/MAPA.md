@@ -1,5 +1,25 @@
 # Mapa dinámico
 
+## Entrega 4.1 / 4.2a: lancha y amarre sobre la fosa (8 de noviembre)
+
+- Objetivo: primera entrega técnica de la etapa 4 para preparar salidas desde la lancha. La evaluación humana de etapas 1–3 sigue abierta; no dar por cerrado ese hito.
+- Entrada/conexiones: `WorldBuilder.BuildVehicles` crea lancha y señal de amarre → `SurfaceVehicle` controla amarrar/soltar → `DiverController` recibe G → HUD indica estado. Persistencia captura/restaura estado de amarre.
+- Alcance: nombre uniforme Lancha de caleta; amarre a un lado del eje de descenso, con aproximación corta comprobada contra terreno/obstáculos. Solo lancha comprada y ocupada, dentro del radio; amarrada no se mueve y permite desembarcar/reembarcar.
+- Archivos: vehículo, constructor, controles/HUD, catálogo/defaults, guardado/validación y comprobaciones de editor. Extensión opcional `SavedVehicle.moored` (false en v1 anterior); no cambiar IDs, precio ni borrar partidas.
+- Riesgo medio: colisiones al aproximar, salida del vehículo, estado persistente y compatibilidad. Probar con componentes reales en editor y archivos temporales; compilar Windows sin ejecutar el juego.
+- Pendiente explícito: bodega/carga, preparación desde la embarcación, recuperación de una lancha abandonada y recorrido humano de la etapa 4.
+- Resultado: 18 comprobaciones de amarre aprobadas con componentes reales y guardado temporal, incluidas obstrucción en traslación y giro sobre el mismo punto. También pasan 31 de Develop, 71 de fosa, 20 de informe, 11 de señales y validaciones generales. Compilación principal y salida 0: `unity-mooring-final-build.log`. No se abrió el jugador ni Play Mode.
+
+## Entrega 3.6b: repetir la primera expedición desde Develop (8 de noviembre)
+
+- Objetivo: preparar la revisión humana pendiente con escenarios repetibles sin borrar el progreso personal.
+- Framework/entrada: Unity, `DiveHUD.Developer` → `GameSession.Developer` → creación/restauración de `SaveData` existente.
+- Cambio: compartir la creación de partida inicial con Nueva partida; escenarios temporales de inicio sin equipo y primer santuario con tridente. Reinician solo el progreso de prueba, desactivan ventajas y mantienen el panel abierto para cambiar a Jugador.
+- Conservar: snapshot anterior a Develop, archivos de partida/respaldo, formato v1, precios, geometría y ausencia de marcador. Los escenarios no reinician la simulación completa de fauna.
+- Archivos: parciales de persistencia/desarrollador, panel, `DeveloperModeChecks` y documentación. Riesgo medio por reiniciar estado: verificar repetición, rechazo en Jugador y restauración de una partida con progreso real en una carpeta temporal.
+- Validación: editor y compilación principal Windows sin abrir el juego. No cerrar 3.3b/3.4b ni ajustar balance sin observación humana.
+- Resultado: 31 comprobaciones de Develop (12 nuevas) y validaciones existentes aprobadas; compilación principal Windows y salida 0 en `unity-developer-scenarios-build.log`. Verificados repetición, llegada por encima del terreno, restricciones en Jugador, preservación de principal/respaldo y restauración del progreso previo no vacío. Panel renderizado y recorrido humano pendientes.
+
 ## Entrega 3.6: quitar marcador y añadir pruebas Develop/Jugador
 
 - Petición directa: retirar el marcador de misiones y alternar desarrollador/jugador para probar mecánicas.

@@ -47,7 +47,7 @@ namespace LaFosa.Editor
                         new ShopOffer(GearKind.OxygenTank, "Bombona de O₂ ampliada", "+60 unidades de aire; la duración depende de la profundidad y de acelerar.", 90),
                         new ShopOffer(GearKind.Fins, "Aletas de buceo", "Nadas un 35% más rápido. Se equipan automáticamente.", 75),
                         new ShopOffer(GearKind.Net, "Red de pesca", "Después del tridente. Tecla 4: hasta 5 peces cercanos.", 120),
-                        new ShopOffer(GearKind.Boat, "Bote de caleta", "Conducible a 12 m/s. Entrega al lado izquierdo del muelle.", 240),
+                        new ShopOffer(GearKind.Boat, "Lancha de caleta", "Navega a 12 m/s. G para amarrar junto a la boya sobre la fosa.", 240),
                         new ShopOffer(GearKind.JetSki, "Moto de agua", "Conducible a 22 m/s. Entrega al lado derecho del muelle.", 360)
                     };
                     AssetDatabase.CreateAsset(catalog, DataPath + "/Tienda.asset");

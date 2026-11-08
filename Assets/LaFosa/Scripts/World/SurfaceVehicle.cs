@@ -10,7 +10,11 @@ namespace LaFosa
         public Vector3 hullSize = new Vector3(2.2f, .8f, 4.4f);
         public Vector3 SeatPosition => kind == GearKind.Boat ? new Vector3(0, .65f, -.55f) : new Vector3(0, .45f, -.3f);
         public DiverController Passenger { get; private set; }
-        public string DisplayName => kind == GearKind.Boat ? "Bote de caleta" : "Moto de agua";
+        public string DisplayName => kind == GearKind.Boat ? "Lancha de caleta" : "Moto de agua";
+        public bool IsMoored { get; private set; }
+        public static Vector3 TrenchMooringPosition(float waterLevel) => new Vector3(6, waterLevel, 76);
+        public bool NearMooring => Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(6, 76)) <= 8;
+        public string MooringHint => IsMoored ? "G soltar amarre" : NearMooring ? "G amarrar en la fosa" : "Amarre: boya sobre la fosa";
         public override string Prompt => "Subir a " + DisplayName + " · E";
         public void Deliver() { gameObject.SetActive(true); }
         public override void Interact(DiverController diver) { TryBoard(diver); }
@@ -24,7 +28,7 @@ namespace LaFosa
         }
         public void Drive(float throttle, float steering, float deltaTime)
         {
-            if (Passenger == null || session.Blocked) return;
+            if (Passenger == null || session.Blocked || IsMoored) return;
             throttle = Mathf.Clamp(throttle, -1, 1); steering = Mathf.Clamp(steering, -1, 1);
             // Substeps avoid crossing a dock or rock during a slow frame.
             int steps = Mathf.Clamp(Mathf.CeilToInt(deltaTime / .02f), 1, 30);
@@ -37,6 +41,28 @@ namespace LaFosa
                 if (!Navigable(next, rotation)) return;
                 transform.SetPositionAndRotation(next, rotation);
             }
+        }
+        public bool ToggleMooring()
+        {
+            if (kind != GearKind.Boat || Passenger == null || session.Blocked || !session.Economy.Has(kind)) return false;
+            if (IsMoored)
+            {
+                IsMoored = false; session.MarkSaveDirty(); session.Notify("Amarre suelto. WASD para navegar."); return true;
+            }
+            if (!NearMooring) { session.Notify("Acerca la lancha a la boya de amarre sobre la fosa."); return false; }
+            Vector3 origin = transform.position, destination = TrenchMooringPosition(session.Config.waterLevel);
+            // Check the complete short approach before moving; failed attempts leave the boat in place.
+            int steps = Mathf.Max(1, Mathf.CeilToInt(Vector3.Distance(origin, destination) / .25f));
+            steps = Mathf.Max(steps, Mathf.CeilToInt(Quaternion.Angle(transform.rotation, Quaternion.identity) / 5));
+            for (int i = 0; i <= steps; i++)
+            {
+                float t = i / (float)steps;
+                if (!Navigable(Vector3.Lerp(origin, destination, t), Quaternion.Slerp(transform.rotation, Quaternion.identity, t)))
+                { session.Notify("Amarre ocupado o aproximación bloqueada. Despeja el paso."); return false; }
+            }
+            transform.SetPositionAndRotation(destination, Quaternion.identity);
+            IsMoored = true; Physics.SyncTransforms(); session.MarkSaveDirty();
+            session.Notify("Lancha amarrada. E para bucear; G para soltar el amarre."); return true;
         }
         bool Navigable(Vector3 position, Quaternion rotation)
         {
@@ -65,9 +91,10 @@ namespace LaFosa
             session.Notify("No hay espacio al costado. Aléjate del muelle o pulsa R."); return false;
         }
         public void ClearPassenger() { Passenger = null; }
-        internal void Restore(bool owned, Vector3 position, float yaw)
+        internal void Restore(bool owned, Vector3 position, float yaw, bool moored = false)
         {
             Passenger = null;
+            IsMoored = owned && kind == GearKind.Boat && moored;
             transform.SetPositionAndRotation(position, Quaternion.Euler(0, yaw, 0));
             gameObject.SetActive(owned);
         }

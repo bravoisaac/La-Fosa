@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace LaFosa
 {
+    public enum DeveloperScenario { FirstExpedition, FirstSanctuary }
+
     public sealed partial class GameSession
     {
         SaveData developerSnapshot;
@@ -49,6 +51,34 @@ namespace LaFosa
         }
         public void ToggleDeveloperAir() { if (DeveloperMode) DeveloperInfiniteAir = !DeveloperInfiniteAir; }
         public void ToggleDeveloperSpeed() { if (DeveloperMode) DeveloperFastMove = !DeveloperFastMove; }
+        public bool DeveloperPrepareScenario(DeveloperScenario scenario)
+        {
+            if (!DeveloperSession || !DeveloperMode || Intro) return false;
+            if (scenario != DeveloperScenario.FirstExpedition && scenario != DeveloperScenario.FirstSanctuary) return false;
+            var fresh = CreateFreshSave();
+            bool sanctuary = scenario == DeveloperScenario.FirstSanctuary;
+            if (sanctuary)
+            {
+                fresh.gear = new[] { nameof(GearKind.Trident) };
+                fresh.selectedTool = 1;
+            }
+            // Apply only to the temporary session. Never replace developerSnapshot or save to disk.
+            ApplySave(fresh);
+            DeveloperInfiniteAir = false; DeveloperFastMove = false;
+            if (sanctuary)
+            {
+                var station = Config.zones[0].stationPosition;
+                Diver.LeaveVehicle(station + new Vector3(0, 2, 3));
+                Diver.LookAt(station + Vector3.up * 2);
+                Physics.SyncTransforms();
+            }
+            DeveloperPanelOpen = true;
+            SaveStatus = "PRUEBA TEMPORAL · escenario reiniciado sin guardar.";
+            ApplyPause();
+            Notify(sanctuary ? "Primer santuario: tridente listo y sello sin resolver. F2 para probar como jugador."
+                : "Inicio: manos, mochila vacía y sin dinero. F2 para probar como jugador.");
+            return true;
+        }
         public void DeveloperAddMoney()
         {
             if (!DeveloperMode) return;
