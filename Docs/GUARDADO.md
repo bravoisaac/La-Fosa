@@ -1,49 +1,45 @@
 # Guardado de la expedición
 
-Etapa 1 del plan. Una partida local por usuario del sistema. El menú permite **Nueva partida** y **Continuar**; una nueva partida solicita confirmación cuando existe el archivo principal o su respaldo. Cancelar conserva los archivos. La pausa incluye **Guardar y volver al menú** y permanece en el juego si falla la escritura.
+Estado vigente: formato v2, compatible con lectura de v1. Una partida local por usuario del sistema. Nueva partida solicita confirmación si existe el principal o respaldo; cancelar conserva ambos. Guardar y volver al menú permanece en el juego si falla la escritura.
 
 ## Qué se conserva
 
-- Saldo, pilas de inventario, compras únicas y herramienta seleccionada.
-- Tesoros reclamados y mejoras de aire/profundidad, aunque se haya descartado el objeto.
-- Giros, cantidad de movimientos y apertura de cada mecanismo; tapa de cada cofre.
-- Requisitos de los mecanismos derivados de tesoros/equipo. Las antiguas compuertas de descenso fueron retiradas: el paso por la fosa es libre.
-- Zonas descubiertas: se registran al acercarse a menos de 18 m del santuario, o al recuperar su tesoro.
-- Las nueve conchas de la costa: las recogidas no se vuelven a entregar al cargar.
-- Propiedad, posición y orientación de la lancha y de la moto de agua; estado de amarre de la lancha.
+- Dinero, pilas de inventario, compras únicas y herramienta seleccionada.
+- Mejoras de equipo fabricadas, sin ocupar espacios de mochila.
+- Momento UTC de regeneración de cada depósito de minerales. Cargar no reinicia el plazo; los 180 segundos transcurren también con el juego cerrado.
+- Zonas descubiertas, conchas recogidas y propiedad/posición/orientación de vehículos.
+- Amarre de la lancha. En datos antiguos sin ese campo se interpreta como desamarrada.
 
-Al continuar, el buzo vuelve a la playa con salud y aire completos. No se conserva su posición bajo el agua, un pasajero embarcado, la cámara, la recarga de herramientas ni el estado temporal de la fauna. Los peces se regeneran; ya eran un recurso renovable. No existe almacenamiento/carga de embarcaciones: corresponde a la etapa 4.
-
-Desde 4.2a, `SavedVehicle.moored` es un campo opcional del formato v1: si falta, se interpreta como false. Solo una lancha comprada puede estar amarrada, en el punto de la fosa y con su orientación de amarre; la validación rechaza otros estados. Amarrar/soltar marca cambios para guardar al final del frame. Las pruebas Develop conservan/restauran este campo en su snapshot, y los escenarios iniciales empiezan desamarrados.
+Continuar devuelve al buzo a la playa con aire y salud completos. No guarda posición submarina, pasajero embarcado, cámara, recargas ni estado temporal de peces. La bodega de embarcaciones todavía no existe. El rescate conserva objetos.
 
 ## Cuándo se guarda
 
-Compras, ventas y tesoros guardan al completar su transacción. Inventario, conchas, herramienta, giros y sellos marcan cambios para guardar al final del frame, evitando capturar una operación a medio terminar. También se guarda al regresar a la superficie/playa, desembarcar, perder el foco, pausar la aplicación y cerrar normalmente; cada 20 segundos se actualiza la posición de los vehículos. La pausa permite guardar explícitamente al volver al menú.
+Compras, ventas, extracción y fabricación guardan después de completar la transacción. Cambios de inventario, conchas, herramienta y amarre se guardan al final del frame. También se guarda al regresar, desembarcar, perder foco, pausar la aplicación y cerrar normalmente; cada 20 segundos se actualizan posiciones de vehículos. La pausa permite guardar explícitamente.
 
-Un cierre forzado puede perder los cambios posteriores al último guardado confirmado. El guardado no simula progreso mientras el juego está cerrado.
+Un cierre forzado puede perder cambios posteriores al último guardado confirmado. La regeneración de minerales usa reloj real; no se simulan pesca, ingresos ni expediciones sin conexión.
 
 ## Archivo y recuperación
 
-Se usa `Application.persistentDataPath/expedition.json`. En Windows, con los ajustes actuales del proyecto, corresponde a `%USERPROFILE%/AppData/LocalLow/Caleta Bruma/La Fosa/expedition.json`. No está dentro del repositorio ni dentro del ejecutable.
+`Application.persistentDataPath/expedition.json`: en Windows, `%USERPROFILE%/AppData/LocalLow/Caleta Bruma/La Fosa/expedition.json`. No está dentro del repositorio ni del ejecutable.
 
-- `expedition.json`: principal, envoltura JSON con datos de versión 1 y checksum SHA-256.
-- `expedition.json.bak`: copia de la última escritura válida anterior; en una nueva partida ambos archivos representan la expedición nueva.
-- `expedition.json.tmp`: escritura temporal. Se vacía el búfer a disco antes de reemplazar el principal.
+- `expedition.json`: envoltura JSON con datos v2 y checksum SHA-256.
+- `expedition.json.bak`: última escritura válida anterior; Nueva partida establece ambos con la partida nueva.
+- `expedition.json.tmp`: escritura temporal antes de sustituir el principal.
 
-El checksum detecta corrupción; no es una protección contra modificaciones deliberadas. Antes de tocar la sesión se validan versión, semilla, IDs, cantidades, capacidad, requisitos de equipo, progresión, circuitos resueltos y coordenadas finitas de vehículos. Las mejoras se derivan de compras y tesoros, sin acumularlas de nuevo en cada carga.
+El checksum detecta corrupción, no impide modificaciones deliberadas. Antes de restaurar se validan versión, semilla, IDs, cantidades, capacidad, compras, orden de mejoras, plazos de minerales y estado/coordenadas de vehículos. El equipo se reconstruye sin sumar otra vez mejoras ya obtenidas.
 
-Si el principal está ausente, truncado, dañado o es incompatible, se intenta el respaldo y se avisa en el menú. Guardar después de esa recuperación conserva el respaldo válido. Si ambos fallan, Continuar queda deshabilitado; los archivos se conservan hasta que el jugador confirme Nueva partida. Un fallo de escritura mantiene el progreso en memoria y muestra un aviso; se puede reintentar desde pausa.
+Si el principal falla se intenta el respaldo y se avisa. Guardar después de recuperar conserva el respaldo válido. Si ambos fallan, Continuar queda deshabilitado; los archivos permanecen hasta confirmar Nueva partida. Un fallo de escritura mantiene el progreso en memoria y muestra aviso.
 
-## Identificadores y ampliaciones
+## Migración e identificadores
 
-Los objetos usan `ItemDefinition.id`. Las zonas usan `DiveZoneDefinition.id`: `huiros`, `naufragio`, `abismo`; cada zona tiene exactamente un mecanismo y un tesoro, y su ID identifica ambos estados. Las embarcaciones y compras usan nombres estables de `GearKind`, no sus índices numéricos. Las conchas usan `coast-shell-0` a `coast-shell-8`.
+Las partidas v1 se validan con las definiciones antiguas de circuitos y recompensas. Sus mejoras ganadas se convierten a `equipmentUpgrades`; no se exige volver a fabricarlas. Se conservan dinero, compras, inventario, descubrimientos, conchas, vehículos y amarre. La siguiente escritura usa v2, con `treasures` y `puzzles` vacíos. Los objetos antiguos del inventario se conservan, pero ya no gobiernan la progresión. Un v1 sin datos de minerales empieza con vetas disponibles.
 
-No renombrar estos IDs al cambiar un título visible. El formato actual rechaza semillas distintas, IDs desconocidos y tableros con dimensiones incompatibles. No hay migraciones de formatos futuros ni adaptación automática a cambios de contenido. Al ampliar zonas o modificar la geometría de navegación debe diseñarse y probarse una migración antes de distribuir esa versión.
+Los objetos usan `ItemDefinition.id`; las mejoras conservan IDs `huiros`, `naufragio`, `abismo`. Las vetas usan IDs únicos de `WorldBuilder.Minerals`. Compras/vehículos usan nombres estables de `GearKind`, y las conchas `coast-shell-0` a `coast-shell-8`. No cambiar IDs al renombrar títulos visibles. No hay adaptación automática para formatos futuros, semillas distintas o contenido desconocido.
 
-## Pruebas
+## Develop y pruebas
 
-`SmokeCheck.Persistence` amplía `--smoke-test` con transacciones, restauración, duplicados, nueva partida, respaldo, archivos ausentes/dañados, valores inválidos y fallo de escritura. Cada ejecución completa usa una carpeta aislada bajo `Builds/Windows/Verification/SaveTests-*`, sin leer ni sobrescribir la partida personal.
+Entrar a Develop guarda primero el progreso normal y toma una copia. Extracción, fabricación y cierre durante la prueba no escriben sobre la partida personal ni su respaldo. Terminar pruebas restaura el progreso y vuelve a la playa; al cargar se aplica el reloj real a la regeneración.
 
-Para comprobar un cierre real, ejecutar en orden el mismo binario con `--smoke-test --save-restart-write` y después `--smoke-test --save-restart-read`. Estos dos modos comparten solamente `Verification/RestartSave`, registran su resultado en `restart-write.txt` y `restart-read.txt` y se cierran automáticamente. El segundo proceso compara todos los datos guardados y comprueba recompensa única y mejoras.
+`EconomyProgressionChecks` verifica transacciones, plazos persistentes, fabricación duplicada, datos inválidos, migración v1 parcial/completa y recarga v2. `DeveloperModeChecks` comprueba aislamiento y restauración; ambos usan archivos temporales propios. Evidencia: `unity-economy-final-build.log`, sin Play Mode.
 
-La prueba humana del menú, cancelación, avisos y navegación se detalla en `Docs/PRUEBAS.md`.
+El recorrido actual de `SmokeCheck.Start` y los modos `--smoke-test --save-restart-write` / `--smoke-test --save-restart-read` están adaptados y compilados para economía. **No se ejecutaron en esta entrega.** Los antiguos auxiliares de diagnóstico de puzles no validan el mundo actual. La revisión humana del menú y continuidad sigue pendiente en `Docs/PRIMERA_EXPEDICION.md`.

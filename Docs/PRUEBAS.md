@@ -1,5 +1,17 @@
 # Validación
 
+## Entrega E1–E4: economía, minería y fabricación (9 de noviembre de 2026)
+
+- [x] Mundo sin puzles, santuarios ni cofres de progresión; 35 vetas y tres recetas de equipo. Pico de $45, extracción E y taller FABRICAR.
+- [x] **39 comprobaciones económicas**: compra con venta real, pico/requisitos, distancia/obstáculos/mochila, regeneración persistente, costes completos, orden, duplicados, las tres recetas, carga v2 y migración v1 parcial/completa.
+- [x] **16 comprobaciones Develop**, **18 de amarre**, **71 de fosa**, **20 de informes**, **11 de señales**, además de inventario/capacidad/equipo. Ejecutadas en editor, sin Play Mode; guardados de prueba aislados.
+- [x] Compilación principal Windows terminada: `Builds/Windows/La Fosa.exe`. Log `unity-economy-final-build.log`: `LA_FOSA_ECONOMY_TESTS_OK`, `LA_FOSA_DEVELOPER_TESTS_OK`, `LA_FOSA_BUILD_OK` y demás suites.
+- [x] Diagnóstico `SmokeCheck.Start` y modos de reinicio adaptados y compilados para economía.
+- [ ] Ejecutar el diagnóstico en jugador: no se lanzó en esta entrega.
+- [ ] Recorrido humano, revisión visual del taller/vetas/HUD y balance de ingresos/materiales/aire: ficha en `Docs/PRIMERA_EXPEDICION.md`.
+
+**Historial a continuación:** resultados de versiones anteriores. Las pruebas de puzles, sellos, cofres, marcador y compuertas describen contenido retirado; no constituyen validación del diseño económico actual. Los antiguos recorridos manuales quedan sustituidos por la ficha vigente.
+
 ## Entrega 4.1 / 4.2a: lancha y amarre (8 de noviembre de 2026)
 
 - [x] Nombre Lancha de caleta en catálogo, modelo y HUD, manteniendo ID Boat y precio $240. Boya/señal en la superficie a un lado del conducto central; no genera colisión que cierre el descenso.

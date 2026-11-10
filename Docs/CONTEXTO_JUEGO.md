@@ -4,7 +4,7 @@ Este es el contexto de diseño de **La Fosa**. Explica la experiencia que se qui
 
 ## Concepto
 
-La Fosa es un juego de exploración submarina, aventura y puzles en primera persona, desarrollado en Unity con estética 3D low poly. Comienza en una caleta chilena y gira alrededor de una enorme fosa marina misteriosa.
+La Fosa es un juego de exploración submarina, economía y fabricación en primera persona, desarrollado en Unity con estética 3D low poly. Comienza en una caleta chilena y gira alrededor de una enorme fosa marina misteriosa. La petición vigente retira los puzles y centra el progreso en pescar, vender, extraer minerales y fabricar equipo.
 
 La inspiración de Made in Abyss es la curiosidad por descender, el asombro ante entornos desconocidos y el peligro creciente. El mundo, los personajes, la historia, las criaturas y los mecanismos de La Fosa serán propios.
 
@@ -17,7 +17,7 @@ El objetivo principal es descender, descubrir los secretos de la fosa y preparar
 Las prioridades de diseño son:
 
 1. **Exploración y descubrimiento:** cada capa debe ofrecer algo que el jugador quiera conocer.
-2. **Puzles y pruebas del entorno:** observar, comprender y actuar permite abrir nuevos caminos.
+2. **Recursos y fabricación:** explorar el fondo para obtener minerales y crear equipo permite preparar descensos más largos.
 3. **Preparación y progreso:** las herramientas y la infraestructura hacen posibles nuevas expediciones.
 4. **Economía al servicio de la exploración:** pescar y recuperar hallazgos financia el siguiente descenso.
 5. **Peligro creciente:** la profundidad exige más cuidado; combatir es una opción, junto a evitar amenazas y buscar otras rutas.
@@ -31,9 +31,9 @@ No todas las recompensas tienen que ser dinero. Una ruta descubierta, una pista,
 | Motor y presentación | Unity, 3D low poly, primera persona |
 | Punto de partida | Caleta chilena con una cabaña que funciona como tienda |
 | Inicio del jugador | Sin armas; captura peces con las manos |
-| Primera herramienta | Tridente; después se accede al arpón |
-| Actividad central | Explorar la fosa y superar puzles o pruebas para avanzar |
-| Economía | Vender pesca y hallazgos para comprar herramientas e infraestructura |
+| Primeras herramientas | Pico para minería; tridente opcional para pesca, necesario para comprar arpón/red |
+| Actividad central | Explorar, pescar, extraer minerales y fabricar equipo para descender más |
+| Economía | Vender pesca para financiar compras y recetas; reservar minerales para fabricación |
 | Herramienta futura | Ballesta adaptada al uso submarino; su posición exacta en la progresión está pendiente |
 | Infraestructura | Pasar de inmersiones desde la costa a una lancha y, después, una base sobre la fosa |
 | Apoyo económico futuro | Contratar exploradores para enviar expediciones |
@@ -41,7 +41,7 @@ No todas las recompensas tienen que ser dinero. Una ruta descubierta, una pista,
 
 ## Ciclo de una expedición
 
-**Preparar → descender → explorar y resolver pruebas → obtener capturas y hallazgos → regresar → vender y mejorar → descender más.**
+**Preparar → descender → explorar, pescar y extraer minerales → regresar → vender y fabricar → descender más.**
 
 Antes de salir, el jugador decide qué llevar y qué objetivo perseguir. Bajo el agua administra aire, capacidad de carga y exposición al peligro. Al regresar puede invertir en herramientas, equipo, transporte o infraestructura.
 
@@ -49,32 +49,32 @@ La siguiente meta debe ser comprensible: conseguir más aire y mejorar el equipo
 
 ## Estructura de la fosa
 
-La ruta principal de descenso es fácil de reconocer. A su alrededor hay cuevas, desvíos, secretos y lugares opcionales. **Decisión del usuario del 28 de octubre: el acceso físico a toda la fosa es libre; el límite es el aire disponible, no una pared.** La preparación amplía el alcance de la expedición y los puzles entregan mejoras, sin crear compuertas obligatorias entre capas.
+La ruta principal de descenso es fácil de reconocer. A su alrededor hay cuevas, desvíos, secretos y lugares opcionales. **Decisión del usuario del 28 de octubre: el acceso físico a toda la fosa es libre; el límite es el aire disponible, no una pared.** Fabricar mejoras amplía el alcance de la expedición, sin crear compuertas obligatorias entre capas.
 
-**Referencia aportada: `fosa mapa.png`.** Corte vertical con entrada estrecha, paredes irregulares, ramificaciones, cámaras y ensanchamiento inferior. Las cinco líneas numeradas señalan niveles donde sube la presión y aumenta el gasto de aire. La primera implementación amplía el fondo a 650 m, con umbrales a 60, 150, 280, 420 y 560 m; son valores iniciales de diseño, ajustables tras probar. Conserva los tres santuarios iniciales y amplía la geometría de exploración bajo ellos.
+**Referencia aportada: `fosa mapa.png`.** Corte vertical con entrada estrecha, paredes irregulares, ramificaciones, cámaras y ensanchamiento inferior. Las cinco líneas numeradas señalan niveles donde sube la presión y aumenta el gasto de aire. La implementación amplía el fondo a 650 m, con umbrales a 60, 150, 280, 420 y 560 m; son valores iniciales de diseño, ajustables tras probar. Las primeras zonas de minerales están cerca de 24, 52 y 88 m, con cristal adicional en el fondo.
 
-Cada bioma debe tener identidad visual y sonora, fauna, recursos, un fenómeno ambiental y una prueba principal. La profundidad aumenta la extrañeza y el peligro, pero debe haber espacios de calma y referencias que permitan orientarse.
+Cada bioma debe tener identidad visual y sonora, fauna, recursos y un fenómeno ambiental. La profundidad aumenta la extrañeza y el peligro, pero debe haber espacios de calma y referencias que permitan orientarse.
 
-Los tres santuarios actuales son una base para desarrollar estas capas. Los 88 metros del prototipo son una escala jugable provisional, no el tamaño definitivo de la fosa.
+La geometría de 650 m es una base para desarrollar estas capas; no equivale a biomas completos ya terminados.
 
 **Propuesta inicial de evolución de los biomas:**
 
-| Capa | Sensación | Prueba posible | Papel de la fauna |
+| Capa | Sensación | Recursos y exploración propuestos | Papel de la fauna |
 |---|---|---|---|
-| Costa y bosque de huiros | Familiar, luminosa, segura para aprender | Unir canales de piedra y descubrir el primer paso | Peces costeros y primeras capturas manuales |
-| Naufragio y grietas | Intriga, corrientes y menor visibilidad | Desviar una corriente o equilibrar un mecanismo | Fauna real junto a las primeras especies extrañas |
-| Jardines bioluminiscentes | Asombro y desorientación | Orientar luz o interpretar señales vivas | Criaturas fantásticas, algunas territoriales |
-| Capas profundas | Oscuridad, presión y tensión | Combinar herramientas, observación y mecanismos | Depredadores y rutas que conviene evitar |
+| Costa y bosque de huiros | Familiar, luminosa, segura para aprender | Cobre y rutas cortas de recolección | Peces costeros y primeras capturas manuales |
+| Naufragio y grietas | Intriga, corrientes y menor visibilidad | Hierro y exploración de ruinas | Fauna real junto a las primeras especies extrañas |
+| Jardines bioluminiscentes | Asombro y desorientación | Cristales y referencias naturales para orientarse | Criaturas fantásticas, algunas territoriales |
+| Capas profundas | Oscuridad, presión y tensión | Materiales raros y planificación de aire/carga | Depredadores y rutas que conviene evitar |
 
 Los nombres, el número final de capas y sus profundidades todavía pueden cambiar.
 
-## Puzles y pruebas
+## Economía y fabricación
 
-Los puzles deben formar parte del lugar: mecanismos de piedra, cauces, ruinas, corrientes, iluminación y comportamiento de criaturas. Resolverlos debe producir un cambio visible, como revelar un tesoro, detener una corriente local o habilitar un atajo. No deben cerrar la ruta principal entre capas con una pared: ese alcance depende del aire.
+Los puzles, sellos y cofres de progresión se retiraron del mundo por petición explícita. No añadir nuevos mecanismos obligatorios ni volver a exigir soluciones antiguas. Las partidas anteriores conservan las mejoras que ya habían ganado.
 
-Los mosaicos de piedras giratorias ya construidos se conservan como una familia de puzles. Las futuras capas deben incorporar otras reglas para que avanzar no consista únicamente en repetir tableros más grandes.
+La pesca financia el pico submarino y el coste monetario de las recetas. Los minerales se extraen del fondo y se consumen al fabricar en Don Lucho. El taller muestra ingredientes, precio y equipo resultante antes de confirmar; un intento fallido no debe consumir recursos.
 
-Una prueba debe comunicar qué se puede manipular, mostrar la consecuencia de la acción y permitir entender un error. La dificultad debe venir de comprender el entorno, no de adivinar controles. El equipo puede permitir llegar a una prueba o interactuar con ella; comprarlo no sustituye resolverla.
+La primera entrega incluye cobre, hierro y cristal, con tres recetas ordenadas hasta equipo de 650 m. Precios, cantidades y regeneración son provisionales. La dificultad debe venir de planificar aire, carga, rutas e inversión. Ver `Docs/ECONOMIA_CRAFTING.md` para los valores implementados.
 
 ## Pesca y equipo
 
@@ -100,7 +100,7 @@ La cabaña de la costa conserva su papel como tienda y punto de regreso. La moto
 
 Los exploradores aportarán apoyo económico mediante encargos a zonas conocidas. Como propuesta inicial, cada encargo tendrá coste, duración, preparación y posibles resultados visibles antes de contratarlo.
 
-El jugador seguirá siendo quien descubre nuevas capas y supera las pruebas principales. Los exploradores no deben abrir automáticamente la siguiente zona ni reemplazar la exploración personal.
+El jugador seguirá siendo quien descubre nuevas capas y consigue sus primeros materiales. Los exploradores no deben reemplazar la exploración personal.
 
 La duración en tiempo de juego o tiempo real, el funcionamiento sin conexión y las consecuencias de una expedición fallida están pendientes. Conviene empezar con un sistema pequeño de encargos, antes de construir simulaciones completas de personajes autónomos.
 
@@ -112,11 +112,11 @@ Una criatura peligrosa debe mostrar señales que el jugador pueda aprender: post
 
 ## Qué existe y qué falta
 
-**Ya existe en el prototipo:** movimiento y buceo en primera persona; oxígeno y presión; inventario; cabaña y tienda; venta de peces; manos, tridente, arpón y red; mejoras de aire y aletas; bote y moto de agua conducibles; 49 modelos de fauna y 132 individuos; tres mosaicos de 6, 9 y 12 piedras; cofres y mejoras de equipo.
+**Ya existe en el prototipo:** movimiento y buceo en primera persona; oxígeno y presión; inventario; cabaña y tienda; venta de peces; manos, tridente, arpón y red; mejoras de aire y aletas; lancha con amarre y moto de agua; 49 modelos de fauna y 132 individuos; pico, 35 depósitos y tres recetas de equipo; modo Develop con prueba temporal aislada. No hay marcador de misión proyectado.
 
-**Añadido en la etapa 1:** guardado persistente local con respaldo, Nueva partida/Continuar y recuperación desde la playa. Conserva inventario, dinero, compras, tesoros, puzles, descubrimientos, conchas y embarcaciones. El rescate conserva los objetos.
+**Guardado:** formato v2 con respaldo, Nueva partida/Continuar y recuperación desde la playa. Conserva inventario, dinero, compras, mejoras fabricadas, regeneración de minerales, descubrimientos, conchas y embarcaciones. Lee v1 convirtiendo mejoras ganadas; el rescate conserva los objetos.
 
-**Etapa 2, diseño vigente al 28 de octubre:** descenso libre entre las tres capas, coste de aire por profundidad, señales sin colisión y mejoras persistentes. Se retiraron las compuertas de las versiones anteriores. Los requisitos de equipo y tesoro siguen aplicándose a mecanismos/recompensas, no al movimiento. Falta probar manualmente orientación y equilibrio junto con la primera expedición.
+**Descenso:** cavidad de 650 m, cinco umbrales de presión, señales sin colisión y mejoras persistentes. La progresión de recetas no bloquea el movimiento. Falta probar manualmente orientación, taller y equilibrio del recorrido económico.
 
 **Todavía no está implementado:** base flotante; exploradores; ballesta; fauna fantástica agresiva; capas con fenómenos ambientales propios; viajes rápidos desbloqueables; historia desarrollada y sonido.
 
@@ -126,7 +126,7 @@ Una criatura peligrosa debe mostrar señales que el jugador pueda aprender: post
 - Construir sobre el proyecto actual y conservar las funciones que ya sirven al diseño.
 - Distinguir decisiones confirmadas de propuestas. No presentar una propuesta como una petición ya aprobada.
 - Trabajar por etapas jugables, con una condición observable para dar cada una por terminada.
-- Mantener configurables biomas, especies, equipo, precios, requisitos y puzles.
+- Mantener configurables biomas, especies, equipo, precios, materiales y recetas.
 - Comprobar que se puede empezar sin armas, obtener recursos, mejorar el equipo y avanzar sin bloquear la partida.
 - Priorizar una expedición completa y entretenida antes de multiplicar el número de capas, criaturas o sistemas.
 

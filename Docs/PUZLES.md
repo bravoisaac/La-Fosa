@@ -1,3 +1,5 @@
+> HISTÓRICO: los puzles y cofres se retiraron del mundo. Este documento solo describe contenido antiguo y compatibilidad de partidas v1. La progresión vigente está en ECONOMIA_CRAFTING.md.
+
 # Mecanismos de piedras
 
 Los santuarios usan circuitos de canales tallados, en lugar de repetir una secuencia escrita. No hace falta colocar objetos del inventario ni comprar una herramienta para resolverlos.

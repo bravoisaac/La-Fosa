@@ -4,7 +4,7 @@ Prototipo original en **Unity 6.3 LTS (6000.3.26f1)**. Exploración low poly en 
 
 Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md) y [plan de mejora por etapas](Docs/PLAN_MEJORAS.md). Para continuar el desarrollo, empezar por **Reanudar aquí**, al inicio del plan: contiene objetivo, pasos marcados, evidencia y pendiente inmediato. Estos documentos distinguen la visión futura de las funciones implementadas que se describen aquí.
 
-La referencia de mapa del usuario se implementa como una **fosa de 650 m**, con cavidad irregular, cámaras laterales y rutas alrededor de pilares. Cinco umbrales aumentan presión y consumo de aire sin bloquear el paso. [Sección estática del mapa](Docs/Mapa/fosa-seccion.png) · [Profundidades, equipo y límites de validación](Docs/DESCENSOS.md). La costa y los tres santuarios iniciales se conservan; la ampliación no añade todavía cinco biomas con fauna y puzles propios.
+La referencia de mapa del usuario se implementa como una **fosa de 650 m**, con cavidad irregular, cámaras laterales y rutas alrededor de pilares. Cinco umbrales aumentan presión y consumo de aire sin bloquear el paso. [Sección estática del mapa](Docs/Mapa/fosa-seccion.png) · [Profundidades, equipo y límites de validación](Docs/DESCENSOS.md). La costa y las ruinas del naufragio se conservan. La progresión usa pesca, minerales y fabricación; no se generan puzles ni cofres. La ampliación no equivale todavía a cinco biomas terminados.
 
 ## Jugar
 
@@ -27,7 +27,7 @@ La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con
 | Saltar / ascender | Espacio |
 | Descender | Ctrl izquierdo o C |
 | Acelerar (consume más aire al bucear) | Shift izquierdo |
-| Interactuar / activar sello / recoger | E |
+| Interactuar / extraer minerales / recoger | E |
 | Atrapar con las manos / usar herramienta | Clic izquierdo |
 | Manos / tridente / arpón / red | 1 / 2 / 3 / 4 |
 | Abrir tienda / subir o bajar de vehículo | E |
@@ -44,49 +44,50 @@ La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con
 
 Durante una partida, **F2** guarda primero tu progreso normal y abre una sesión temporal de pruebas. También se puede entrar desde pausa. **F1** abre/cierra el panel: aire y salud fijos, velocidad ×3 con colisiones, recarga, $1000 de prueba, herramientas/equipo para 650 m y transporte a playa o distintas profundidades.
 
-Para repetir mecánicas, **Inicio sin equipo** reinicia la prueba en la playa con manos, sin dinero y mochila vacía. **Primer santuario** prepara el tridente junto al primer sello, todavía sin resolver. Ambos restauran puzles, tesoros y recursos al inicio de la prueba, apagan aire fijo/velocidad extra y mantienen abierto el panel; pulsa F2 para probar como Jugador. Reemplazan los cambios de la prueba actual, conservando tu partida normal. **Equipo para 650 m** mejora el equipo temporal sin reiniciar el progreso. Los escenarios no reinician toda la simulación de fauna.
+Para repetir mecánicas, **Inicio sin equipo** reinicia la prueba en la playa con manos, sin dinero y mochila vacía. **Primera minería** prepara el pico junto a las vetas de cobre. Ambos reinician mejoras y recursos de la prueba, apagan aire fijo/velocidad extra y mantienen abierto el panel; pulsa F2 para probar como Jugador. Reemplazan los cambios de la prueba actual, conservando tu partida normal. **Equipo para 650 m** mejora el equipo temporal sin reiniciar el progreso. Los escenarios no reinician toda la simulación de fauna.
 
-**F2** alterna Develop y Jugador manteniendo la posición, el equipo y los cambios de la prueba. En Jugador se desactivan los privilegios: vuelve el consumo de aire, el daño y la velocidad normal. La etiqueta superior recuerda que la sesión sigue **sin guardar**. Para recuperar tu partida, pulsa **Terminar pruebas** en el panel: se restauran dinero, inventario, puzles, tesoros, equipo y vehículos anteriores y vuelves a la playa. Volver al menú también termina las pruebas. Cerrar el juego descarta los cambios temporales; no se escriben sobre la partida ni su respaldo. Los informes de expedición se interrumpen durante las pruebas.
+**F2** alterna Develop y Jugador manteniendo la posición, el equipo y los cambios de la prueba. En Jugador se desactivan los privilegios: vuelve el consumo de aire, el daño y la velocidad normal. La etiqueta superior recuerda que la sesión sigue **sin guardar**. Para recuperar tu partida, pulsa **Terminar pruebas** en el panel: se restauran dinero, inventario, minerales, mejoras, equipo y vehículos anteriores y vuelves a la playa. Volver al menú también termina las pruebas. Cerrar el juego descarta los cambios temporales; no se escriben sobre la partida ni su respaldo. Los informes de expedición se interrumpen durante las pruebas.
 
 ## Bucle de juego
 
-El cuaderno guía la **primera expedición**: pesca lenta en la orilla → vender → comprar tridente → resolver sello → recoger tesoro → regresar. Calcula cuánto falta reunir según el valor real de las especies y recuerda los controles necesarios. Por petición del usuario se retiró el marcador de misión proyectado (rombo, distancia y flechas de destino); se mantienen cuaderno, retícula y señales del mundo. Aire bajo o presión excesiva priorizan el ascenso. Al cargar se reconstruye el objetivo a partir del progreso. [Recorrido, compatibilidad y revisión pendiente](Docs/PRIMERA_EXPEDICION.md).
+**Pescar → vender → comprar pico → extraer minerales → fabricar equipo → explorar más profundo.** El cuaderno calcula el siguiente objetivo según saldo, materiales y mejoras. Se mantienen retícula y señales físicas; el marcador de misión proyectado sigue retirado. Aire bajo o presión excesiva priorizan el ascenso. [Recorrido y evaluación pendiente](Docs/PRIMERA_EXPEDICION.md).
 
-Para preparar la evaluación humana, `--expedition-report` habilita informes locales de tiempos, intentos, capturas, visitas y rescates. Cada inicio/carga crea un segmento separado; el guardado personal conserva su formato. [Campos, ubicación y límites de medición](Docs/PRIMERA_EXPEDICION.md#registro-opcional-del-recorrido-34a-28-de-octubre-de-2026).
+Empiezas con las manos: bajo el agua, apunta a un pez y haz clic. Alcance de 1,6 m y recarga de 0,8 s, respetando obstáculos. Los peces de la orilla huyen a 1,8 m/s; los del mar a 16 m/s, por lo que tridente, arpón y red ofrecen distintas formas de pescar. Hay 49 modelos propios y 132 individuos: [guía de fauna](Docs/FAUNA.md).
 
-Recoge conchas en la playa, sigue las boyas hasta el punto de inmersión y explora. Empiezas sin armas: acércate a un pez bajo el agua, apúntalo y haz clic para atraparlo con las manos (alcance de 1,6 m y 0,8 s entre intentos). Las manos no disparan y no atraviesan obstáculos. Vende tu pesca para obtener el tridente y, más adelante, el arpón.
+Vende en Don Lucho y compra el **pico submarino por $45**, sin exigir tridente. Apunta a una veta y pulsa **E**: entrega tres unidades si tienes espacio. Hay cobre cerca de 24 m, hierro cerca de 52 m y cristal abisal cerca de 88 m, además de cristal en el fondo. Las vetas agotadas se oscurecen y regeneran tras 180 segundos de reloj real; guardar/cargar no reinicia ese plazo.
 
-El mar incluye **49 especies o grupos del documento aportado, con 49 modelos 3D propios y 132 peces**, repartidos desde la orilla hasta el abismo. Cada especie tiene su forma, colores, precio y franja de profundidad. Apunta a un pez cercano para identificarlo. Los modelos reutilizables están en `Assets/LaFosa/Models/Fish/`; consulta [la guía de fauna](Docs/FAUNA.md) y [la lámina de modelos](Docs/peces-catalogo.jpg).
+En la tienda, abre **FABRICAR**. Dinero y minerales permiten crear tres mejoras permanentes, en orden:
 
-Los peces huyen al ver al buzo. **Los de la orilla escapan despacio (1,8 m/s)**: puedes alcanzarlos con las manos y mejorar después al tridente. **Los del mar escapan a 16 m/s**, por encima del nado con aletas: usa el arpón de 40 m para capturarlos a distancia. Al perderte de vista se tranquilizan y regresan nadando. La detección respeta los obstáculos y la huida permanece dentro del hábitat.
+| Equipo | Coste | Profundidad segura / reserva |
+|---|---|---|
+| Traje reforzado | $120 + 8 cobre | 64 m / 155 u de aire |
+| Equipo presurizado | $300 + 6 cobre + 12 hierro | 100 m / 200 u |
+| Traje abisal | $650 + 8 hierro + 16 cristal abisal | 650 m / 1400 u |
 
-Hay tres santuarios: Bosque de huiros (~24 m), Ecos del naufragio (~52 m) y Corazón del abismo (~88 m). Cada uno tiene un mosaico de piedras giratorias: **6, 9 y 12 piezas**, respectivamente. Apunta a una piedra y pulsa **E** para girarla 90°. Une los canales desde **ENTRADA** hasta **SELLO** pasando por todas las piedras y sin extremos abiertos. La corriente ilumina el recorrido conectado. Cuando esté completo, acciona la palanca **ABRIR SELLO** y abre el cofre con E.
+La bombona suma su reserva adicional. Una fabricación fallida no consume dinero ni materiales; no se puede volver a pagar una mejora obtenida. [Reglas y configuración económica](Docs/ECONOMIA_CRAFTING.md).
 
-Los giros equivocados no borran tus avances. La piedra **REINICIAR** restaura solo ese tablero si quieres empezar de nuevo. Puedes leer la pista mirando el cofre cerrado y pulsando E. Los giros y los sellos abiertos se guardan también al cerrar el juego. Consulta [los puzles de piedras](Docs/PUZLES.md).
+**Toda la fosa tiene descenso libre.** Superar la profundidad segura multiplica el consumo de aire por 8, o por 12 al acelerar, además del coste de la franja de presión. No hay daño directo de presión mientras quede aire. Desde cámaras profundas busca el conducto central para ascender. La superficie recupera aire y salud; agotar salud o pulsar R devuelve al buzo a la playa conservando objetos. [Profundidades y consumo](Docs/DESCENSOS.md).
 
-Los tesoros mejoran automáticamente la reserva de aire y la profundidad segura. Abrir un cofre repone oxígeno y salud. Superar la profundidad segura consume aire ×8 (×12 al acelerar), sin daño directo de presión mientras quede oxígeno. La falta de aire causa daño. La superficie repone aire y salud; si agotas la salud, regresas a la playa conservando tus objetos. R permite regresar en cualquier momento.
+La mochila tiene 12 espacios y pilas limitadas; puedes descartar pilas desde Tab. Inventario y pausa detienen la simulación, pero la regeneración de minerales usa reloj real. Las mejoras fabricadas no ocupan espacios.
 
-**Toda la fosa tiene descenso libre: el límite de la salida es el aire disponible.** Naufragio y abismo no tienen paredes ni escotillas que exijan mejoras para pasar. Puedes bajar con el equipo inicial, pero fuera de su profundidad segura gastarás aire rápidamente. Los puzles conservan el orden de sus recompensas; comprar aire no los resuelve. Las señales recuerdan reservar aire y no tienen colisión. Desde las cámaras profundas, busca el conducto central para subir. Consulta [rutas y requisitos de descenso](Docs/DESCENSOS.md).
+El guardado v2 conserva dinero, inventario, compras, mejoras, enfriamiento de vetas, descubrimientos, conchas y vehículos con su amarre. Lee partidas v1 y convierte las mejoras ya ganadas. **Continuar** devuelve al buzo a la playa. [Guardado y respaldo](Docs/GUARDADO.md).
 
-La mochila tiene 12 espacios y pilas limitadas. Un inventario lleno no consume tesoros ni capturas. Puedes descartar pilas desde Tab. Las mejoras adquiridas permanecen aunque descartes su tesoro. Inventario y pausa detienen la simulación.
+Las manos mantienen dedos articulados y gesto de captura. **La Fosa → Exportar vistas de manos (sin jugar)** crea vistas estáticas en `Docs/Manos`. No incluye multijugador ni sonido; animación específica de minería y equilibrio humano siguen pendientes.
 
-**El progreso se guarda en el equipo**, con versión de formato y copia de respaldo. Se conservan dinero, inventario, compras, tesoros, piedras, zonas descubiertas, conchas recogidas y propiedad/posición de vehículos. **Continuar** devuelve al buzo a la playa con aire y salud recuperados. En pausa, **Guardar y volver al menú** permite comprobar el guardado antes de salir. Un error de escritura se muestra en pantalla; un archivo principal inválido permite recuperar el respaldo. Consulta [guardado y recuperación](Docs/GUARDADO.md).
-
-Las manos tienen dedos articulados de longitudes distintas, uñas discretas, mangas de neopreno y pulgares que acompañan el agarre. El gesto de captura abre, cierra y retira las manos en 0,48 s; conserva alcance de 1,6 m y recarga de 0,8 s. Puedes exportar vistas estáticas desde **La Fosa → Exportar vistas de manos (sin jugar)**; se guardan en `Docs/Manos`.
-
-No incluye multijugador ni sonido. Es una base jugable para ampliar; los objetos y paisajes se generan con geometría simple, sin recursos externos.
+El argumento opcional `--expedition-report` registra tiempos y eventos locales, incluidos extracción y fabricación. Los informes no se generan durante Develop. [Registro y ficha humana](Docs/PRIMERA_EXPEDICION.md#registro-opcional-del-recorrido).
 
 ## Cabaña y tienda de Don Lucho
 
 La cabaña de madera está a la izquierda del punto de inicio, con techo de zinc a dos aguas, corredor, mostrador y un pescador que atiende. Acércate al mostrador, mira hacia él y pulsa **E**. La tienda pausa el mundo; **Esc** permite salir.
 
-Empiezas **sin dinero, sin arpón y pescando con las manos**. Los peces de la orilla y el jurel se venden por **$30 de moneda del juego**; otras especies tienen precios propios. Dos capturas de la orilla pagan el **tridente de $60**, la primera herramienta, que se equipa al comprarlo. Solo entonces puedes comprar el arpón o la red. El botón de venta suma los precios de toda tu pesca y deja intactos conchas y tesoros. Los peces reaparecen tras 25 segundos de simulación para mantener el ciclo de pesca y comercio.
+Empiezas **sin dinero, sin arpón y pescando con las manos**. Los peces de la orilla y el jurel se venden por **$30 de moneda del juego**; otras especies tienen precios propios. Dos capturas de la orilla pagan el **tridente de $60**, una mejora opcional de pesca, que se equipa al comprarlo. Solo entonces puedes comprar el arpón o la red. El botón de venta suma los precios de toda tu pesca y deja intactos conchas, minerales y objetos antiguos. Los peces reaparecen tras 25 segundos de simulación para mantener el ciclo de pesca y comercio.
 
 | Compra | Precio | Función |
 |---|---:|---|
-| Tridente | $60 | Primera herramienta; tecla 2, alcance de 4 m y recarga de 0,45 s |
+| Pico submarino | $45 | Extrae minerales con E; no exige tridente |
+| Tridente | $60 | Herramienta de pesca; tecla 2, alcance de 4 m y recarga de 0,45 s |
 | Arpón | $150 | Requiere tridente; tecla 3, alcance de 40 m y recarga de 0,65 s |
-| Bombona de O₂ ampliada | $90 | +60 unidades de aire, acumulables con cada tesoro; duración según profundidad y aceleración |
+| Bombona de O₂ ampliada | $90 | +60 unidades de aire, adicionales al equipo fabricado; duración según profundidad y aceleración |
 | Aletas | $75 | +35% de velocidad de nado, también al acelerar |
 | Red de pesca | $120 | Requiere tridente; tecla 4, hasta 5 peces en un radio de 4 m, recarga de 5 s |
 | Lancha de caleta | $240 | Navega a 12 m/s; amarre sobre la fosa con G |
@@ -100,25 +101,20 @@ La boya naranja sobre la fosa señala el **amarre de la lancha**, a un lado del 
 
 ## Ampliar
 
-- `Assets/LaFosa/Data/Expedicion.asset`: semilla, punto de aparición, oxígeno inicial, profundidad segura, capacidad y lista ordenada de zonas.
-- Desde fuera del agua, el mar tiene un tono y una turbidez uniformes; solo los primeros 20 m junto a la orilla son progresivamente más transparentes, sin una mancha oscura sobre la fosa. Bajo el agua, `coastalFogDensity` (0,035), `shallowFogDensity` (0,065) y `deepFogDensity` (0,115) en `Expedicion.asset` ajustan exterior, fosa somera y fosa profunda, conservando la transición gradual entre zonas. La bruma del aire sigue en 0,0035 y Graphics Settings conserva explícitamente el modo Exp2.
-- `Assets/LaFosa/Data/Tienda.asset`: precios del equipo, bono de oxígeno y multiplicador de aletas. Los precios de venta están en cada `ItemDefinition.salePrice` (el campo antiguo `fishValue` se conserva como referencia del jurel inicial). `ShopCatalog`, `Economy` y `GearKind` permiten ampliar el equipo; añade también su efecto en el componente correspondiente.
-- `WorldBuilder.Shop.cs`: cabaña, vendedor, modelos de herramientas y embarcaciones. `SurfaceVehicle` concentra navegación, embarque, colisiones y desembarque. `DiveHUD.Shop.cs` contiene la tienda con lista desplazable.
-- **Create → La Fosa → Objeto**: crea recursos, peces y tesoros con identificador estable, nombre, descripción, color y tamaño de pila.
-- **Create → La Fosa → Zona de buceo**: crea una zona con ID estable único, posición, profundidad, tesoro y mejoras. Asígnale un **Puzle de piedras** y añádela a `Expedicion.zones` en orden de profundidad. Se genera su santuario automáticamente. El campo antiguo `sequence` ya no controla los nuevos mecanismos. Cambiar IDs o estructura del contenido exige planificar una migración del guardado.
-- `GameSession.Persistence`, `GameSession.SaveValidation` y `SaveStore`: captura/restauración de la partida, validación previa y escritura con respaldo. Los cambios de inventario/puzles se guardan al final del frame; compras, ventas y tesoros se guardan tras completar la transacción.
-- `WorldBuilder.Descents`: referencias de profundidad y ascenso sin colliders. Las zonas definen la preparación de sus mecanismos, pero nunca impiden nadar. `GameConfig.pressureOxygenMultiplier` ajusta el consumo fuera de la profundidad segura.
-- `WorldBuilder.FloorHeight`: amplía el fondo si añades niveles por debajo de los 88 m. Ajusta también los límites de rescate de `DiverController` para profundidades mayores a 120 m. Las posiciones y alturas del paisaje base asumen agua a 0 m.
-- `Interactable`: hereda esta clase para añadir puertas, herramientas, misiones o nuevos puzles. El buzo detecta automáticamente los objetos a menos de 4,5 m.
-- `StonePuzzleDefinition` define dimensiones, recorrido y mezcla; `StoneCircuitPuzzle` evalúa conexiones y corriente; `RuneStone` gira las piedras; `StonePuzzleLever` activa o reinicia; `StonePuzzleView` anima el cierre; `TreasureChest` entrega la recompensa. `SequencePuzzle` conserva el código anterior por compatibilidad, pero ya no se usa en los santuarios.
-- `FishAgent` y `HarpoonGun`: puntos de extensión para especies, comportamiento, daño y proyectiles físicos. Manos/tridente/arpón usan barrido de esfera y la red consulta peces cercanos con comprobación de visibilidad. Manos y tridente tienen un movimiento corto de alcance; el arpón muestra la línea del disparo.
-- `DiveHUD`: IMGUI con escala uniforme y lienzo centrado de 1600 × 900; el cuaderno ajusta su altura y los paneles separan interacción y avisos; el marcador de misión fue retirado. Los menús cubren toda la ventana. Aviso y guía usan la reserva estimada de regreso (mínimo 30 unidades) y el límite del equipo. Muestra unidades de aire, consumo por segundo incluyendo aceleración, tiempo aproximado al ritmo actual y distancia al próximo umbral. Ese tiempo cambia al subir/bajar o acelerar; no garantiza completar el regreso. Revisión visual en distintos formatos pendiente. Para un inventario mayor a 12 espacios, añade paginación o migra a UI Toolkit/uGUI.
+- `GameConfig.minerals/recipes`, `CraftingRecipe` y `EconomyProgressionSetup`: minerales, ingredientes, precios y mejoras. `Expedicion.asset` conserva configuración, semilla, aire y zonas; `Tienda.asset` contiene compras.
+- `WorldBuilder.Minerals` crea depósitos con IDs estables; `MineralDeposit` controla extracción, visibilidad, agotamiento y regeneración. `Economy.Crafting` e `Inventory.TryConsume` aplican costes completos.
+- `DiveHUD.Shop` presenta TIENDA/FABRICAR. `GameSession.Expedition` deriva el cuaderno de economía, recursos y equipo, sin marcador proyectado.
+- `GameSession.Persistence`, `GameSession.SaveValidation` y `SaveStore`: guardado v2, lectura v1, validación y respaldo. No renombrar IDs sin migración. Las definiciones antiguas de puzles se conservan para validar partidas v1; no generan contenido jugable.
+- `DeepTrenchProfile`, `WorldBuilder.DeepTrench` y `WorldBuilder.Descents`: cavidad a 650 m, malla con colisión y señales sin bloqueo. `GameConfig.pressureBands` controla cinco umbrales de gasto; `pressureOxygenMultiplier` controla el sobrecoste fuera del equipo. El terreno superficial no representa techos o paredes de la cavidad.
+- `WorldBuilder.Shop` y `SurfaceVehicle`: tienda, embarcaciones, conducción y amarre. Bodega y recuperación siguen pendientes.
+- `FishAgent` y `HarpoonGun`: fauna, comportamiento y captura. `ItemDefinition.salePrice` define el valor de cada especie.
+- `DiveHUD`: IMGUI con lienzo base 1600 × 900; aire en unidades, consumo actual y duración aproximada. Revisar formatos de pantalla mediante la ficha humana.
 
-La escena usa el renderizador integrado de Unity y entrada clásica, sin paquetes externos. Si importas los scripts en otro proyecto, habilita **Active Input Handling: Input Manager (Old)** o **Both**, y conserva los ejes Mouse X / Mouse Y. Las referencias a shaders en la configuración evitan que la compilación los elimine.
+La escena usa el renderizador integrado y entrada clásica de Unity, sin paquetes externos. Al importar en otro proyecto, habilita **Active Input Handling: Input Manager (Old)** o **Both** y conserva Mouse X / Mouse Y. Las referencias a shaders evitan su eliminación al compilar.
 
 ## Verificación y compilación
 
-- **La Fosa → Validar mecánicas**: comprueba inventario, fauna, circuitos de piedras, reinicio, bloqueo de soluciones y accesibilidad de cada nivel.
+- **La Fosa → Validar mecánicas**: comprueba inventario, fauna, economía, minería, fabricación, migración, aislamiento Develop, amarre y descenso.
 - **La Fosa → Compilar Windows**: valida y crea el ejecutable en `Builds/Windows`.
 - `Docs/PRUEBAS.md`: resultados y recorrido de pruebas manuales.
 - `Docs/MAPA.md`: estructura y dependencias del proyecto.
