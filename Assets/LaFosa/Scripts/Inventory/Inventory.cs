@@ -78,6 +78,44 @@ namespace LaFosa
             return true;
         }
 
+        public bool CanReceive(ItemDefinition item, int amount)
+        {
+            if (item == null || amount <= 0) return false;
+            int limit = Mathf.Max(1, item.maxStack);
+            long room = (long)Mathf.Max(0, capacity - stacks.Count) * limit;
+            foreach (var stack in stacks)
+                if (stack.item == item) room += Mathf.Max(0, limit - stack.count);
+            return room >= amount;
+        }
+
+        public bool TryTransferTo(Inventory destination, ItemDefinition item, int amount)
+        {
+            if (destination == null || destination == this || item == null || amount <= 0 ||
+                Count(item) < amount || !destination.CanReceive(item, amount)) return false;
+            // Mutate both inventories before observers can capture a save or another transfer.
+            int remaining = amount, limit = Mathf.Max(1, item.maxStack);
+            foreach (var stack in destination.stacks)
+            {
+                if (stack.item != item) continue;
+                int added = Mathf.Min(remaining, limit - stack.count);
+                stack.count += added; remaining -= added;
+            }
+            while (remaining > 0)
+            {
+                int added = Mathf.Min(remaining, limit);
+                destination.stacks.Add(new InventoryStack(item, added)); remaining -= added;
+            }
+            remaining = amount;
+            for (int i = stacks.Count - 1; i >= 0 && remaining > 0; i--)
+            {
+                if (stacks[i].item != item) continue;
+                int removed = Mathf.Min(remaining, stacks[i].count);
+                stacks[i].count -= removed; remaining -= removed;
+                if (stacks[i].count == 0) stacks.RemoveAt(i);
+            }
+            Changed?.Invoke(); destination.Changed?.Invoke(); return true;
+        }
+
         public bool HasIngredients(CraftIngredient[] ingredients)
         {
             if (ingredients == null || ingredients.Length == 0) return false;

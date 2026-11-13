@@ -41,6 +41,7 @@ namespace LaFosa.Editor
                 var storeField = typeof(GameSession).GetField("saveStore", flags); storeField.SetValue(session, store);
                 Check(session.NewGame(), "Partida v2 creada en ruta temporal");
                 EconomyProgressionChecks.Validate(session, store);
+                CityProgressionChecks.Validate(session, store);
                 var original = JsonUtility.ToJson(capture.Invoke(session, null));
                 session.ToggleDeveloperMode();
                 Check(session.DeveloperSession && session.DeveloperMode && session.Blocked, "Develop con copia protegida");
@@ -75,6 +76,7 @@ namespace LaFosa.Editor
                 Check(session.ReturnToMenu() && !session.DeveloperSession && session.ContinueGame(), "Menú descarta pruebas y permite continuar");
                 Check(JsonUtility.ToJson(capture.Invoke(session, null)) == original, "Carga posterior conserva partida anterior");
                 MooringChecks.Validate(session, store);
+                CargoChecks.Validate(session, store);
                 storeField.SetValue(session, new SaveStore(path, _ => false)); session.ToggleDeveloperMode();
                 Check(!session.DeveloperSession, "Fallo de guardado impide Develop");
                 Debug.Log("LA_FOSA_DEVELOPER_TESTS_OK · " + checks + " comprobaciones de modos y guardado aislado, sin Play Mode.");

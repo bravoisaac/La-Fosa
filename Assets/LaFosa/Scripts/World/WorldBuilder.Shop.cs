@@ -40,10 +40,10 @@ namespace LaFosa
             }
             Shape("Cumbrera", PrimitiveType.Cube, new Vector3(0, 5.48f, .3f), new Vector3(.22f, .18f, 8.5f), roofMat, false, cabin.transform);
             Shape("Letrero de madera", PrimitiveType.Cube, new Vector3(.5f, 3.05f, 3.43f), new Vector3(5.5f, .65f, .1f), black, false, cabin.transform);
-            var sign = Label("DON LUCHO · ALMACÉN DE MAR", new Vector3(-12.5f, 6.05f, -19.45f), .18f, new Color(.98f, .83f, .48f));
+            var sign = Label("DON LUCHO · PESCA", new Vector3(-12.5f, 6.05f, -19.45f), .18f, new Color(.98f, .83f, .48f));
             sign.GetComponent<Billboard>().enabled = false;
             sign.transform.rotation = Quaternion.Euler(0, 180, 0);
-            Label("[ E ]  VENDER / COMPRAR / FABRICAR", new Vector3(-12, 4.7f, -18.8f), .09f, Color.white);
+            Label("[ E ]  VENDER PECES / HERRAMIENTAS", new Vector3(-12, 4.7f, -18.8f), .09f, Color.white);
             Shape("Estante posterior", PrimitiveType.Cube, new Vector3(1, 1.5f, -2.5f), new Vector3(5, .16f, .75f), paleWood, true, cabin.transform);
             for (int i = 0; i < 4; i++)
             {
@@ -60,6 +60,7 @@ namespace LaFosa
 
         public void BuildVehicles(GameSession session)
         {
+            BuildInfrastructure(session);
             session.Boat = BuildVehicle(session, GearKind.Boat, new Vector3(4.8f, config.waterLevel, 17));
             session.JetSki = BuildVehicle(session, GearKind.JetSki, new Vector3(13.2f, config.waterLevel, 17));
             Label("EMBARCACIONES\nRecoge aquí tus compras", new Vector3(9, 3.8f, 17), .12f, Color.white);

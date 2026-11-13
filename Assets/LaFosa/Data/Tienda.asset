@@ -20,33 +20,65 @@ MonoBehaviour:
     title: Tridente
     description: "Primera herramienta. Tecla 2: alcance de 4 m y recarga r\xE1pida."
     price: 60
+    shop: 0
+    ingredients: []
   - gear: 0
     title: "Arp\xF3n"
     description: "Despu\xE9s del tridente. Tecla 3: alcance de 40 m y recarga de
       0,65 s."
     price: 150
+    shop: 0
+    ingredients:
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 6
   - gear: 1
     title: "Bombona de O\u2082 ampliada"
     description: "+60 unidades de aire; la duraci\xF3n depende de la profundidad
       y de acelerar."
     price: 90
+    shop: 2
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 4
   - gear: 2
     title: Aletas de buceo
     description: "Nadas un 35% m\xE1s r\xE1pido. Se equipan autom\xE1ticamente."
     price: 75
+    shop: 2
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 3
   - gear: 3
     title: Red de pesca
     description: "Despu\xE9s del tridente. Tecla 4: hasta 5 peces cercanos."
     price: 120
+    shop: 0
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 6
   - gear: 5
     title: Lancha de caleta
     description: Navega a 12 m/s. G para amarrar junto a la boya sobre la fosa.
     price: 240
+    shop: 3
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 8
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 6
   - gear: 6
     title: Moto de agua
     description: Conducible a 22 m/s. Entrega al lado derecho del muelle.
     price: 360
+    shop: 3
+    ingredients:
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 12
+    - item: {fileID: 11400000, guid: fe450edd3d2f3034f8711f26eb143328, type: 2}
+      amount: 4
   - gear: 7
     title: Pico submarino
     description: "E junto a un dep\xF3sito: extrae minerales para fabricar equipo."
     price: 45
+    shop: 1
+    ingredients: []

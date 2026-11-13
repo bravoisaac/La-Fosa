@@ -41,6 +41,7 @@ namespace LaFosa.Editor
             diver.Inventory.TryAdd(config.fish, 10); session.OpenShop();
             long value = session.Economy.SaleValue;
             Check(session.Economy.SellFish() && session.Economy.Money == value, "Pesca financia la economía");
+            session.OpenShop(ShopKind.Mining);
             Check(session.Economy.Buy(config.shop.offers.First(o => o.gear == GearKind.MiningPick)), "Comprar pico con venta de peces");
             session.CloseShop(); Approach(copper);
             var wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -65,7 +66,7 @@ namespace LaFosa.Editor
             Check(!iron.TryMine(diver) && iron.Available, "Mochila llena no consume depósito"); inventory.capacity = capacity;
             diver.LeaveVehicle(iron.transform.position + Vector3.right * 12); Physics.SyncTransforms();
             Check(!iron.TryMine(diver), "Minería exige cercanía");
-            session.OpenShop(); var first = config.recipes[0];
+            session.OpenShop(ShopKind.Diving); var first = config.recipes[0];
             int money = session.Economy.Money, ore = inventory.Count(copper.mineral);
             Check(!session.Economy.Craft(first) && session.Economy.Money == money && inventory.Count(copper.mineral) == ore, "Material insuficiente no cobra ni consume");
             inventory.TryAdd(copper.mineral, 3); Fund(0);

@@ -13,6 +13,7 @@ namespace LaFosa
                 data.inventory == null || data.inventory.Length > Config.inventorySlots ||
                 data.puzzles == null ||
                 data.vehicles == null || data.vehicles.Length != 2) return false;
+            if (!ValidateCity(data)) return false;
             var zones = new HashSet<string>(Config.zones.Select(z => z.id));
             var gearIds = new HashSet<string>(Config.shop.offers.Select(o => o.gear.ToString()));
             if (!ValidIds(data.gear, gearIds) || !ValidIds(data.treasures, zones) || !ValidIds(data.discoveredZones, zones) ||
@@ -25,6 +26,14 @@ namespace LaFosa
                 (data.selectedTool == 3 && !data.gear.Contains(nameof(GearKind.Net)))) return false;
             foreach (var stack in data.inventory)
                 if (stack == null || string.IsNullOrEmpty(stack.id) || !items.TryGetValue(stack.id, out var item) || stack.count < 1 || stack.count > Mathf.Max(1, item.maxStack)) return false;
+            if (data.boatCargo != null)
+            {
+                if (data.boatCargo.Length > BoatCargoSlots ||
+                    (data.boatCargo.Length > 0 && !data.gear.Contains(nameof(GearKind.Boat)))) return false;
+                foreach (var stack in data.boatCargo)
+                    if (stack == null || string.IsNullOrEmpty(stack.id) || !items.TryGetValue(stack.id, out var item) ||
+                        !IsCargoItem(item) || stack.count < 1 || stack.count > Mathf.Max(1, item.maxStack)) return false;
+            }
             if (data.version == 1)
             {
                 if (data.puzzles.Length != Config.zones.Length) return false;

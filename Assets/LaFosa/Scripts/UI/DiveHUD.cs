@@ -87,7 +87,7 @@ namespace LaFosa
                     Panel(540, 705, 520, 90);
                     Text(diver.Riding.DisplayName + " · WASD conducir · E desembarcar", 550, 731, 500, 28, 16, Mint, TextAnchor.MiddleCenter);
                     if (diver.Riding.kind == GearKind.Boat)
-                        Text(diver.Riding.MooringHint, 550, 765, 500, 24, 14, Gold, TextAnchor.MiddleCenter);
+                        Text(diver.Riding.MooringHint + " · B bodega", 550, 765, 500, 24, 14, Gold, TextAnchor.MiddleCenter);
                 }
                 if (diver.Target != null)
                 {
@@ -125,6 +125,7 @@ namespace LaFosa
                 Text(session.SaveStatus, 410, 180, 780, 55, 16, Gold, TextAnchor.MiddleCenter);
             if (session.DeveloperSession) DeveloperBadge();
             if (session.Intro) Intro();
+            else if (session.CargoOpen) Cargo();
             else if (session.ShopOpen) Shop();
             else if (session.InventoryOpen) Inventory();
             else if (session.Paused) Pause();

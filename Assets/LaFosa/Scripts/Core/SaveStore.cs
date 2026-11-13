@@ -23,6 +23,7 @@ namespace LaFosa
         public int money;
         public int selectedTool;
         public SavedStack[] inventory;
+        public SavedStack[] boatCargo;
         public string[] gear;
         public string[] treasures;
         public string[] discoveredZones;
@@ -31,6 +32,10 @@ namespace LaFosa
         public SavedVehicle[] vehicles;
         public string[] equipmentUpgrades;
         public SavedMineral[] minerals;
+        public int infrastructureLevel;
+        public int[] automaticFish;
+        public float[] fishingProgress;
+        public float exploredDepth;
     }
 
     // The envelope detects truncated/edited data before any live state is changed.

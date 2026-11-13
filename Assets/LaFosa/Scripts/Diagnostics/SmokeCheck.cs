@@ -72,7 +72,7 @@ namespace LaFosa
                     Check(diver.Inventory.TryAdd(session.Config.fish, 10), "Preparar pesca de prueba");
                     session.OpenShop(); Check(session.Economy.SellFish(), "Vender pesca"); session.CloseShop();
                 }
-                session.OpenShop();
+                session.OpenShop(ShopKind.Mining);
                 Check(session.Economy.Buy(session.Config.shop.offers.First(o => o.gear == GearKind.MiningPick)), "Comprar pico");
                 session.CloseShop();
                 foreach (var deposit in deposits.Where(d => d.mineral == session.Config.minerals[0]).Take(3))
@@ -82,7 +82,7 @@ namespace LaFosa
                     Check(!deposit.TryMine(diver), "Depósito agotado no duplica mineral");
                     yield return new WaitForSecondsRealtime(.1f);
                 }
-                diver.Rescue("Regreso de prueba con minerales."); session.OpenShop();
+                diver.Rescue("Regreso de prueba con minerales."); session.OpenShop(ShopKind.Diving);
                 Check(session.Economy.Craft(recipe) && session.HasUpgrade(recipe.upgrade), "Fabricar mejora con dinero y cobre");
                 int money = session.Economy.Money;
                 Check(!session.Economy.Craft(recipe) && session.Economy.Money == money, "No repetir cobro de mejora");

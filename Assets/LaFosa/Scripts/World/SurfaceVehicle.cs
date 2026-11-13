@@ -23,7 +23,7 @@ namespace LaFosa
             if (!gameObject.activeInHierarchy || !session.Economy.Has(kind) || session.Blocked || Passenger != null || diver.Riding != null) return false;
             if (Vector3.Distance(diver.View.transform.position, transform.position + Vector3.up) > 5.5f) return false;
             Passenger = diver; diver.Board(this);
-            session.Notify(DisplayName + ": W/S avanzar, A/D girar, E desembarcar, R regresar a la playa.");
+            session.Notify(DisplayName + ": W/S avanzar, A/D girar, E desembarcar" + (kind == GearKind.Boat ? ", B bodega." : "."));
             return true;
         }
         public void Drive(float throttle, float steering, float deltaTime)

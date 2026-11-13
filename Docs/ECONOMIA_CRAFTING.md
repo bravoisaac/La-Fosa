@@ -5,9 +5,9 @@ Dirección vigente al 9 de noviembre de 2026: pesca → venta → pico → miner
 ## Recorrido
 
 1. Captura peces en la orilla con las manos y vende en Don Lucho. Tridente, arpón y red facilitan la pesca; el pico no exige comprar el tridente.
-2. Compra el **pico submarino por $45**. Se utiliza automáticamente al apuntar a una veta y pulsar E; no ocupa una tecla de arma ni un espacio de mochila.
+2. En La Veta · Minería, compra el **pico submarino por $45**. Se utiliza automáticamente al apuntar a una veta y pulsar E; no ocupa una tecla de arma ni un espacio de mochila.
 3. Extrae cobre cerca de 24 m, hierro cerca de 52 m y cristal cerca de 88 m. Hay diez depósitos de cada tipo en esas franjas y cinco depósitos adicionales de cristal en el fondo a 650 m.
-4. Regresa a la tienda y abre **FABRICAR**. Cada receta muestra materiales actuales/necesarios, precio, profundidad y reserva de aire resultantes.
+4. Regresa a Marea · Buceo y abre **FABRICAR TRAJES**. Cada receta muestra materiales actuales/necesarios, precio, profundidad y reserva de aire resultantes.
 5. Fabrica las mejoras en orden. Se equipan permanentemente y no ocupan espacios; la bombona comprada suma su reserva adicional.
 
 ## Recetas iniciales
@@ -39,3 +39,4 @@ Los informes opcionales `--expedition-report` pasan a versión 2 e incluyen `min
 `GameConfig.minerals/recipes`, `CraftingRecipe` y `EconomyProgressionSetup` definen el contenido editable. `WorldBuilder.Minerals` crea recursos con IDs estables; `MineralDeposit` gestiona interacción y regeneración. `Economy.Crafting` e `Inventory.TryConsume` aplican requisitos/costes. `GameSession.Persistence` y `SaveValidation` conservan y migran el progreso. `DiveHUD.Shop` presenta tienda y taller.
 
 Validación ejecutada en editor y compilación: `unity-economy-final-build.log`. Recorrido humano, presentación visual, sonido/animación específica de minería y balance profundo pendientes.
+Actualización de ciudad: comercios separados, materiales en herramientas avanzadas y cinco obras de muelle/base. Ver `CIUDAD_Y_MUELLE.md`. La venta de minerales es opcional en La Veta; conservar ingredientes para trajes y obras. Añadir a la ficha humana visitas a los cuatro locales, pesca automática, las cinco construcciones y enlace/descensor.

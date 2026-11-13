@@ -6,6 +6,16 @@ Dirección del proyecto: [contexto de diseño para Codex](Docs/CONTEXTO_JUEGO.md
 
 La referencia de mapa del usuario se implementa como una **fosa de 650 m**, con cavidad irregular, cámaras laterales y rutas alrededor de pilares. Cinco umbrales aumentan presión y consumo de aire sin bloquear el paso. [Sección estática del mapa](Docs/Mapa/fosa-seccion.png) · [Profundidades, equipo y límites de validación](Docs/DESCENSOS.md). La costa y las ruinas del naufragio se conservan. La progresión usa pesca, minerales y fabricación; no se generan puzles ni cofres. La ampliación no equivale todavía a cinco biomas terminados.
 
+## Ciudad, comercios y obras
+
+Caleta Bruma tiene plaza, calles, casas y cuatro tiendas físicas: **Don Lucho (pesca), La Veta (minería), Marea (buceo) y Astillero Bruma (construcción y barcos)**. E abre cada mostrador. Peces y minerales se venden en sus comercios; herramientas avanzadas y obras cuestan **dinero y materiales**. Pico y tridente iniciales siguen siendo accesibles sin minerales.
+
+En el astillero, **OBRAS DEL MUELLE** ofrece cinco mejoras en orden: ampliar muelle → primera red automática → segundo tramo y red → base sobre la fosa → descensor rápido. Cada red produce un pez/minuto de juego activo y guarda hasta diez; E en su cajón recoge la captura. No produce en menús, pausado ni sin conexión.
+
+La base desbloquea enlace gratuito ciudad/base. El descensor permite regresar a cotas ya exploradas con equipo y aire suficientes; no recarga recursos ni bloquea el descenso manual. Obras y producción se guardan; las partidas anteriores empiezan sin ciudad mejorada y conservan su equipo. [Precios, materiales, transporte y pruebas](Docs/CIUDAD_Y_MUELLE.md).
+
+Vistas de editor, sin jugar: [ciudad](Docs/Ciudad/ciudad.png) · [muelle y base con todas las obras](Docs/Ciudad/muelle-base.png). Revisión humana del recorrido y balance pendiente.
+
 ## Jugar
 
 1. En Unity Hub, selecciona **Add / Add project from disk** y esta carpeta.
@@ -33,6 +43,7 @@ La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con
 | Abrir tienda / subir o bajar de vehículo | E |
 | Conducir lancha o moto | W/S avanzar-retroceder, A/D girar |
 | Amarrar / soltar la lancha junto a la boya de la fosa | G, desde el puesto de conducción |
+| Bodega de la lancha | B a bordo; B o Esc para cerrar |
 | Linterna | F |
 | Inventario | Tab |
 | Pausa | Esc |
@@ -42,7 +53,7 @@ La ruta principal para las entregas es `Builds/Windows/La Fosa.exe`. Compila con
 
 ## Modo Develop
 
-Durante una partida, **F2** guarda primero tu progreso normal y abre una sesión temporal de pruebas. También se puede entrar desde pausa. **F1** abre/cierra el panel: aire y salud fijos, velocidad ×3 con colisiones, recarga, $1000 de prueba, herramientas/equipo para 650 m y transporte a playa o distintas profundidades.
+Durante una partida, **F2** guarda primero tu progreso normal y abre una sesión temporal de pruebas. También se puede entrar desde pausa. **F1** abre/cierra el panel: aire y salud fijos, velocidad ×3 con colisiones, recarga, $1000 de prueba, herramientas/equipo para 650 m, +10 de cada mineral de prueba y transporte a playa o distintas profundidades.
 
 Para repetir mecánicas, **Inicio sin equipo** reinicia la prueba en la playa con manos, sin dinero y mochila vacía. **Primera minería** prepara el pico junto a las vetas de cobre. Ambos reinician mejoras y recursos de la prueba, apagan aire fijo/velocidad extra y mantienen abierto el panel; pulsa F2 para probar como Jugador. Reemplazan los cambios de la prueba actual, conservando tu partida normal. **Equipo para 650 m** mejora el equipo temporal sin reiniciar el progreso. Los escenarios no reinician toda la simulación de fauna.
 
@@ -54,9 +65,9 @@ Para repetir mecánicas, **Inicio sin equipo** reinicia la prueba en la playa co
 
 Empiezas con las manos: bajo el agua, apunta a un pez y haz clic. Alcance de 1,6 m y recarga de 0,8 s, respetando obstáculos. Los peces de la orilla huyen a 1,8 m/s; los del mar a 16 m/s, por lo que tridente, arpón y red ofrecen distintas formas de pescar. Hay 49 modelos propios y 132 individuos: [guía de fauna](Docs/FAUNA.md).
 
-Vende en Don Lucho y compra el **pico submarino por $45**, sin exigir tridente. Apunta a una veta y pulsa **E**: entrega tres unidades si tienes espacio. Hay cobre cerca de 24 m, hierro cerca de 52 m y cristal abisal cerca de 88 m, además de cristal en el fondo. Las vetas agotadas se oscurecen y regeneran tras 180 segundos de reloj real; guardar/cargar no reinicia ese plazo.
+Vende en Don Lucho y compra en La Veta el **pico submarino por $45**, sin exigir tridente. Apunta a una veta y pulsa **E**: entrega tres unidades si tienes espacio. Hay cobre cerca de 24 m, hierro cerca de 52 m y cristal abisal cerca de 88 m, además de cristal en el fondo. Las vetas agotadas se oscurecen y regeneran tras 180 segundos de reloj real; guardar/cargar no reinicia ese plazo.
 
-En la tienda, abre **FABRICAR**. Dinero y minerales permiten crear tres mejoras permanentes, en orden:
+En Marea · Buceo, abre **FABRICAR TRAJES**. Dinero y minerales permiten crear tres mejoras permanentes, en orden:
 
 | Equipo | Coste | Profundidad segura / reserva |
 |---|---|---|
@@ -76,7 +87,7 @@ Las manos mantienen dedos articulados y gesto de captura. **La Fosa → Exportar
 
 El argumento opcional `--expedition-report` registra tiempos y eventos locales, incluidos extracción y fabricación. Los informes no se generan durante Develop. [Registro y ficha humana](Docs/PRIMERA_EXPEDICION.md#registro-opcional-del-recorrido).
 
-## Cabaña y tienda de Don Lucho
+## Pesca, herramientas y embarcaciones
 
 La cabaña de madera está a la izquierda del punto de inicio, con techo de zinc a dos aguas, corredor, mostrador y un pescador que atiende. Acércate al mostrador, mira hacia él y pulsa **E**. La tienda pausa el mundo; **Esc** permite salir.
 
@@ -93,11 +104,11 @@ Empiezas **sin dinero, sin arpón y pescando con las manos**. Los peces de la or
 | Lancha de caleta | $240 | Navega a 12 m/s; amarre sobre la fosa con G |
 | Moto de agua | $360 | Embarcación de superficie a 22 m/s |
 
-Las mejoras se compran una sola vez y no consumen espacios de mochila. Puedes volver a las manos con la tecla 1. La bombona amplía permanentemente la capacidad de la partida; no es un consumible. La red es reutilizable, funciona buceando o desde una embarcación y respeta los obstáculos. Las manos, el arpón y el tridente requieren estar bajo el agua. Cambiar de herramienta no elimina la recarga pendiente.
+La tabla anterior muestra precios monetarios; los materiales y el local de cada compra figuran en [Ciudad y muelle](Docs/CIUDAD_Y_MUELLE.md). Las mejoras se compran una sola vez y no consumen espacios de mochila. Puedes volver a las manos con la tecla 1. La bombona amplía permanentemente la capacidad de la partida; no es un consumible. La red es reutilizable, funciona buceando o desde una embarcación y respeta los obstáculos. Las manos, el arpón y el tridente requieren estar bajo el agua. Cambiar de herramienta no elimina la recarga pendiente.
 
 La lancha comprada aparece a la izquierda del muelle y la moto a la derecha. Acércate, mira la embarcación y pulsa **E**. Usa **W/S** para avanzar/retroceder, **A/D** para girar y el ratón para mirar. **E** te deja nadando a un costado; el vehículo queda donde lo abandonaste. **R** rescata al buzo y conserva la propiedad. La conducción usa colisiones y límites de costa; no incluye una simulación de oleaje o combustible.
 
-La boya naranja sobre la fosa señala el **amarre de la lancha**, a un lado del conducto central. Desde el puesto de conducción, acércate a menos de 8 m del punto de amarre y pulsa **G**. El HUD avisa cuándo está disponible. Si el acercamiento o giro están obstruidos, la lancha permanece donde está. Amarrada queda inmóvil; puedes desembarcar con E, bucear, volver a subir y soltar con G. Posición y amarre se conservan al guardar/cargar; una partida anterior carga las embarcaciones desamarradas. La moto no usa este amarre. La bodega y la recuperación de una lancha abandonada siguen pendientes.
+La boya naranja sobre la fosa señala el **amarre de la lancha**, a un lado del conducto central. Desde el puesto de conducción, acércate a menos de 8 m del punto de amarre y pulsa **G**. El HUD avisa cuándo está disponible. Si el acercamiento o giro están obstruidos, la lancha permanece donde está. Amarrada queda inmóvil; puedes desembarcar con E, bucear, volver a subir y soltar con G. Posición y amarre se conservan al guardar/cargar; una partida anterior carga las embarcaciones desamarradas. La moto no usa este amarre. La lancha incluye una **bodega de 24 espacios**: pulsa **B a bordo** para transferir pesca y minerales por unidad o pila completa; **B/Esc** cierra. El panel pausa la navegación y muestra los límites de ambas cargas. Si no cabe la cantidad, no mueve nada. Retira a la mochila antes de vender o fabricar. Carga persistente y aislada en Develop. [Bodega y pruebas pendientes](Docs/BODEGA_LANCHA.md). La recuperación de una lancha abandonada sigue pendiente.
 
 ## Ampliar
 
@@ -106,7 +117,8 @@ La boya naranja sobre la fosa señala el **amarre de la lancha**, a un lado del 
 - `DiveHUD.Shop` presenta TIENDA/FABRICAR. `GameSession.Expedition` deriva el cuaderno de economía, recursos y equipo, sin marcador proyectado.
 - `GameSession.Persistence`, `GameSession.SaveValidation` y `SaveStore`: guardado v2, lectura v1, validación y respaldo. No renombrar IDs sin migración. Las definiciones antiguas de puzles se conservan para validar partidas v1; no generan contenido jugable.
 - `DeepTrenchProfile`, `WorldBuilder.DeepTrench` y `WorldBuilder.Descents`: cavidad a 650 m, malla con colisión y señales sin bloqueo. `GameConfig.pressureBands` controla cinco umbrales de gasto; `pressureOxygenMultiplier` controla el sobrecoste fuera del equipo. El terreno superficial no representa techos o paredes de la cavidad.
-- `WorldBuilder.Shop` y `SurfaceVehicle`: tienda, embarcaciones, conducción y amarre. Bodega y recuperación siguen pendientes.
+- `WorldBuilder.City`, `InfrastructureView`, `CityInteraction`, `GameSession.City` y `Economy.City`: comercios separados, obras, producción y viajes. `CityProgressionSetup` define materiales y precios.
+- `WorldBuilder.Shop` y `SurfaceVehicle`: tienda, embarcaciones, conducción y amarre. `GameSession.Cargo` y `DiveHUD.Cargo`: bodega de 24 espacios y transferencias atómicas con `Inventory.TryTransferTo`. Recuperación de lancha abandonada pendiente.
 - `FishAgent` y `HarpoonGun`: fauna, comportamiento y captura. `ItemDefinition.salePrice` define el valor de cada especie.
 - `DiveHUD`: IMGUI con lienzo base 1600 × 900; aire en unidades, consumo actual y duración aproximada. Revisar formatos de pantalla mediante la ficha humana.
 

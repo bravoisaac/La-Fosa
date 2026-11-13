@@ -72,7 +72,7 @@ Los nombres, el número final de capas y sus profundidades todavía pueden cambi
 
 Los puzles, sellos y cofres de progresión se retiraron del mundo por petición explícita. No añadir nuevos mecanismos obligatorios ni volver a exigir soluciones antiguas. Las partidas anteriores conservan las mejoras que ya habían ganado.
 
-La pesca financia el pico submarino y el coste monetario de las recetas. Los minerales se extraen del fondo y se consumen al fabricar en Don Lucho. El taller muestra ingredientes, precio y equipo resultante antes de confirmar; un intento fallido no debe consumir recursos.
+La pesca financia el pico submarino y el coste monetario de las recetas. Los minerales se extraen del fondo y se consumen al fabricar en Marea · Buceo. El taller muestra ingredientes, precio y equipo resultante antes de confirmar; un intento fallido no debe consumir recursos.
 
 La primera entrega incluye cobre, hierro y cristal, con tres recetas ordenadas hasta equipo de 650 m. Precios, cantidades y regeneración son provisionales. La dificultad debe venir de planificar aire, carga, rutas e inversión. Ver `Docs/ECONOMIA_CRAFTING.md` para los valores implementados.
 
@@ -90,9 +90,9 @@ Las mejoras de aire, iluminación, movilidad, carga y resistencia ambiental debe
 
 La lancha debe ser un avance útil: facilitar el transporte, permitir organizar expediciones y acercar el punto de salida a la fosa. El bote actual aporta conducción, pero todavía no tiene todas estas funciones.
 
-La base flotante será el centro de operaciones sobre la entrada de la fosa, con preparación del equipo, almacenamiento y apoyo a los descensos. Debe reducir viajes repetitivos a zonas ya dominadas.
+La base flotante ya se construye como cuarta obra del Astillero Bruma. Incluye plataforma, refugio y enlace gratuito ciudad/base. Almacenamiento y preparación de suministros siguen pendientes.
 
-**Propuesta por validar:** un cable guía y un sistema de descenso conectado a anclajes que el jugador active personalmente. Solo permitirían viajar a lugares ya alcanzados y desbloqueados. No se ha decidido todavía si habrá ascensor, cápsula, puntos de retorno u otro mecanismo.
+**Implementado en C4:** la quinta obra añade descensor rápido desde la base a cotas ya exploradas, con equipo y reserva de aire adecuados. La ciudad incorpora tiendas separadas de pesca, minería, buceo y construcción. Herramientas avanzadas y obras cuestan dinero y materiales; los dos puestos automáticos del muelle producen capturas para vender. Ver `CIUDAD_Y_MUELLE.md`.
 
 La cabaña de la costa conserva su papel como tienda y punto de regreso. La moto de agua existente puede mantenerse como transporte opcional; no es un paso obligatorio de la progresión principal.
 
@@ -118,7 +118,7 @@ Una criatura peligrosa debe mostrar señales que el jugador pueda aprender: post
 
 **Descenso:** cavidad de 650 m, cinco umbrales de presión, señales sin colisión y mejoras persistentes. La progresión de recetas no bloquea el movimiento. Falta probar manualmente orientación, taller y equilibrio del recorrido económico.
 
-**Todavía no está implementado:** base flotante; exploradores; ballesta; fauna fantástica agresiva; capas con fenómenos ambientales propios; viajes rápidos desbloqueables; historia desarrollada y sonido.
+**Todavía no está implementado:** bodega y suministros de base/lancha; exploradores; ballesta; fauna fantástica agresiva; capas con fenómenos ambientales propios; historia desarrollada y sonido. Ciudad, obras, pesca automática y viajes están implementados; su balance humano sigue pendiente.
 
 ## Criterios para trabajar con Codex
 

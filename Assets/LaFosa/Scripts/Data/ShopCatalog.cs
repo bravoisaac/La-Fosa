@@ -4,6 +4,7 @@ using UnityEngine;
 namespace LaFosa
 {
     public enum GearKind { ReinforcedHarpoon, OxygenTank, Fins, Net, Trident, Boat, JetSki, MiningPick }
+    public enum ShopKind { Fishing, Mining, Diving, Construction, Transit }
 
     [Serializable]
     public sealed class ShopOffer
@@ -12,6 +13,8 @@ namespace LaFosa
         public string title;
         [TextArea] public string description;
         [Min(1)] public int price;
+        public ShopKind shop;
+        public CraftIngredient[] ingredients = new CraftIngredient[0];
         public ShopOffer(GearKind kind, string name, string detail, int cost)
         { gear = kind; title = name; description = detail; price = cost; }
     }

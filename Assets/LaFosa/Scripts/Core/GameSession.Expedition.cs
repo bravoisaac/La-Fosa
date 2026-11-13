@@ -27,13 +27,15 @@ namespace LaFosa
             if (firstReturnPending && !Diver.Underwater && Vector3.Distance(Diver.transform.position, Config.spawn) < 12)
             {
                 ReportExpeditionReturn(); firstReturnPending = false;
-                Notify("Minerales recuperados. Revisa FABRICAR en el taller de la caleta.");
+                Notify("Minerales recuperados. Marea fabrica trajes; el Astillero construye obras. La Veta compra minerales.");
             }
         }
         public ExpeditionObjective ExpeditionObjective()
         {
             if (Diver.NeedsAirReturn)
                 return new ExpeditionObjective(ExpeditionStep.Surface, "Recupera aire", "Busca el conducto central y asciende con ESPACIO. Reserva aire para volver; R te rescata conservando la mochila.", "", Vector3.zero);
+            if (Complete && InfrastructureLevel < Config.infrastructure.Length)
+                return new ExpeditionObjective(ExpeditionStep.Craft, "Amplía la ciudad y el muelle", "Visita Astillero Bruma: dinero y minerales construyen el muelle, dos zonas de pesca automática y una base con enlace a la ciudad y descensor.", "", new Vector3(13, 4, -34));
             if (Complete)
                 return new ExpeditionObjective(ExpeditionStep.Complete, "Explora la fosa profunda", "Equipo abisal fabricado. Explora hasta 650 m, pesca y recoge cristal del fondo. Vigila presión y reserva de regreso.", "", Vector3.zero);
             bool hasPick = Economy.Has(GearKind.MiningPick);
@@ -45,15 +47,15 @@ namespace LaFosa
                     return new ExpeditionObjective(ExpeditionStep.FreeSpace, "Prepara espacio para mineral", "Vende pesca en la caleta o descarta una pila desde TAB. El pico extrae tres unidades por depósito.", "", CabinWaypoint);
                 string materials = string.Join(" · ", recipe.ingredients.Select(i => i.item.displayName + " " + Diver.Inventory.Count(i.item) + "/" + i.amount));
                 return new ExpeditionObjective(ExpeditionStep.Mine, "Minerales para " + recipe.title,
-                    materials + ". Cobre a 24 m, hierro a 52 m y cristal a 88 m. Acércate a las vetas brillantes y pulsa E. Después fabrica en la caleta ($" + recipe.price + ").", "", recipe.upgrade.stationPosition);
+                    materials + ". Cobre a 24 m, hierro a 52 m y cristal a 88 m. Acércate a las vetas brillantes y pulsa E. Después fabrica en Marea · Buceo ($" + recipe.price + ").", "", recipe.upgrade.stationPosition);
             }
             if (Economy.Money >= price)
                 return new ExpeditionObjective(hasPick ? ExpeditionStep.Craft : ExpeditionStep.BuyPick,
                     hasPick ? "Fabrica tu siguiente equipo" : "Compra el pico submarino",
-                    hasPick ? "Tienes dinero y minerales. E en Don Lucho → FABRICAR → " + recipe.title + ". La mejora se equipa automáticamente."
-                    : "E en Don Lucho → TIENDA → Pico submarino ($" + MiningPickPrice + "). El tridente es opcional para pescar a mayor distancia.", "", CabinWaypoint);
+                    hasPick ? "Tienes dinero y minerales. E en Marea · Buceo → FABRICAR TRAJES → " + recipe.title + ". La mejora se equipa automáticamente."
+                    : "E en La Veta · Minería → Pico submarino ($" + MiningPickPrice + "). El tridente es opcional para pescar a mayor distancia.", "", CabinWaypoint);
             if (Economy.FishCount > 0 && (Economy.Money + Economy.SaleValue >= price || Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity))
-                return new ExpeditionObjective(ExpeditionStep.Sell, "Vende tu pesca", "Llevas $" + Economy.SaleValue + " en peces. E en Don Lucho y VENDER. Los minerales se reservan para fabricar.", "", CabinWaypoint);
+                return new ExpeditionObjective(ExpeditionStep.Sell, "Vende tu pesca", "Llevas $" + Economy.SaleValue + " en peces. E en Don Lucho y VENDER. Reserva minerales para trajes y obras; puedes vender excedentes en La Veta.", "", CabinWaypoint);
             if (Diver.Inventory.Stacks.Count >= Diver.Inventory.capacity)
                 return new ExpeditionObjective(ExpeditionStep.FreeSpace, "Haz espacio para pescar", "TAB abre la mochila. Conserva minerales para la receta; vende peces o descarta una pila.", "", CabinWaypoint);
             return new ExpeditionObjective(ExpeditionStep.Fishing, "Pesca para financiar tu equipo",

@@ -26,7 +26,7 @@ namespace LaFosa
             }
             DeveloperMode = !DeveloperMode;
             DeveloperPanelOpen = DeveloperMode;
-            Paused = false; InventoryOpen = false; ShopOpen = false;
+            Paused = false; InventoryOpen = false; ShopOpen = false; CargoOpen = false;
             SaveStatus = "PRUEBA TEMPORAL · los cambios no se guardan.";
             ApplyPause();
             Notify(DeveloperMode ? "DEVELOP · F1 herramientas · F2 probar como jugador" : "JUGADOR DE PRUEBA · reglas normales · F2 volver a Develop");
@@ -35,7 +35,7 @@ namespace LaFosa
         {
             if (!DeveloperSession || Intro) return;
             DeveloperPanelOpen = !DeveloperPanelOpen;
-            Paused = false; InventoryOpen = false; ShopOpen = false;
+            Paused = false; InventoryOpen = false; ShopOpen = false; CargoOpen = false;
             ApplyPause();
         }
         public void EndDeveloperSession()
@@ -85,6 +85,13 @@ namespace LaFosa
             var state = CaptureSave();
             Economy.Restore((int)Math.Min(int.MaxValue, (long)Economy.Money + 1000), state.gear);
             Notify("+ $1000 de prueba. No se guardan.");
+        }
+        public void DeveloperMaterials()
+        {
+            if (!DeveloperMode) return;
+            int added = 0;
+            foreach (var mineral in Config.minerals) if (Diver.Inventory.TryAdd(mineral, 10)) added++;
+            Notify("Materiales de prueba: +10 de " + added + " tipos. Libera mochila si está llena; no se guardan.");
         }
         public void DeveloperEquip()
         {

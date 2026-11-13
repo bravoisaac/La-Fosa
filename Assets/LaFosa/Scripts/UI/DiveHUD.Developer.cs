@@ -34,8 +34,9 @@ namespace LaFosa
                 float x = 355 + (i % 3) * 300, y = 531 + (i / 3) * 49;
                 if (Button(depths[i] == 0 ? "PLAYA" : depths[i] + " m", x, y, 280, 40)) session.DeveloperTravel(depths[i]);
             }
+            if (Button("+10 DE CADA MINERAL · PRUEBA", 355, 685, 430, 34)) session.DeveloperMaterials();
             GUI.enabled = true;
-            Text("En Jugador: aire, daño y velocidad normales. Las pruebas siguen sin guardarse.", 355, 684, 880, 25, 14, Muted);
+            Text("Jugador: reglas normales, sin guardar.", 805, 687, 430, 25, 14, Muted);
             if (Button("TERMINAR PRUEBAS · RECUPERAR MI PARTIDA", 355, 735, 880, 48)) session.EndDeveloperSession();
         }
     }

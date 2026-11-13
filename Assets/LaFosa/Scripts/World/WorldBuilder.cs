@@ -124,6 +124,7 @@ namespace LaFosa
             {
                 float x = Random.Range(-110, 110), z = Random.Range(-30, 160);
                 if (Mathf.Abs(x) < 10) continue;
+                if (x > -38 && x < 38 && z > -50 && z < -11) continue; // Town streets and shop approaches.
                 if (x > -21 && x < -6 && z > -31 && z < -15) continue;
                 if (x > 0 && x < 19 && z > 8 && z < 30) continue;
                 float h = FloorHeight(x, z); float s = Random.Range(1, 4);
@@ -144,6 +145,7 @@ namespace LaFosa
             for (int i = 0; i < 6; i++)
                 foreach (float x in new[] { 7.4f, 10.6f }) Shape("Pilote", PrimitiveType.Cylinder, new Vector3(x, -1, -10 + i * 5), new Vector3(.28f, 3.5f, .28f), wood);
             BuildCabin();
+            BuildCity();
             Shape("Poste bandera", PrimitiveType.Cylinder, new Vector3(-7, 6.5f, -23), new Vector3(.09f, 3.5f, .09f), pale);
             Shape("Bandera roja", PrimitiveType.Cube, new Vector3(-5.9f, 8.25f, -23), new Vector3(2.2f, .65f, .06f), red, false);
             Shape("Bandera blanca", PrimitiveType.Cube, new Vector3(-5.5f, 8.9f, -23), new Vector3(1.4f, .65f, .06f), pale, false);

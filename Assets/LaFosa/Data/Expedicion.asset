@@ -115,6 +115,48 @@ MonoBehaviour:
       amount: 8
     - item: {fileID: 11400000, guid: fe450edd3d2f3034f8711f26eb143328, type: 2}
       amount: 16
+  infrastructure:
+  - title: "1 \xB7 Ampliar el muelle"
+    description: Prolonga el muelle 12 m y prepara el primer puesto de pesca.
+    price: 180
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 12
+  - title: "2 \xB7 Primera zona de pesca"
+    description: "Red autom\xE1tica: 1 pez cada 60 s de juego activo. Guarda hasta
+      10; recoge con E."
+    price: 280
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 10
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 6
+  - title: "3 \xB7 Muelle pesquero"
+    description: "Otros 12 m de muelle y una segunda zona autom\xE1tica independiente."
+    price: 450
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 8
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 18
+  - title: "4 \xB7 Base sobre la fosa"
+    description: "Plataforma junto al conducto de descenso y enlace ciudad \u2194
+      base."
+    price: 900
+    ingredients:
+    - item: {fileID: 11400000, guid: 97c6f08aed24a0346b8c2ce6633f117d, type: 2}
+      amount: 24
+    - item: {fileID: 11400000, guid: fe450edd3d2f3034f8711f26eb143328, type: 2}
+      amount: 12
+  - title: "5 \xB7 Descensor r\xE1pido"
+    description: 'Desde la base: baja a cotas exploradas y seguras para tu equipo.
+      Sin coste por viaje.'
+    price: 700
+    ingredients:
+    - item: {fileID: 11400000, guid: 6ed101f73f353e846979f5599d0e411d, type: 2}
+      amount: 12
+    - item: {fileID: 11400000, guid: fe450edd3d2f3034f8711f26eb143328, type: 2}
+      amount: 18
   zones:
   - {fileID: 11400000, guid: a05fc36d05d684e47883d73176a801e2, type: 2}
   - {fileID: 11400000, guid: d4a602b78c8fddc47bed0ae411a5eb76, type: 2}

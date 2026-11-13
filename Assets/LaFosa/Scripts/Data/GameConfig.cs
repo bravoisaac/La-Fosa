@@ -58,6 +58,7 @@ namespace LaFosa
         public ShopCatalog shop;
         public ItemDefinition[] minerals;
         public CraftingRecipe[] recipes;
+        public InfrastructureOffer[] infrastructure;
         public DiveZoneDefinition[] zones;
         [HideInInspector] public Shader[] includedShaders;
     }

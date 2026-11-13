@@ -16,7 +16,7 @@ namespace LaFosa
         }
         public bool Craft(CraftingRecipe recipe)
         {
-            if (!session.ShopOpen) return false;
+            if (!session.ShopOpen || session.CurrentShop != ShopKind.Diving) return Reject("Fabrica tu equipo en Marea · Buceo.");
             string requirement = CraftRequirement(recipe);
             if (requirement.Length > 0) return Reject(requirement);
             // All preconditions are checked before consuming; a failed recipe spends nothing.

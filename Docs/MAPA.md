@@ -1,5 +1,28 @@
 # Mapa dinámico
 
+## Entrega 4.2b: bodega de lancha (13 de noviembre)
+
+- Objetivo: transferir pesca/minerales entre mochila y bodega de 24 espacios; conservar pilas, propiedad, guardado y aislamiento Develop.
+- Motor/entrada: Unity C#, GameSession → tecla B a bordo → DiveHUD.Cargo → Inventory.TryTransferTo.
+- Estado/conexiones: inventario separado de sesión, campos opcionales v2, restauración compartida por carga/Nueva partida/Develop; panel pausa navegación y vitales.
+- Patrones: parciales, IMGUI 1600 × 900, operaciones completas antes de notificar Changed y guardado al final del frame.
+- Archivos revisados: Inventory, GameSession/Persistence/SaveValidation/Developer, SaveStore, SurfaceVehicle, DiveHUD, DeveloperModeChecks y MooringChecks.
+- Archivos a modificar: inventario, sesión y sus parciales, persistencia, HUD, comprobaciones de editor y documentación; nuevos parciales Cargo y CargoChecks.
+- Evitar: precios, ciudad/fosa, dependencias, partidas personales y cambios previos del usuario. Sin abrir el juego ni Play Mode.
+- Riesgo medio: pérdida/duplicación, acceso sin propiedad, capacidad, restauración antigua y paneles simultáneos. Validar transacciones y ciclo de persistencia en archivos temporales.
+- Resultado: terminada; 39 comprobaciones nuevas y regresión aprobadas, Windows actualizado, salida 0 (`unity-cargo-build.log`). Sin Play Mode; revisión humana pendiente. Reanudar 8b desde PLAN_MEJORAS y BODEGA_LANCHA; las secciones siguientes son historial.
+
+## Entrega C1–C5: ciudad comercial e infraestructura (9 de noviembre)
+
+- Objetivo: tiendas físicas separadas de pesca, minería, buceo y construcción; compra/venta con dinero y materiales; muelle ampliable, dos zonas de pesca automática, base sobre la fosa y transporte rápido.
+- Motor/patrón: Unity, mundo procedural, componentes Interactable, datos serializables y GameSession/Economy parciales; conservar inventario atómico y prueba Develop aislada.
+- Entradas: GameBootstrap → WorldBuilder.Build/BuildVehicles; ShopCounter → GameSession.OpenShop → DiveHUD.Shop → Economy. Expedir recursos y mejorar equipo sigue siendo el ciclo central.
+- Cambios: ShopCatalog/GameConfig y preparación de datos; Economy y UI por comercio; nuevo catálogo/estado de obras; WorldBuilder.City/Infrastructure; terminales de transporte; guardado con campos opcionales v2; guía y pruebas de editor.
+- Persistencia: nivel de obras, pesca acumulada/progreso de producción y máxima profundidad visitada. Cargar guardados anteriores inicia infraestructura a cero. Develop restaura todo; no sobrescribir partidas personales.
+- Riesgos: bloqueo circular de materiales iniciales, costes parciales/duplicados, producción durante pausa o carga, colisiones de muelle/base, destino de viaje obstruido, comercios mezclados. Verificar con comprobaciones de economía, construcción, geometría, transporte y continuidad.
+- Límites: no añadir librerías ni modificar la fosa/aire para bloquear paso; no abrir ni jugar automáticamente. Precios y estética requieren evaluación humana posterior.
+- Resultado: C1–C5 terminadas y marcadas en PLAN_MEJORAS.md. 78 comprobaciones nuevas, regresión y Windows; `unity-city-final.log`. Vistas estáticas en Docs/Ciudad. Revisión humana pendiente; siguiente implementación, bodega de lancha.
+
 ## Entrega E1–E4: economía, minería y fabricación (9 de noviembre)
 
 - Petición explícita: quitar puzles y progresar pescando, consiguiendo minerales del fondo y fabricando equipo. Sustituye el diseño anterior de sellos/tesoros y la etapa futura de nuevos puzles.

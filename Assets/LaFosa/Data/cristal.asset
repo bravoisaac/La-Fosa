@@ -18,4 +18,4 @@ MonoBehaviour:
   maxStack: 30
   color: {r: 0.65, g: 0.35, b: 1, a: 1}
   isFish: 0
-  salePrice: 30
+  salePrice: 26

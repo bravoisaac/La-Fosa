@@ -24,7 +24,7 @@ namespace LaFosa
 
         public bool SellFish()
         {
-            if (!session.ShopOpen) return false;
+            if (!session.ShopOpen || session.CurrentShop != ShopKind.Fishing) return Reject("Vende tus peces en Don Lucho · Pesca.");
             int count = FishCount;
             long value = SaleValue;
             if (count == 0) return Reject("No tienes peces para vender. Acércate a un pez y atrápalo con las manos.");
@@ -41,11 +41,14 @@ namespace LaFosa
             if (!session.ShopOpen) return false;
             if (offer == null || Array.IndexOf(session.Config.shop.offers, offer) < 0 || offer.price <= 0)
                 return Reject("Artículo no disponible.");
+            if (session.CurrentShop != offer.shop) return Reject("Disponible en " + CityShops.Name(offer.shop));
             if (Has(offer.gear)) return Reject("Ya tienes este equipo. No necesitas comprarlo otra vez.");
             if (!MeetsRequirement(offer.gear)) return Reject("Primero compra el tridente: es tu siguiente nivel después de las manos.");
             if (Money < offer.price) return Reject("Te faltan $" + (offer.price - Money) + ". Vende más peces.");
             if ((offer.gear == GearKind.Boat && session.Boat == null) || (offer.gear == GearKind.JetSki && session.JetSki == null))
                 return Reject("No hay un amarre disponible para esta embarcación.");
+            if (offer.ingredients != null && offer.ingredients.Length > 0 && !session.Diver.Inventory.TryConsume(offer.ingredients))
+                return Reject("Faltan materiales. Consulta las cantidades de la compra.");
             Money -= offer.price;
             owned.Add(offer.gear);
             if (offer.gear == GearKind.Trident) session.RecordExpeditionEvent("trident", offer.price.ToString(), true);

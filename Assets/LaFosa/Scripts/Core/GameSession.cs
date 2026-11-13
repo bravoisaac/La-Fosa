@@ -9,11 +9,12 @@ namespace LaFosa
         public bool Intro { get; private set; } = true;
         public bool InventoryOpen { get; private set; }
         public bool ShopOpen { get; private set; }
+        public ShopKind CurrentShop { get; private set; }
         public Economy Economy { get; private set; }
         public SurfaceVehicle Boat { get; set; }
         public SurfaceVehicle JetSki { get; set; }
         public bool Paused { get; private set; }
-        public bool Blocked => Intro || InventoryOpen || Paused || ShopOpen || DeveloperPanelOpen;
+        public bool Blocked => Intro || InventoryOpen || Paused || ShopOpen || CargoOpen || DeveloperPanelOpen;
         public int Treasures { get; private set; }
         public int CraftedUpgrades => Treasures;
         public event System.Action ProgressChanged;
@@ -49,18 +50,20 @@ namespace LaFosa
         {
             Config = config;
             Economy = gameObject.AddComponent<Economy>(); Economy.Initialize(this);
+            BoatCargo = gameObject.AddComponent<Inventory>(); BoatCargo.capacity = BoatCargoSlots;
             ApplyPause();
         }
-        public void OpenShop()
+        public void OpenShop(ShopKind shop = ShopKind.Fishing)
         {
             if (Intro || Config.shop == null || Diver.Riding != null) return;
             if (!ShopOpen) RecordExpeditionEvent("shop");
+            CurrentShop = shop;
             InventoryOpen = false; Paused = false; ShopOpen = true; ApplyPause();
         }
         public void CloseShop() { ShopOpen = false; ApplyPause(); }
         public void Begin() { NewGame(); }
-        public void ToggleInventory() { if (ShopOpen) return; InventoryOpen = !InventoryOpen; ApplyPause(); }
-        public void Resume() { Paused = false; InventoryOpen = false; ShopOpen = false; ApplyPause(); }
+        public void ToggleInventory() { if (ShopOpen || CargoOpen) return; InventoryOpen = !InventoryOpen; ApplyPause(); }
+        public void Resume() { Paused = false; InventoryOpen = false; ShopOpen = false; CargoOpen = false; ApplyPause(); }
         public void Notify(string message) { Message = message; MessageUntil = Time.unscaledTime + 4; }
         public void Reward(DiveZoneDefinition zone)
         {
@@ -82,11 +85,15 @@ namespace LaFosa
                 if (Input.GetKeyDown(KeyCode.Escape)) ToggleDeveloperPanel();
                 return;
             }
+            if (Input.GetKeyDown(KeyCode.B))
+            { if (CargoOpen) CloseCargo(); else OpenCargo(); return; }
+            if (CargoOpen && !CanAccessCargo) CloseCargo();
             if (!Blocked) UpdateExpeditionReturn();
             if (Input.GetKeyDown(KeyCode.Tab) && !Paused) ToggleInventory();
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (ShopOpen) ShopOpen = false;
+                if (CargoOpen) CargoOpen = false;
+                else if (ShopOpen) ShopOpen = false;
                 else if (InventoryOpen) InventoryOpen = false;
                 else Paused = !Paused;
                 ApplyPause();

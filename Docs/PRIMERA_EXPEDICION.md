@@ -6,9 +6,9 @@ Recorrido vigente al 9 de noviembre de 2026. Sustituye la guía de sellos/cofres
 
 1. Nueva partida comienza en la playa, con manos y sin dinero. WASD mueve, ratón mira, C baja y Espacio sube. Bajo el agua, apunta a peces de orilla y haz clic para capturarlos.
 2. Reúne pesca para financiar el **pico de $45**. El cuaderno considera saldo y valor real de los peces; si falta espacio, TAB permite revisar o descartar pilas.
-3. Vuelve a Don Lucho, pulsa E en el mostrador y vende peces. Compra el pico; tridente y otras herramientas de pesca son mejoras opcionales, no un requisito para minar.
+3. Vuelve a Don Lucho, pulsa E en el mostrador y vende peces. Compra el pico en La Veta · Minería; tridente y otras herramientas de pesca son mejoras opcionales, no un requisito para minar.
 4. Sigue las boyas y busca vetas de cobre cerca de 24 m. Con pico comprado, bajo el agua y a menos de 4,5 m, apunta y pulsa E. Cada depósito entrega tres unidades; reúne al menos ocho para el primer traje.
-5. Regresa a la tienda con **$120 y 8 cobre**. En **FABRICAR**, crea Traje reforzado: 64 m de profundidad segura y 155 unidades de aire. Los costes se descuentan una vez y la mejora se equipa permanentemente.
+5. Regresa a Marea · Buceo con **$120 y 8 cobre**. En **FABRICAR TRAJES**, crea Traje reforzado: 64 m de profundidad segura y 155 unidades de aire. Los costes se descuentan una vez y la mejora se equipa permanentemente.
 6. Repite con hierro cerca de 52 m y después cristal cerca de 88 m. Las recetas posteriores combinan materiales y dinero; consulta `Docs/ECONOMIA_CRAFTING.md`. El traje final prepara para explorar hasta 650 m.
 
 El paso por la fosa siempre está abierto. Exceder el equipo consume mucho más aire; el aviso de regreso prioriza ascender antes que recolectar. En cámaras laterales vuelve al conducto central para subir. R rescata conservando inventario. La bombona de tienda suma aire al equipo fabricado.
@@ -58,3 +58,5 @@ Usar `Builds/Windows/La Fosa.exe`; `Builds/FirstExpedition` puede conservar una 
 | Ajuste propuesto y motivo observado | Pendiente |
 
 Comprobar consumo en superficie, al acelerar y al cruzar los cinco umbrales. La duración del aire cambia según el ritmo actual y no garantiza el regreso. Medir antes de ajustar precios o reservas; las pruebas automáticas no rellenan esta ficha.
+
+Actualización de ciudad: comercios separados, materiales en herramientas avanzadas y cinco obras de muelle/base. Ver `CIUDAD_Y_MUELLE.md`. La venta de minerales es opcional en La Veta; conservar ingredientes para trajes y obras. Añadir a la ficha humana visitas a los cuatro locales, pesca automática, las cinco construcciones y enlace/descensor.

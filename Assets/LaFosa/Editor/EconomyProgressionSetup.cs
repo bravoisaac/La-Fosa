@@ -24,6 +24,7 @@ namespace LaFosa.Editor
             if (!config.shop.offers.Any(o => o.gear == GearKind.MiningPick))
                 config.shop.offers = config.shop.offers.Concat(new[] { new ShopOffer(GearKind.MiningPick, "Pico submarino",
                     "E junto a un depósito: extrae minerales para fabricar equipo.", 45) }).ToArray();
+            CityProgressionSetup.Ensure(config);
             EditorUtility.SetDirty(config.shop); EditorUtility.SetDirty(config);
         }
         static ItemDefinition Mineral(string id, string title, Color color)

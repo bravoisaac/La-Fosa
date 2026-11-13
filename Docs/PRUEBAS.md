@@ -1,5 +1,22 @@
 # Validación
 
+## Entrega 4.2b: bodega de lancha (13 de noviembre de 2026)
+
+- [x] 39 comprobaciones nuevas (`CargoChecks`): acceso solo a bordo con propiedad, exclusión de moto/Tab, transferencias unidad/pila, conservación antes de notificar, capacidad llena/parcial, rechazo sin cambios, IDs/cantidades/propiedad de guardado, menú/Continuar, venta solo desde mochila, rescate, Nueva partida, v1/v2 anteriores y aislamiento/restauración Develop.
+- [x] Regresión: 78 ciudad, 39 economía, 16 Develop, 18 amarre, 71 fosa, 20 informe, 11 señales y validaciones generales. Componentes reales en editor y archivos temporales; sin Play Mode ni ejecución del jugador.
+- [x] Compilación Windows actualizada, `unity-cargo-build.log`, `LA_FOSA_CARGO_TESTS_OK`, `LA_FOSA_TESTS_OK`, `LA_FOSA_BUILD_OK` y salida 0.
+- [ ] Revisión visual, interacción de B/Esc/scroll, balance de capacidad y continuidad tras reiniciar el ejecutable. Ficha en `Docs/BODEGA_LANCHA.md`; C6/E5 siguen pendientes.
+
+## Entrega C1–C5: ciudad, obras y base (9 de noviembre de 2026)
+
+- [x] 78 comprobaciones nuevas: comercios separados y mostradores accesibles; ventas por tipo, costes de dinero/materiales, orden y compra única de obras; cubierta de muelle y eje libre de inmersión; dos puestos con producción pausada/capada, recogida atómica y persistencia del tiempo; destinos conocidos/equipo, colisión de llegada, continuidad y aislamiento Develop.
+- [x] Regresión: 39 comprobaciones económicas, 16 Develop, 18 amarre, 71 fosa, 20 informe y 11 señales. Archivos de prueba aislados; no se inició una partida.
+- [x] Windows generado en `Builds/Windows/La Fosa.exe`. Primera compilación satisfactoria en `unity-city-build.log`; entrega final en `unity-city-final.log`.
+- [x] Vistas estáticas de ciudad y obras en `Docs/Ciudad`, generadas por editor y revisadas. No son capturas de una partida ni validación de HUD.
+- [ ] Recorrido humano de los cuatro locales, entrada por rampas/pasillos, recogida automática, las cinco obras y descensor; revisar etiquetas/UI, ritmo de recursos e ingresos y continuidad real al cerrar/abrir.
+
+Las instrucciones anteriores que sitúan todas las compras en Don Lucho quedaron sustituidas: `Docs/CIUDAD_Y_MUELLE.md` es la referencia actual.
+
 ## Entrega E1–E4: economía, minería y fabricación (9 de noviembre de 2026)
 
 - [x] Mundo sin puzles, santuarios ni cofres de progresión; 35 vetas y tres recetas de equipo. Pico de $45, extracción E y taller FABRICAR.

@@ -52,6 +52,7 @@ namespace LaFosa
             saveStore = new SaveStore(path, ValidateSave);
             RefreshSaveAvailability();
             Diver.Inventory.Changed += MarkSaveDirty;
+            BoatCargo.Changed += MarkSaveDirty;
         }
         void AddItem(ItemDefinition item)
         {
@@ -93,7 +94,7 @@ namespace LaFosa
             if (DeveloperSession) EndDeveloperSession();
             if (!SaveNow()) return false;
             FinishExpeditionReport("menu");
-            Intro = true; Paused = false; InventoryOpen = false; ShopOpen = false;
+            Intro = true; Paused = false; InventoryOpen = false; ShopOpen = false; CargoOpen = false;
             ApplyPause(); RefreshSaveAvailability(); return true;
         }
         internal void ApplySave(SaveData data)
@@ -107,7 +108,9 @@ namespace LaFosa
                 firstReturnPending = false; // Loading already returns the expedition safely to the coast.
                 discoveredZones.Clear(); discoveredZones.UnionWith(data.discoveredZones);
                 Economy.Restore(data.money, data.gear);
+                RestoreCity(data);
                 Diver.Inventory.Restore(data.inventory.Select(s => new InventoryStack(items[s.id], s.count)).ToArray());
+                BoatCargo.Restore((data.boatCargo ?? new SavedStack[0]).Select(s => new InventoryStack(items[s.id], s.count)).ToArray());
                 foreach (var deposit in mineralDeposits)
                 {
                     var saved = data.minerals?.FirstOrDefault(p => p.id == deposit.id);
@@ -121,7 +124,7 @@ namespace LaFosa
                 }
                 Diver.RestoreEquipment(); Diver.GetComponent<HarpoonGun>().SelectTool(data.selectedTool);
                 ProgressChanged?.Invoke();
-                Paused = false; InventoryOpen = false; ShopOpen = false;
+                Paused = false; InventoryOpen = false; ShopOpen = false; CargoOpen = false;
                 wasUnderwater = false; nextPeriodicSave = Time.unscaledTime + 20;
                 Physics.SyncTransforms();
             }
@@ -133,11 +136,13 @@ namespace LaFosa
         {
             version = 2, worldSeed = Config.seed, money = Economy.Money, selectedTool = Diver.GetComponent<HarpoonGun>().SelectedTool,
             inventory = Diver.Inventory.Stacks.Select(s => new SavedStack { id = s.item.id, count = s.count }).ToArray(),
+            boatCargo = BoatCargo.Stacks.Select(s => new SavedStack { id = s.item.id, count = s.count }).ToArray(),
             gear = Enum.GetValues(typeof(GearKind)).Cast<GearKind>().Where(Economy.Has).Select(g => g.ToString()).ToArray(),
             treasures = new string[0], equipmentUpgrades = claimedZones.OrderBy(id => id).ToArray(), discoveredZones = discoveredZones.OrderBy(id => id).ToArray(),
             collectedPickups = pickups.Where(p => !p.gameObject.activeSelf).Select(p => p.id).ToArray(),
             puzzles = new SavedPuzzle[0], minerals = mineralDeposits.Select(p => new SavedMineral { id = p.id, readyAtUtcTicks = p.ReadyAtUtcTicks }).ToArray(),
-            vehicles = CaptureVehicles()
+            vehicles = CaptureVehicles(), infrastructureLevel = InfrastructureLevel, exploredDepth = ExploredDepth,
+            automaticFish = (int[])automaticFish.Clone(), fishingProgress = (float[])fishingProgress.Clone()
         };
         public void MarkSaveDirty() { if (!restoring && !Intro) saveDirty = true; }
         public bool SaveNow()
@@ -160,6 +165,7 @@ namespace LaFosa
             if (Intro || saveStore == null) return;
             if (!Blocked)
             {
+                AdvanceCity(Time.deltaTime);
                 foreach (var zone in Config.zones)
                     if (Vector3.Distance(Diver.transform.position, zone.stationPosition) < 18 && discoveredZones.Add(zone.id)) saveDirty = true;
                 if (wasUnderwater && !Diver.Underwater) saveDirty = true;
